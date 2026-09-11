@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi Saathi - Gov Schemes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = { darkMode: "class", theme: { extend: {
+  colors: {
+    "primary": "#10B981", "primary-dim": "#059669", "primary-glow": "rgba(16,185,129,0.15)",
+    "accent": "#34D399", "accent-soft": "rgba(52,211,153,0.1)",
+    "bg-base": "#0B0F19", "bg-surface": "#111827", "bg-elevated": "#1F2937", "bg-hover": "#374151",
+    "card": "#111827", "card-hover": "#1a2332",
+    "text-primary": "#F9FAFB", "text-secondary": "#D1D5DB", "text-muted": "#6B7280",
+    "border-dark": "#1F2937", "border-glow": "rgba(16,185,129,0.2)",
+    "danger": "#EF4444", "warning": "#F59E0B", "info": "#3B82F6",
+    "surface-dim": "#1a2332"
+  },
+  fontFamily: { "headline": ["Manrope"], "body": ["Inter"] },
+  boxShadow: {
+    "card": "0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2)",
+    "card-hover": "0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1)",
+    "glow": "0 0 30px rgba(16,185,129,0.15)",
+    "glow-strong": "0 0 40px rgba(16,185,129,0.25)"
+  }
+}}}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; vertical-align: middle }
+  body { background: #0B0F19; }
+  /* Subtle animated gradient mesh */
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: 0.4;
+    background: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(139,92,246,0.05) 0%, transparent 50%); }
+  .sidebar-link { transition: all 0.2s ease; }
+  .sidebar-link:hover { background: rgba(16,185,129,0.08); transform: translateX(4px); }
+  .sidebar-link.active { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.08)); color: #10B981; border: 1px solid rgba(16,185,129,0.2); }
+  .sidebar-link.active .material-symbols-outlined { color: #34D399; }
+  .glass-dark { background: rgba(17,24,39,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .metric-card { transition: all 0.25s ease; border: 1px solid #1F2937; }
+  .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
+  .action-card { transition: all 0.25s ease; }
+  .action-card:hover { transform: translateY(-2px); }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.4 } }
+  .form-input { background: #1F2937; border: 1px solid #374151; color: #F9FAFB; transition: all 0.2s; }
+  .form-input:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); outline: none; }
+  .form-input::placeholder { color: #6B7280; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0B0F19; }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+</style>
+</head>
+<body class="font-body text-text-primary min-h-screen">
+
+<!-- Top Navbar -->
+<header class="fixed top-0 w-full z-50 glass-dark">
+<nav class="flex items-center justify-between px-6 h-16 max-w-[1600px] mx-auto">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+      <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">eco</span>
+    </div>
+    <span class="text-lg font-headline font-extrabold text-text-primary tracking-tight">Krishi<span class="text-primary"> Saathi</span></span>
+  </div>
+  <div class="hidden md:flex flex-1 max-w-lg mx-8">
+    <div class="relative w-full">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-lg">search</span>
+      <input type="text" placeholder="Search crops, markets, schemes..." class="w-full bg-bg-elevated border border-border-dark rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none transition-all placeholder:text-text-muted"/>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <button class="relative p-2 rounded-xl hover:bg-bg-elevated transition-colors">
+      <span class="material-symbols-outlined text-text-muted">notifications</span>
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
+    </button>
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dim text-white flex items-center justify-center text-sm font-bold cursor-pointer shadow-glow" id="profileMiniName" onclick="window.location.href='/stitch/farmer/profile'">F</div>
+  </div>
+</nav>
+</header>
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex h-screen w-56 fixed left-0 top-0 flex-col gap-1 p-3 pt-20 z-40 border-r border-border-dark bg-bg-surface/80" style="backdrop-filter: blur(12px);">
+<div class="mb-4 px-3 pt-2">
+  <p class="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Navigation</p>
+</div>
+<nav class="space-y-0.5 flex-1">
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/farmer">
+    <span class="material-symbols-outlined text-[20px]">space_dashboard</span>
+    <span class="font-semibold text-[13px]">Overview</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/farmer/profile">
+    <span class="material-symbols-outlined text-[20px]">badge</span>
+    <span class="font-semibold text-[13px]">My Identity</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/marketplace">
+    <span class="material-symbols-outlined text-[20px]">store</span>
+    <span class="font-semibold text-[13px]">Market</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/insurance">
+    <span class="material-symbols-outlined text-[20px]">health_and_safety</span>
+    <span class="font-semibold text-[13px]">Insurance</span>
+  </a>
+  <a class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-2.5" href="/stitch/gov-schemes">
+    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">account_balance</span>
+    <span class="font-semibold text-[13px]">Gov Schemes</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/crop-prediction">
+    <span class="material-symbols-outlined text-[20px]">psychology</span>
+    <span class="font-semibold text-[13px]">Crop AI</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/yield-prediction">
+    <span class="material-symbols-outlined text-[20px]">calculate</span>
+    <span class="font-semibold text-[13px]">Yield Calc</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/chatbot">
+    <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+    <span class="font-semibold text-[13px]">AI Assistant</span>
+  </a>
+</nav>
+<a href="/stitch/chatbot" class="mb-3 mx-1 bg-gradient-to-r from-primary to-primary-dim text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-glow-strong transition-all shadow-glow">
+  <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">smart_toy</span> AI Assistant
+</a>
+</aside>
+
+<!-- Main Dashboard Content -->
+<main class="pt-20 pb-20 px-4 md:px-8 lg:pl-56 max-w-[1200px] mx-auto">
+
+<section class="mt-4">
+<h2 class="text-3xl font-headline font-extrabold text-primary mb-2">Government Schemes & Subsidies</h2>
+<p class="text-sm text-text-secondary mb-8">Discover and apply for national and state-level agricultural policies aimed to empower farmers.</p>
+
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+    <div class="flex-1 relative">
+        <span class="material-symbols-outlined absolute left-4 top-3 text-text-secondary/50">search</span>
+        <input type="text" class="w-full bg-card border-none shadow-sm rounded-xl py-3.5 pl-12 pr-4 text-text-primary font-medium" placeholder="Search for schemes, e.g. 'tractor subsidy'...">
+    </div>
+    <select class="bg-card border-none shadow-sm rounded-xl px-4 py-3.5 text-text-primary font-medium cursor-pointer w-full md:w-auto">
+        <option>All Categories</option>
+        <option>Financial Support</option>
+        <option>Equipment Subsidy</option>
+        <option>Fertilizer Grants</option>
+    </select>
+</div>
+
+<div class="grid grid-cols-1 gap-4">
+  <!-- Scheme 1 -->
+  <div class="bg-card p-6 rounded-[24px] border border-border-dark shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-primary/40 transition">
+      <div class="w-16 h-16 rounded-2xl bg-primary/20 text-primary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-3xl">currency_rupee</span>
+      </div>
+      <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+              <h3 class="text-xl font-bold text-text-primary font-headline">PM-KISAN Samman Nidhi</h3>
+              <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Active</span>
+          </div>
+          <p class="text-sm text-text-secondary mb-3 max-w-2xl">Financial benefit of Rs 6000/- per year in three equal installments, directly into the bank accounts of all landholding farmers' families.</p>
+          <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-bg-elevated-high px-3 py-1 rounded-full text-text-secondary font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_month</span> Deadline: Ongoing</span>
+              <span class="text-xs bg-bg-elevated-high px-3 py-1 rounded-full text-text-secondary font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">description</span> Aadhar Required</span>
+          </div>
+      </div>
+      <div class="flex flex-col gap-2 w-full md:w-40 shrink-0">
+          <button class="bg-primary text-white font-bold py-2.5 rounded-xl shadow-sm hover:brightness-110 transition">Apply Now</button>
+          <button class="text-primary font-bold py-2 text-sm text-center hover:underline">Read Guidelines</button>
+      </div>
+  </div>
+
+  <!-- Scheme 2 -->
+  <div class="bg-card p-6 rounded-[24px] border border-border-dark shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-primary/40 transition">
+      <div class="w-16 h-16 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-3xl">agriculture</span>
+      </div>
+      <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+              <h3 class="text-xl font-bold text-text-primary font-headline">SMAM (Equipment Subsidy)</h3>
+              <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Active</span>
+          </div>
+          <p class="text-sm text-text-secondary mb-3 max-w-2xl">Sub-Mission on Agricultural Mechanization. Provides 50-80% subsidy for purchasing tractors, tillers, and modern farming machinery.</p>
+          <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-bg-elevated-high px-3 py-1 rounded-full text-text-secondary font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_month</span> Next Phase: June 2026</span>
+              <span class="text-xs bg-bg-elevated-high px-3 py-1 rounded-full text-text-secondary font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sell</span> Up to 80% Off</span>
+          </div>
+      </div>
+      <div class="flex flex-col gap-2 w-full md:w-40 shrink-0">
+          <button class="bg-bg-elevated text-text-primary font-bold py-2.5 rounded-xl border border-border-dark/50 hover:bg-bg-elevated-highest transition">Check Eligibility</button>
+      </div>
+  </div>
+  
+  <!-- Scheme 3 -->
+  <div class="bg-card p-6 rounded-[24px] border border-border-dark shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-primary/40 transition">
+      <div class="w-16 h-16 rounded-2xl bg-[#E4BEB2] text-[#583E35] flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-3xl">water_drop</span>
+      </div>
+      <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+              <h3 class="text-xl font-bold text-text-primary font-headline">PM Krishi Sinchayee Yojana</h3>
+              <span class="bg-bg-elevated-highest text-text-secondary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Closes Soon</span>
+          </div>
+          <p class="text-sm text-text-secondary mb-3 max-w-2xl">Focuses on improving water use efficiency at the farm level through micro-irrigation systems (drip and sprinkler irrigation).</p>
+      </div>
+      <div class="flex flex-col gap-2 w-full md:w-40 shrink-0">
+          <button class="bg-primary text-white font-bold py-2.5 rounded-xl shadow-sm hover:brightness-110 transition">Apply Now</button>
+      </div>
+  </div>
+</div>
+
+</section>
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 px-4 py-3 flex justify-around items-center border-t border-border-dark" style="background: rgba(11,15,25,0.95); backdrop-filter: blur(20px);">
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/farmer"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span class="text-[9px]">Home</span></a>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/marketplace"><span class="material-symbols-outlined text-[20px]">store</span><span class="text-[9px]">Market</span></a>
+<div class="relative -top-6"><a href="/stitch/chatbot" class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dim text-white rounded-full shadow-glow flex items-center justify-center"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">smart_toy</span></a></div>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/farmer/profile"><span class="material-symbols-outlined text-[20px]">badge</span><span class="text-[9px]">Identity</span></a>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/crop-prediction"><span class="material-symbols-outlined text-[20px]">psychology</span><span class="text-[9px]">Crop AI</span></a>
+</nav>
+
+<script>
+  const storedRole = localStorage.getItem('stitch_role') || '';
+  let storedSession = {};
+  try { storedSession = JSON.parse(localStorage.getItem('stitch_session') || '{}'); } catch {}
+  const _pn = document.getElementById('profileMiniName'); if (_pn) _pn.textContent = ((storedSession.name || 'F')[0] || 'F').toUpperCase();
+</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+{
+  "crops": [
+    {
+      "name": "Ragi (Finger Millet)",
+      "season": "Kharif",
+      "suitable_soil": "Red laterite, red sandy loam",
+      "water_requirement": "Low to moderate",
+      "growth_period_days": 120,
+      "common_diseases": ["Blast", "Blight", "Smut"],
+      "fertilizer": "NPK 50:40:25 kg/ha",
+      "best_months": "June-July sowing, October harvest"
+    },
+    {
+      "name": "Paddy (Rice)",
+      "season": "Kharif",
+      "suitable_soil": "Clay, alluvial, loamy",
+      "water_requirement": "High",
+      "growth_period_days": 130,
+      "common_diseases": ["Blast", "Sheath blight", "Brown plant hopper"],
+      "fertilizer": "NPK 100:50:50 kg/ha",
+      "best_months": "June-July transplanting, November harvest"
+    },
+    {
+      "name": "Jowar (Sorghum)",
+      "season": "Kharif, Rabi",
+      "suitable_soil": "Black cotton, deep black",
+      "water_requirement": "Low",
+      "growth_period_days": 110,
+      "common_diseases": ["Grain mold", "Anthracnose", "Shoot fly"],
+      "fertilizer": "NPK 80:40:40 kg/ha",
+      "best_months": "June (Kharif), October (Rabi)"
+    },
+    {
+      "name": "Groundnut",
+      "season": "Kharif",
+      "suitable_soil": "Red sandy, red loam",
+      "water_requirement": "Moderate",
+      "growth_period_days": 105,
+      "common_diseases": ["Tikka leaf spot", "Rust", "Stem rot"],
+      "fertilizer": "NPK 25:50:25 kg/ha + Gypsum 500 kg/ha",
+      "best_months": "June-July sowing, October harvest"
+    },
+    {
+      "name": "Cotton",
+      "season": "Kharif",
+      "suitable_soil": "Black cotton soil, deep black",
+      "water_requirement": "Moderate",
+      "growth_period_days": 180,
+      "common_diseases": ["Boll worm", "Whitefly", "Bacterial blight"],
+      "fertilizer": "NPK 120:60:60 kg/ha",
+      "best_months": "June sowing, December picking"
+    },
+    {
+      "name": "Sugarcane",
+      "season": "Year-round",
+      "suitable_soil": "Black soil, alluvial, loamy",
+      "water_requirement": "Very high",
+      "growth_period_days": 365,
+      "common_diseases": ["Red rot", "Smut", "Grassy shoot"],
+      "fertilizer": "NPK 250:100:120 kg/ha",
+      "best_months": "January-February planting"
+    },
+    {
+      "name": "Sunflower",
+      "season": "Rabi, Summer",
+      "suitable_soil": "Black, red loam",
+      "water_requirement": "Moderate",
+      "growth_period_days": 95,
+      "common_diseases": ["Downy mildew", "Rust", "Alternaria"],
+      "fertilizer": "NPK 60:90:30 kg/ha",
+      "best_months": "January-February sowing"
+    },
+    {
+      "name": "Tur Dal (Pigeon Pea)",
+      "season": "Kharif",
+      "suitable_soil": "Black, red loam, well-drained",
+      "water_requirement": "Low",
+      "growth_period_days": 180,
+      "common_diseases": ["Wilt", "Sterility mosaic", "Pod borer"],
+      "fertilizer": "NPK 25:50:25 kg/ha + Rhizobium",
+      "best_months": "June sowing, December harvest"
+    },
+    {
+      "name": "Coconut",
+      "season": "Year-round",
+      "suitable_soil": "Coastal alluvial, red sandy, laterite",
+      "water_requirement": "Moderate to high",
+      "growth_period_days": 0,
+      "common_diseases": ["Rhinoceros beetle", "Root wilt", "Bud rot"],
+      "fertilizer": "NPK 500g:320g:1200g per palm per year",
+      "best_months": "Planting during monsoon (June-September)"
+    },
+    {
+      "name": "Maize (Corn)",
+      "season": "Kharif, Rabi",
+      "suitable_soil": "Well-drained loamy, red loam",
+      "water_requirement": "Moderate",
+      "growth_period_days": 100,
+      "common_diseases": ["Fall armyworm", "Stem borer", "Downy mildew"],
+      "fertilizer": "NPK 120:60:40 kg/ha",
+      "best_months": "June (Kharif), November (Rabi)"
+    },
+    {
+      "name": "Bengal Gram (Chickpea)",
+      "season": "Rabi",
+      "suitable_soil": "Black, medium to deep",
+      "water_requirement": "Low",
+      "growth_period_days": 110,
+      "common_diseases": ["Wilt", "Ascochyta blight", "Pod borer"],
+      "fertilizer": "NPK 20:40:20 kg/ha + Rhizobium",
+      "best_months": "October sowing, February harvest"
+    },
+    {
+      "name": "Arecanut",
+      "season": "Year-round",
+      "suitable_soil": "Laterite, red loam, coastal",
+      "water_requirement": "Moderate",
+      "growth_period_days": 0,
+      "common_diseases": ["Koleroga", "Yellow leaf disease", "Fruit rot"],
+      "fertilizer": "NPK 100:40:140g per palm per year + organic manure",
+      "best_months": "Planting during monsoon"
+    },
+    {
+      "name": "Chilli",
+      "season": "Kharif, Rabi",
+      "suitable_soil": "Black, red loam, well-drained",
+      "water_requirement": "Moderate",
+      "growth_period_days": 150,
+      "common_diseases": ["Thrips", "Fruit rot", "Leaf curl", "Bacterial wilt"],
+      "fertilizer": "NPK 100:50:50 kg/ha",
+      "best_months": "June (Kharif), September (Rabi) transplanting"
+    },
+    {
+      "name": "Tobacco",
+      "season": "Rabi",
+      "suitable_soil": "Red sandy loam, well-drained",
+      "water_requirement": "Low to moderate",
+      "growth_period_days": 120,
+      "common_diseases": ["TMV", "Bacterial wilt", "Black shank"],
+      "fertilizer": "NPK 120:60:120 kg/ha",
+      "best_months": "August-September nursery, October transplanting"
+    },
+    {
+      "name": "Coffee",
+      "season": "Year-round",
+      "suitable_soil": "Red loam, laterite, well-drained",
+      "water_requirement": "Moderate",
+      "growth_period_days": 0,
+      "common_diseases": ["Coffee berry borer", "Rust", "Black rot"],
+      "fertilizer": "NPK 40:30:40g per plant + shade management",
+      "best_months": "Planting during monsoon, harvest November-February"
+    }
+  ]
+}

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Krishi AI - Farmer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#006a39',
+                        background: '#faf9f7',
+                        'surface-container-high': '#e9e8e6',
+                        'surface-container-low': '#f4f3f1',
+                        'on-surface': '#1a1c1b',
+                        'on-surface-variant': '#3e4a3f',
+                        'secondary-container': '#bdefbe',
+                        brand: '#0F9D58',
+                        brandDeep: '#0a7a45',
+                        ink: '#1a1c1b',
+                        sub: '#4d5a50'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        soft: '0 20px 50px rgba(0,0,0,0.08)',
+                        glow: '0 0 0 1px rgba(15,157,88,0.35), 0 24px 48px rgba(15,157,88,0.22)'
+                    },
+                    keyframes: {
+                        floatUp: {
+                            '0%': { opacity: 0, transform: 'translateY(14px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        },
+                        pulseDot: {
+                            '0%,100%': { opacity: 0.35 },
+                            '50%': { opacity: 1 }
+                        }
+                    },
+                    animation: {
+                        floatUp: 'floatUp 650ms ease-out both',
+                        pulseDot: 'pulseDot 1.2s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+        }
+        .sunlight-shadow {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+        }
+        .card-lift {
+            transition: transform 220ms ease, box-shadow 220ms ease;
+        }
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(11, 26, 19, 0.12);
+        }
+        .bg-farm {
+            background:
+                radial-gradient(circle at 14% 24%, rgba(15,157,88,0.2), transparent 42%),
+                radial-gradient(circle at 88% 8%, rgba(100,221,145,0.16), transparent 38%),
+                linear-gradient(180deg, #f4fff8 0%, #eef9f2 40%, #f8fbf9 100%);
+        }
+        .farmer-overlay {
+            background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=60');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.06;
+            filter: blur(2px);
+        }
+        .hero-glow {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(11, 194, 102, 0.24) 0%, rgba(11, 194, 102, 0) 68%);
+            filter: blur(10px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen selection:bg-secondary-container">
+    <div class="fixed inset-0 pointer-events-none farmer-overlay"></div>
+
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full border border-white/20 bg-white/70 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] flex justify-between items-center px-5 md:px-8 py-3 z-50 font-headline tracking-tight text-sm">
+        <div class="text-xl md:text-2xl font-black text-emerald-800 tracking-tighter">Krishi AI</div>
+        <div class="hidden md:flex gap-7 items-center">
+            <span class="text-emerald-700 font-bold">Farmer Console</span>
+            <span class="text-zinc-600">Live Wallet</span>
+            <span class="text-zinc-600">AI Voice Actions</span>
+        </div>
+        <a href="/app" class="bg-primary text-white px-4 py-2 rounded-full font-bold">Main Site</a>
+    </nav>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-24 pb-6 md:pb-8 space-y-6 md:space-y-8">
+        <section class="glass-panel rounded-[28px] p-5 md:p-8 sunlight-shadow animate-floatUp relative overflow-hidden">
+            <div class="hero-glow -top-14 -right-16"></div>
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+                <div>
+                    <h1 id="heroWelcome" class="font-headline text-3xl md:text-5xl font-extrabold tracking-tight text-brandDeep">
+                        Welcome back, Farmer
+                    </h1>
+                    <p class="mt-2 text-sub text-base md:text-lg">
+                        Your AI farming assistant is monitoring your farm.
+                    </p>
+                </div>
+                <div class="inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-secondary-container text-green-900 border border-green-200 text-xs md:text-sm font-bold tracking-wide uppercase">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    AI Active
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1.2fr_1fr_auto] gap-3 mt-6">
+                <input id="name" class="rounded-2xl border-0 bg-white/80 shadow-inner px-4 py-3 text-sm md:text-base" placeholder="Name (e.g., Omkar)" />
+                <input id="phone" class="rounded-2xl border-0 bg-white/80 shadow-inner px-4 py-3 text-sm md:text-base" placeholder="Phone (e.g., 8618075133)" />
+                <input id="city" class="rounded-2xl border-0 bg-white/80 shadow-inner px-4 py-3 text-sm md:text-base" placeholder="City" value="Kalaburgi" />
+                <button id="loginBtn" class="rounded-2xl bg-primary text-white px-6 py-3 font-semibold hover:shadow-glow transition-all">
+                    Open Dashboard
+                </button>
+            </div>
+            <p id="status" class="mt-3 text-xs text-sub">Waiting for login...</p>
+        </section>
+
+        <section id="content" class="hidden space-y-6 animate-floatUp" style="animation-delay:120ms;">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <article class="glass-panel rounded-[24px] p-5 card-lift">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs uppercase tracking-wider text-sub font-semibold">Wallet Balance</p>
+                        <span class="material-symbols-outlined text-emerald-600">account_balance_wallet</span>
+                    </div>
+                    <p id="wallet" class="font-headline text-3xl font-extrabold text-brandDeep mt-2">INR 0</p>
+                    <p class="text-xs text-sub mt-1">Auto-deducted on confirmed orders</p>
+                </article>
+
+                <article class="glass-panel rounded-[24px] p-5 card-lift bg-gradient-to-br from-white/70 to-[#e9f8ef]">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs uppercase tracking-wider text-sub font-semibold">Soil Type</p>
+                        <span class="material-symbols-outlined text-amber-700">landscape</span>
+                    </div>
+                    <p id="soil" class="font-headline text-2xl font-bold mt-2">Unknown</p>
+                    <p id="cityLabel" class="text-xs text-sub mt-1">-</p>
+                </article>
+
+                <article class="glass-panel rounded-[24px] p-5 card-lift bg-gradient-to-br from-white/70 to-[#ebf4ff]">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs uppercase tracking-wider text-sub font-semibold">Weather</p>
+                        <span class="material-symbols-outlined text-blue-700">partly_cloudy_day</span>
+                    </div>
+                    <p id="temp" class="font-headline text-2xl font-bold mt-2">N/A</p>
+                    <p id="weatherDesc" class="text-xs text-sub mt-1">-</p>
+                </article>
+
+                <article class="glass-panel rounded-[24px] p-5 card-lift bg-gradient-to-br from-white/70 to-[#f4f7eb]">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs uppercase tracking-wider text-sub font-semibold">Farmer</p>
+                        <span class="material-symbols-outlined text-green-800">badge</span>
+                    </div>
+                    <p id="farmerName" class="font-headline text-2xl font-bold mt-2">Farmer</p>
+                    <p id="farmerPhone" class="text-xs text-sub mt-1">-</p>
+                </article>
+            </div>
+
+            <section class="glass-panel rounded-[24px] p-4 md:p-5">
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 items-center">
+                    <div class="flex flex-wrap gap-3">
+                        <button id="callBtn" class="min-w-[220px] rounded-2xl px-6 py-3 bg-primary text-white font-semibold sunlight-shadow hover:shadow-glow transition-all text-left">
+                            <span class="block text-xs opacity-90">Action</span>
+                            <span id="callBtnLabel" class="block text-base">Call AI Assistant</span>
+                        </button>
+                        <button id="refreshBtn" class="rounded-2xl px-5 py-3 bg-white/80 text-ink font-semibold hover:bg-white transition-all border border-white/70">
+                            Refresh
+                        </button>
+                    </div>
+                    <p id="callStatus" class="text-sm text-sub md:text-right">Ready</p>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <section class="glass-panel rounded-[24px] p-5 lg:col-span-2">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-headline text-2xl font-bold">Recent Orders</h2>
+                        <span class="text-xs text-sub">Latest 12</span>
+                    </div>
+                    <div id="orders" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="rounded-2xl border border-white/60 bg-white/60 px-4 py-3 text-sm text-sub">No orders yet.</div>
+                    </div>
+                </section>
+
+                <section class="space-y-4">
+                    <article class="glass-panel rounded-[24px] p-5">
+                        <h3 class="font-headline text-xl font-bold">AI Activity</h3>
+                        <ul id="activityList" class="mt-3 space-y-2 text-sm text-sub">
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand animate-pulseDot"></span>Monitoring weather...</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand animate-pulseDot" style="animation-delay:200ms"></span>Tracking crop conditions...</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand animate-pulseDot" style="animation-delay:400ms"></span>Checking market prices...</li>
+                        </ul>
+                    </article>
+
+                    <article class="glass-panel rounded-[24px] p-5 bg-gradient-to-br from-white/65 to-[#e8f7ef]">
+                        <h3 class="font-headline text-xl font-bold">Mini Market</h3>
+                        <div class="mt-3 space-y-2 text-sm">
+                            <div class="flex items-center justify-between rounded-xl bg-white/70 px-3 py-2">
+                                <span class="font-semibold">Onion</span>
+                                <span id="miniOnion" class="font-bold text-brandDeep">--</span>
+                            </div>
+                            <div class="flex items-center justify-between rounded-xl bg-white/70 px-3 py-2">
+                                <span class="font-semibold">Tomato</span>
+                                <span id="miniTomato" class="font-bold text-brandDeep">--</span>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentPhone = '';
+        let currentName = '';
+        let activitySource = null;
+        let refreshTimer = null;
+        const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+
+        function fmtCurrency(v) {
+            const n = Number(v || 0);
+            return `INR ${Math.round(n).toLocaleString('en-IN')}`;
+        }
+
+        function setStatus(text, isError = false) {
+            const el = document.getElementById('status');
+            el.textContent = text;
+            el.className = isError ? 'mt-3 text-xs text-red-600 font-medium' : 'mt-3 text-xs text-sub';
+        }
+
+        function normalizePhone(phone) {
+            const digits = String(phone || '').replace(/\D/g, '');
+            if (!digits) return '';
+            if (digits.length === 10) return `91${digits}`;
+            if (digits.startsWith('91')) return digits;
+            return digits;
+        }
+
+        function renderActivity(events) {
+            const list = document.getElementById('activityList');
+            if (!list) return;
+            const rows = Array.isArray(events) ? events.slice(0, 4) : [];
+            if (!rows.length) return;
+            list.innerHTML = '';
+            rows.forEach((event, idx) => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center gap-2';
+                const title = event.title || event.event_type || 'Activity';
+                li.innerHTML = `<span class="w-2 h-2 rounded-full bg-brand animate-pulseDot" style="animation-delay:${idx * 180}ms"></span>${title}`;
+                list.appendChild(li);
+            });
+        }
+
+        function shouldRefreshForEvent(event) {
+            const eventType = String(event?.event_type || '').toLowerCase();
+            const metaPhone = normalizePhone(event?.meta?.farmer_phone || event?.meta?.phone || '');
+            const mine = normalizePhone(currentPhone);
+
+            if (metaPhone && mine && metaPhone === mine) return true;
+            return ['order_done', 'order_failed', 'sell_done', 'order_proposed', 'sell_proposed'].includes(eventType);
+        }
+
+        function startActivityStream() {
+            if (activitySource) {
+                activitySource.close();
+            }
+            const streamUrl = `${API_BASE}/api/activity-stream?limit=20`;
+            activitySource = new EventSource(streamUrl);
+
+            activitySource.onmessage = (msg) => {
+                try {
+                    const payload = JSON.parse(msg.data || '{}');
+                    const events = Array.isArray(payload.events) ? payload.events : [];
+                    renderActivity(events);
+                    if (events.some(shouldRefreshForEvent)) {
+                        refreshProfile();
+                    }
+                } catch {
+                }
+            };
+
+            activitySource.onerror = () => {
+                if (activitySource) {
+                    activitySource.close();
+                    activitySource = null;
+                }
+            };
+        }
+
+        function iconForProduct(product) {
+            const p = String(product || '').toLowerCase();
+            if (p.includes('onion')) return '🧅';
+            if (p.includes('tomato')) return '🍅';
+            if (p.includes('potato')) return '🥔';
+            if (p.includes('seed')) return '🌱';
+            if (p.includes('urea') || p.includes('fertil')) return '🧪';
+            return '📦';
+        }
+
+        function renderOrders(orders) {
+            const ordersEl = document.getElementById('orders');
+            if (!Array.isArray(orders) || orders.length === 0) {
+                ordersEl.innerHTML = '<div class="rounded-2xl border border-white/60 bg-white/60 px-4 py-3 text-sm text-sub">No orders yet.</div>';
+                return;
+            }
+
+            ordersEl.innerHTML = '';
+            orders.slice(0, 12).forEach(order => {
+                const status = String(order.status || 'placed').toLowerCase();
+                const badge = status === 'placed'
+                    ? '<span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-semibold">Success</span>'
+                    : '<span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-semibold">Pending</span>';
+
+                const row = document.createElement('article');
+                row.className = 'rounded-2xl border border-white/70 bg-white/70 p-4 card-lift';
+                row.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <p class="text-xs text-sub">${order.order_id || 'ORDER'}</p>
+                            <p class="mt-1 font-semibold text-ink">${iconForProduct(order.product)} ${order.product || 'Product'} - ${order.quantity || ''}</p>
+                            <p class="text-xs text-sub mt-1">Dealer: ${order.dealer_name || 'Dealer'}</p>
+                        </div>
+                        ${badge}
+                    </div>
+                    <div class="mt-3 text-sm font-bold text-brandDeep">${fmtCurrency(order.amount)}</div>
+                `;
+                ordersEl.appendChild(row);
+            });
+        }
+
+        async function fetchMiniMarket() {
+            try {
+                const res = await fetch(`${API_BASE}/api/market-prices`);
+                const data = await res.json();
+                const rows = Array.isArray(data.data) ? data.data : [];
+                const onion = rows.find(r => String(r.crop || '').toLowerCase().includes('onion'));
+                const tomato = rows.find(r => String(r.crop || '').toLowerCase().includes('tomato'));
+                document.getElementById('miniOnion').textContent = onion ? onion.price : '--';
+                document.getElementById('miniTomato').textContent = tomato ? tomato.price : '--';
+            } catch {
+                document.getElementById('miniOnion').textContent = '--';
+                document.getElementById('miniTomato').textContent = '--';
+            }
+        }
+
+        async function openDashboard() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const city = document.getElementById('city').value.trim() || 'Kalaburgi';
+
+            if (!phone) {
+                setStatus('Phone is required', true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/farmer/session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, phone, city })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    throw new Error(data.detail || 'Could not open session');
+                }
+
+                currentPhone = data.farmer.phone;
+                currentName = data.farmer.name;
+                document.getElementById('content').classList.remove('hidden');
+                document.getElementById('heroWelcome').textContent = `Welcome back, ${currentName} 👋`;
+                setStatus('Dashboard ready.');
+                await Promise.all([refreshProfile(), fetchMiniMarket()]);
+                startActivityStream();
+
+                if (refreshTimer) {
+                    clearInterval(refreshTimer);
+                }
+                refreshTimer = setInterval(() => {
+                    refreshProfile();
+                }, 25000);
+            } catch (err) {
+                setStatus(`Error: ${err.message}`, true);
+            }
+        }
+
+        async function refreshProfile() {
+            if (!currentPhone) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}`);
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    throw new Error(data.detail || 'Profile fetch failed');
+                }
+
+                const farmer = data.farmer;
+                const ctx = data.context || {};
+
+                document.getElementById('farmerName').textContent = farmer.name || currentName || 'Farmer';
+                document.getElementById('farmerPhone').textContent = farmer.phone || currentPhone;
+                document.getElementById('wallet').textContent = fmtCurrency(farmer.wallet_balance);
+                document.getElementById('soil').textContent = ctx.soil_type || 'Unknown';
+                document.getElementById('cityLabel').textContent = ctx.city || '-';
+                document.getElementById('temp').textContent = (ctx.temperature !== undefined && ctx.temperature !== null) ? `${ctx.temperature}°C` : 'N/A';
+                document.getElementById('weatherDesc').textContent = ctx.weather_description || '-';
+                renderOrders(Array.isArray(farmer.orders) ? farmer.orders : []);
+            } catch (err) {
+                setStatus(`Profile refresh failed: ${err.message}`, true);
+            }
+        }
+
+        async function callAssistant() {
+            if (!currentPhone) return;
+            const callStatus = document.getElementById('callStatus');
+            const btn = document.getElementById('callBtn');
+            const btnLabel = document.getElementById('callBtnLabel');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-80');
+            const loadMsgs = [
+                'Connecting to AI...',
+                'Analyzing farm context...',
+                'Preparing Kannada voice...'
+            ];
+            let loadIdx = 0;
+            btnLabel.textContent = loadMsgs[0];
+            callStatus.textContent = loadMsgs[0];
+            const loadingTicker = setInterval(() => {
+                loadIdx = (loadIdx + 1) % loadMsgs.length;
+                btnLabel.textContent = loadMsgs[loadIdx];
+                callStatus.textContent = loadMsgs[loadIdx];
+            }, 1400);
+
+            try {
+                const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}/call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: currentName })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    throw new Error(data.detail || 'Call failed');
+                }
+                clearInterval(loadingTicker);
+                callStatus.textContent = `Call started: ${data.call_sid}`;
+            } catch (err) {
+                clearInterval(loadingTicker);
+                callStatus.textContent = `Call failed: ${err.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-80');
+                btnLabel.textContent = 'Call AI Assistant';
+            }
+        }
+
+        document.getElementById('loginBtn').addEventListener('click', openDashboard);
+        document.getElementById('refreshBtn').addEventListener('click', refreshProfile);
+        document.getElementById('callBtn').addEventListener('click', callAssistant);
+
+        window.addEventListener('beforeunload', () => {
+            if (activitySource) {
+                activitySource.close();
+                activitySource = null;
+            }
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+                refreshTimer = null;
+            }
+        });
+    </script>
+</body>
+</html>

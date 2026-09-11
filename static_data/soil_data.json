@@ -1,0 +1,88 @@
+{
+  "regions": [
+    {
+      "name": "Bangalore",
+      "soil_type": "Red laterite soil",
+      "ph_range": "5.5-6.5",
+      "characteristics": "Well-drained, iron-rich, moderately fertile",
+      "suitable_crops": ["Ragi", "Groundnut", "Vegetables", "Flowers", "Mulberry"]
+    },
+    {
+      "name": "Mysore",
+      "soil_type": "Red sandy loam",
+      "ph_range": "6.0-7.0",
+      "characteristics": "Porous, light-textured, needs organic manure",
+      "suitable_crops": ["Tobacco", "Ragi", "Sugarcane", "Coconut", "Rice"]
+    },
+    {
+      "name": "Dharwad",
+      "soil_type": "Black cotton soil (Regur)",
+      "ph_range": "7.0-8.5",
+      "characteristics": "High clay content, self-ploughing, water-retentive",
+      "suitable_crops": ["Cotton", "Jowar", "Wheat", "Sunflower", "Chilli"]
+    },
+    {
+      "name": "Belgaum",
+      "soil_type": "Black soil",
+      "ph_range": "7.0-8.0",
+      "characteristics": "Deep, fertile, moisture-retentive",
+      "suitable_crops": ["Sugarcane", "Soybean", "Jowar", "Wheat", "Groundnut"]
+    },
+    {
+      "name": "Shimoga",
+      "soil_type": "Laterite soil",
+      "ph_range": "5.0-6.0",
+      "characteristics": "Acidic, leached, requires liming",
+      "suitable_crops": ["Arecanut", "Paddy", "Maize", "Pepper", "Cardamom"]
+    },
+    {
+      "name": "Gulbarga",
+      "soil_type": "Deep black soil",
+      "ph_range": "7.5-8.5",
+      "characteristics": "Very deep, calcareous, high moisture retention",
+      "suitable_crops": ["Tur dal", "Jowar", "Sunflower", "Safflower", "Bengal gram"]
+    },
+    {
+      "name": "Mangalore",
+      "soil_type": "Coastal alluvial soil",
+      "ph_range": "5.5-6.5",
+      "characteristics": "Sandy, well-drained, rich in organic matter near coast",
+      "suitable_crops": ["Coconut", "Arecanut", "Cashew", "Paddy", "Rubber"]
+    },
+    {
+      "name": "Raichur",
+      "soil_type": "Medium black soil",
+      "ph_range": "7.0-8.0",
+      "characteristics": "Moderately deep, calcareous, good water retention",
+      "suitable_crops": ["Cotton", "Rice", "Jowar", "Sunflower", "Chilli"]
+    },
+    {
+      "name": "Hassan",
+      "soil_type": "Red loamy soil",
+      "ph_range": "5.5-7.0",
+      "characteristics": "Medium texture, well-drained, moderately fertile",
+      "suitable_crops": ["Coffee", "Potato", "Ragi", "Maize", "Ginger"]
+    },
+    {
+      "name": "Tumkur",
+      "soil_type": "Red sandy soil",
+      "ph_range": "5.5-6.5",
+      "characteristics": "Light-textured, low fertility, drought-prone",
+      "suitable_crops": ["Coconut", "Groundnut", "Ragi", "Sorghum", "Sunflower"]
+    },
+    {
+      "name": "Mandya",
+      "soil_type": "Red loam with alluvial",
+      "ph_range": "6.0-7.0",
+      "characteristics": "Fertile due to irrigation, good for multiple crops",
+      "suitable_crops": ["Sugarcane", "Paddy", "Ragi", "Coconut", "Vegetables"]
+    },
+    {
+      "name": "Davangere",
+      "soil_type": "Transitional black-red soil",
+      "ph_range": "6.5-7.5",
+      "characteristics": "Mixed texture, moderately fertile",
+      "suitable_crops": ["Cotton", "Maize", "Jowar", "Groundnut", "Chilli"]
+    }
+  ]
+}

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi Saathi - My Identity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = { darkMode: "class", theme: { extend: {
+  colors: {
+    "primary": "#10B981", "primary-dim": "#059669", "primary-glow": "rgba(16,185,129,0.15)",
+    "accent": "#34D399", "accent-soft": "rgba(52,211,153,0.1)",
+    "bg-base": "#0B0F19", "bg-surface": "#111827", "bg-elevated": "#1F2937", "bg-hover": "#374151",
+    "card": "#111827", "card-hover": "#1a2332",
+    "text-primary": "#F9FAFB", "text-secondary": "#D1D5DB", "text-muted": "#6B7280",
+    "border-dark": "#1F2937", "border-glow": "rgba(16,185,129,0.2)",
+    "danger": "#EF4444", "warning": "#F59E0B", "info": "#3B82F6",
+    "surface-dim": "#1a2332"
+  },
+  fontFamily: { "headline": ["Manrope"], "body": ["Inter"] },
+  boxShadow: {
+    "card": "0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2)",
+    "card-hover": "0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1)",
+    "glow": "0 0 30px rgba(16,185,129,0.15)",
+    "glow-strong": "0 0 40px rgba(16,185,129,0.25)"
+  }
+}}}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; vertical-align: middle }
+  body { background: #0B0F19; }
+  /* Subtle animated gradient mesh */
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: 0.4;
+    background: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(139,92,246,0.05) 0%, transparent 50%); }
+  .sidebar-link { transition: all 0.2s ease; }
+  .sidebar-link:hover { background: rgba(16,185,129,0.08); transform: translateX(4px); }
+  .sidebar-link.active { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.08)); color: #10B981; border: 1px solid rgba(16,185,129,0.2); }
+  .sidebar-link.active .material-symbols-outlined { color: #34D399; }
+  .glass-dark { background: rgba(17,24,39,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .metric-card { transition: all 0.25s ease; border: 1px solid #1F2937; }
+  .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
+  .action-card { transition: all 0.25s ease; }
+  .action-card:hover { transform: translateY(-2px); }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.4 } }
+  .form-input { background: #1F2937; border: 1px solid #374151; color: #F9FAFB; transition: all 0.2s; }
+  .form-input:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); outline: none; }
+  .form-input::placeholder { color: #6B7280; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0B0F19; }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+</style>
+</head>
+<body class="font-body text-text-primary min-h-screen">
+
+<!-- Top Navbar -->
+<header class="fixed top-0 w-full z-50 glass-dark">
+<nav class="flex items-center justify-between px-6 h-16 max-w-[1600px] mx-auto">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+      <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">eco</span>
+    </div>
+    <span class="text-lg font-headline font-extrabold text-text-primary tracking-tight">Krishi<span class="text-primary"> Saathi</span></span>
+  </div>
+  <div class="hidden md:flex flex-1 max-w-lg mx-8">
+    <div class="relative w-full">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-lg">search</span>
+      <input type="text" placeholder="Search crops, markets, schemes..." class="w-full bg-bg-elevated border border-border-dark rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none transition-all placeholder:text-text-muted"/>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <button class="relative p-2 rounded-xl hover:bg-bg-elevated transition-colors">
+      <span class="material-symbols-outlined text-text-muted">notifications</span>
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
+    </button>
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dim text-white flex items-center justify-center text-sm font-bold cursor-pointer shadow-glow" id="profileMiniName" onclick="window.location.href='/stitch/farmer/profile'">F</div>
+  </div>
+</nav>
+</header>
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex h-screen w-56 fixed left-0 top-0 flex-col gap-1 p-3 pt-20 z-40 border-r border-border-dark bg-bg-surface/80" style="backdrop-filter: blur(12px);">
+<div class="mb-4 px-3 pt-2">
+  <p class="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Navigation</p>
+</div>
+<nav class="space-y-0.5 flex-1">
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/farmer">
+    <span class="material-symbols-outlined text-[20px]">space_dashboard</span>
+    <span class="font-semibold text-[13px]">Overview</span>
+  </a>
+  <a class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-2.5" href="/stitch/farmer/profile">
+    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">badge</span>
+    <span class="font-semibold text-[13px]">My Identity</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/marketplace">
+    <span class="material-symbols-outlined text-[20px]">store</span>
+    <span class="font-semibold text-[13px]">Market</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/insurance">
+    <span class="material-symbols-outlined text-[20px]">health_and_safety</span>
+    <span class="font-semibold text-[13px]">Insurance</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/gov-schemes">
+    <span class="material-symbols-outlined text-[20px]">account_balance</span>
+    <span class="font-semibold text-[13px]">Gov Schemes</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/crop-prediction">
+    <span class="material-symbols-outlined text-[20px]">psychology</span>
+    <span class="font-semibold text-[13px]">Crop AI</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/yield-prediction">
+    <span class="material-symbols-outlined text-[20px]">calculate</span>
+    <span class="font-semibold text-[13px]">Yield Calc</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/chatbot">
+    <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+    <span class="font-semibold text-[13px]">AI Assistant</span>
+  </a>
+</nav>
+<a href="/stitch/chatbot" class="mb-3 mx-1 bg-gradient-to-r from-primary to-primary-dim text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-glow-strong transition-all shadow-glow">
+  <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">smart_toy</span> AI Assistant
+</a>
+</aside>
+
+<!-- Main Content -->
+<main class="pt-20 pb-20 px-4 md:px-8 lg:pl-56 max-w-[1200px] mx-auto">
+
+<!-- Header -->
+<section class="mb-8 mt-4">
+    <div class="flex items-center gap-3 mb-1">
+      <span class="material-symbols-outlined text-accent text-2xl" style="font-variation-settings:'FILL' 1">badge</span>
+      <h1 class="text-3xl md:text-4xl font-headline font-extrabold text-primary leading-tight">Your Digital Identity</h1>
+    </div>
+    <p class="text-text-secondary text-sm ml-10">Manage your profile and generate your official Krishi Farmer ID Card.</p>
+</section>
+
+<!-- Government-Style Horizontal Farmer Identity Card -->
+<section class="mb-8">
+  <div class="relative">
+    <div id="digitalIdCardNode" class="relative overflow-hidden" style="width: 720px; max-width: 100%; height: 450px; margin: 0 auto; background: #FFFFFF; border: 2px solid rgba(20,83,45,0.25); border-radius: 16px; box-shadow: 0 8px 32px rgba(20,83,45,0.12);">
+      
+      <!-- Official Header Band -->
+      <div style="background: linear-gradient(90deg, #14532D 0%, #166534 50%, #14532D 100%); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.25);">
+            <span class="material-symbols-outlined" style="color: #fff; font-size: 22px; font-variation-settings: 'FILL' 1;">agriculture</span>
+          </div>
+          <div>
+            <p style="color: #FFFFFF; font-size: 13px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; line-height: 1.2; font-family: Manrope, sans-serif;">KRISHI SAATHI</p>
+            <p style="color: rgba(255,255,255,0.6); font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;">Digital Farmer Identity Program</p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <p style="color: #86EFAC; font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;">Kisan Identity Card</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 8px; font-weight: 700; letter-spacing: 0.1em;">किसान पहचान पत्र</p>
+        </div>
+      </div>
+
+      <!-- Watermark Pattern -->
+      <div style="position: absolute; inset: 0; pointer-events: none; opacity: 0.03; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, #14532D 35px, #14532D 36px);"></div>
+      <div style="position: absolute; bottom: 16px; right: 16px; pointer-events: none; opacity: 0.04;">
+        <span class="material-symbols-outlined" style="font-size: 120px; color: #14532D; font-variation-settings: 'FILL' 1;">verified_user</span>
+      </div>
+
+      <!-- Card Body -->
+      <div style="display: flex; flex-direction: row; gap: 24px; padding: 24px; position: relative; z-index: 10; height: calc(100% - 72px);">
+        
+        <!-- Left: Photo -->
+        <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+          <div class="relative group/photo cursor-pointer" onclick="document.getElementById('photoUpload').click()" style="width: 120px; height: 144px; border: 3px solid rgba(20,83,45,0.4); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <img id="idCardPhoto" src="https://ui-avatars.com/api/?name=Farmer&background=14532D&color=fff&size=200" style="width: 100%; height: 100%; object-fit: cover;" crossorigin="anonymous" />
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/photo:opacity-100 transition-opacity">
+              <span class="material-symbols-outlined text-white text-2xl">photo_camera</span>
+            </div>
+          </div>
+          <input type="file" id="photoUpload" class="hidden" accept="image/*" onchange="previewPhoto(event)" />
+          <button class="mt-2" style="font-size: 9px; font-weight: 700; color: #14532D; background: rgba(20,83,45,0.1); padding: 4px 12px; border-radius: 4px; border: none; cursor: pointer;" onclick="document.getElementById('photoUpload').click()">UPLOAD PHOTO</button>
+        </div>
+
+        <!-- Center: Identity Details -->
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0;">
+          <!-- Name & ID -->
+          <div>
+            <p style="font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 2px;">Full Name / पूरा नाम</p>
+            <h3 id="idCardName" style="font-size: 26px; font-weight: 800; color: #0F172A; font-family: Manrope, sans-serif; line-height: 1.1; margin: 0;">Farmer Name</h3>
+            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+              <p id="idCardUgfid" style="font-size: 12px; font-family: 'Courier New', monospace; font-weight: 800; color: #14532D; padding: 4px 10px; background: rgba(20,83,45,0.08); border: 1px solid rgba(20,83,45,0.2); border-radius: 4px; letter-spacing: 0.1em; margin: 0;">KR-IND-...</p>
+              <span style="font-size: 8px; font-weight: 700; color: #166534; background: rgba(134,239,172,0.3); padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(22,101,52,0.2); text-transform: uppercase; letter-spacing: 0.1em;">Verified ✓</span>
+            </div>
+          </div>
+          
+          <!-- Details Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; border-top: 1px dashed rgba(226,232,240,0.8); padding-top: 14px;">
+            <div>
+              <p style="font-size: 8px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.15em;">State / राज्य</p>
+              <p id="idCardState" style="font-size: 14px; font-weight: 700; color: #0F172A; margin-top: 2px;">-</p>
+            </div>
+            <div>
+              <p style="font-size: 8px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.15em;">District / जिला</p>
+              <p id="idCardDistrict" style="font-size: 14px; font-weight: 700; color: #0F172A; margin-top: 2px; text-transform: uppercase;">-</p>
+            </div>
+            <div>
+              <p style="font-size: 8px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.15em;">Village / गाँव</p>
+              <p id="idCardVillage" style="font-size: 14px; font-weight: 700; color: #0F172A; margin-top: 2px;">-</p>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-top: 14px; border-top: 1px solid rgba(226,232,240,0.6); padding-top: 8px;">
+            <p style="font-size: 7px; color: #94A3B8; font-weight: 500; line-height: 1.4;">This is an electronically generated identity card.<br/>Valid when verified via QR code scan.</p>
+            <p style="font-size: 7px; color: #94A3B8; font-weight: 700;">Issued by Krishi Saathi Platform</p>
+          </div>
+        </div>
+
+        <!-- Right: QR Code -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; border-left: 1px dashed rgba(226,232,240,0.8); padding-left: 20px;">
+          <div style="background: #fff; padding: 8px; border-radius: 8px; border: 1px solid rgba(226,232,240,0.6); box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <img id="idCardQr" style="width: 120px; height: 120px; object-fit: contain;" src="" alt="QR Code" crossorigin="anonymous" />
+          </div>
+          <p style="font-size: 7px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; text-align: center;">Scan to Verify<br/>Identity</p>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- Download Button -->
+    <div class="flex justify-center mt-6">
+      <button id="downloadIdBtnBtn" onclick="downloadIdCard()" class="py-3 px-8 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 hover:shadow-lg" style="background: #14532D; color: #fff; box-shadow: 0 4px 16px rgba(20,83,45,0.3);">
+        <span class="material-symbols-outlined text-[18px]">download</span> Download ID Card
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Registration Form Card -->
+<section class="bg-card border border-border-dark p-6 md:p-10 rounded-2xl shadow-sm mb-8">
+    <div class="mb-8">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings:'FILL' 1">edit_note</span>
+          <h3 class="text-2xl font-headline font-extrabold text-primary">Registration Information</h3>
+        </div>
+        <p class="text-sm text-text-secondary">Update your details to automatically sync your Identity Card.</p>
+    </div>
+    <form class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">Full Name</label>
+                <input id="identityName" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 focus:ring-2 focus:ring-accent/20 text-text-primary font-medium outline-none" type="text" value="Farmer"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">Phone</label>
+                <input id="identityPhone" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-text-primary font-medium outline-none opacity-60 cursor-not-allowed" readonly="" type="text" value="+91 -"/>
+            </div>
+        </div>
+        
+        <hr class="border-border-dark">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">Village / Town</label>
+                <input id="identityVillage" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" placeholder="Enter village name"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">City</label>
+                <input id="identityCity" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" value="Kalaburgi"/>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">District</label>
+                <input id="identityDistrict" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" placeholder="Enter district"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">State</label>
+                <input id="identityState" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" placeholder="Karnataka"/>
+            </div>
+        </div>
+        
+        <hr class="border-border-dark">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">Major Crops</label>
+                <input id="identityCrops" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" placeholder="e.g. Onion, Tomato"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wider">Land Size</label>
+                <input id="identityLand" class="form-input w-full bg-bg-elevated border border-border-dark rounded-xl p-4 text-sm text-text-primary font-medium outline-none focus:ring-2 focus:ring-accent/20" type="text" placeholder="e.g. 2 acres"/>
+            </div>
+        </div>
+        
+        <div class="pt-4 flex justify-end">
+            <button id="saveProfileBtn" type="button" onclick="saveProfile()" class="bg-primary text-white px-8 py-4 rounded-xl text-sm font-bold shadow-md hover:bg-primary-light transition-colors flex items-center gap-2 active:scale-95">
+              <span class="material-symbols-outlined text-accent-light text-[18px]">sync</span>
+              Sync Profile & Update Card
+            </button>
+        </div>
+    </form>
+</section>
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 px-4 py-3 flex justify-around items-center border-t border-border-dark" style="background: rgba(11,15,25,0.95); backdrop-filter: blur(20px);">
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/farmer"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span class="text-[9px]">Home</span></a>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/marketplace"><span class="material-symbols-outlined text-[20px]">store</span><span class="text-[9px]">Market</span></a>
+<div class="relative -top-6"><a href="/stitch/chatbot" class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dim text-white rounded-full shadow-glow flex items-center justify-center"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">smart_toy</span></a></div>
+<a class="flex flex-col items-center gap-0.5 text-primary font-bold" href="/stitch/farmer/profile"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">badge</span><span class="text-[9px]">Identity</span></a>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/crop-prediction"><span class="material-symbols-outlined text-[20px]">psychology</span><span class="text-[9px]">Crop AI</span></a>
+</nav>
+
+<script>
+  const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+  const params = new URLSearchParams(window.location.search);
+  const storedRole = localStorage.getItem('stitch_role') || '';
+  let storedSession = {};
+  try {
+    storedSession = JSON.parse(localStorage.getItem('stitch_session') || '{}');
+  } catch {
+    storedSession = {};
+  }
+
+  let currentPhone = params.get('phone') || storedSession.phone || '';
+  let currentName = params.get('name') || storedSession.name || 'Farmer';
+  let currentCity = params.get('city') || storedSession.city || 'Kalaburgi';
+
+  function normalizePhone(phone) {
+    const digits = String(phone || '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.length === 10) return `+91${digits}`;
+    if (digits.length === 12 && digits.startsWith('91')) return `+${digits}`;
+    if (digits.startsWith('+')) return digits;
+    return `+${digits}`;
+  }
+
+  function previewPhoto(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('idCardPhoto').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function setIdentity(name, phone, city) {
+    const elName = document.getElementById('identityName');
+    if (elName) elName.value = name || 'Farmer';
+    const elPhone = document.getElementById('identityPhone');
+    if (elPhone) elPhone.value = phone || '-';
+    const elCity = document.getElementById('identityCity');
+    if (elCity) elCity.value = city || '-';
+    const miniName = document.getElementById('profileMiniName');
+    if (miniName) miniName.textContent = ((name || 'F')[0] || 'F').toUpperCase();
+  }
+
+  async function saveProfile() {
+    const btn = document.getElementById('saveProfileBtn');
+    if (!btn) return;
+    const oldHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Saving...';
+
+    try {
+      const name = String(document.getElementById('identityName')?.value || '').trim() || currentName;
+      const city = String(document.getElementById('identityCity')?.value || '').trim() || currentCity;
+      const village = String(document.getElementById('identityVillage')?.value || '').trim();
+      const district = String(document.getElementById('identityDistrict')?.value || '').trim();
+      const state = String(document.getElementById('identityState')?.value || '').trim();
+      const crop_types = String(document.getElementById('identityCrops')?.value || '').trim();
+      const land_size = String(document.getElementById('identityLand')?.value || '').trim();
+
+      const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, city, village, district, state, crop_types, land_size })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.detail || 'Failed to save profile');
+      }
+
+      currentName = data.farmer.name || name;
+      currentCity = data.farmer.city || city;
+      setIdentity(currentName, currentPhone, currentCity);
+
+      localStorage.setItem('stitch_session', JSON.stringify({
+        phone: currentPhone,
+        name: currentName,
+        city: currentCity,
+        at: Date.now()
+      }));
+      
+      // Show success toast
+      btn.innerHTML = '<span class="material-symbols-outlined text-accent-light text-[18px]">check_circle</span> Saved!';
+      btn.classList.add('bg-accent');
+      setTimeout(() => {
+        btn.innerHTML = oldHTML;
+        btn.classList.remove('bg-accent');
+      }, 2000);
+      
+      await fetchProfile();
+    } catch (err) {
+      alert(err.message || 'Profile update failed');
+      btn.innerHTML = oldHTML;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function fetchProfile() {
+    if (!currentPhone) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}`);
+      const data = await res.json();
+      if (!res.ok || !data.success) return;
+
+      const farmer = data.farmer || {};
+      const context = data.context || {};
+      currentName = farmer.name || currentName;
+      currentPhone = farmer.phone || currentPhone;
+      currentCity = context.city || farmer.city || currentCity;
+
+      setIdentity(currentName, currentPhone, currentCity);
+
+      // Bind form fields
+      const elVillage = document.getElementById('identityVillage');
+      if (elVillage) elVillage.value = farmer.village || '';
+      const elDistrict = document.getElementById('identityDistrict');
+      if (elDistrict) elDistrict.value = farmer.district || '';
+      const elState = document.getElementById('identityState');
+      if (elState) elState.value = farmer.state || '';
+      const elCrops = document.getElementById('identityCrops');
+      if (elCrops) elCrops.value = farmer.crop_types || '';
+      const elLand = document.getElementById('identityLand');
+      if (elLand) elLand.value = farmer.land_size || '';
+
+      // Bind ID card
+      if (farmer.ugfid) {
+        window.currentUgfid = farmer.ugfid;
+        const elCardName = document.getElementById('idCardName');
+        if (elCardName) elCardName.textContent = currentName;
+        const elCardUgfid = document.getElementById('idCardUgfid');
+        if (elCardUgfid) elCardUgfid.textContent = farmer.ugfid;
+
+        const elCardState = document.getElementById('idCardState');
+        if (elCardState) elCardState.textContent = farmer.state || '-';
+        const elCardDistrict = document.getElementById('idCardDistrict');
+        if (elCardDistrict) elCardDistrict.textContent = farmer.district || '-';
+        const elCardVillage = document.getElementById('idCardVillage');
+        if (elCardVillage) elCardVillage.textContent = farmer.village || '-';
+
+        const elPhoto = document.getElementById('idCardPhoto');
+        if (elPhoto) elPhoto.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentName)}&background=14532D&color=fff&size=200`;
+
+        const qrUrl = window.location.origin + '/farmer/profile/' + farmer.ugfid;
+        const elQr = document.getElementById('idCardQr');
+        if (elQr) elQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`;
+      }
+
+      localStorage.setItem('stitch_session', JSON.stringify({
+        phone: currentPhone,
+        name: currentName,
+        city: currentCity,
+        at: Date.now()
+      }));
+    } catch (err) {
+      console.error('fetchProfile error:', err);
+    }
+  }
+
+  function downloadIdCard() {
+    if (!window.currentUgfid) {
+      alert('Save your profile first to generate the ID card.');
+      return;
+    }
+    const card = document.getElementById('digitalIdCardNode');
+    if (!card) return;
+
+    const uploadBtn = card.querySelector('button');
+    if (uploadBtn) uploadBtn.style.visibility = 'hidden';
+
+    html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      width: card.scrollWidth,
+      height: card.scrollHeight,
+      logging: false,
+      onclone: function(clonedDoc) {
+        const clonedCard = clonedDoc.getElementById('digitalIdCardNode');
+        if (clonedCard) {
+          clonedCard.style.width = '720px';
+          clonedCard.style.height = '450px';
+        }
+        const btns = clonedDoc.querySelectorAll('#digitalIdCardNode button');
+        btns.forEach(b => b.style.display = 'none');
+        const overlays = clonedDoc.querySelectorAll('#digitalIdCardNode .group\\/photo > div:last-child');
+        overlays.forEach(o => o.style.display = 'none');
+      }
+    }).then(canvas => {
+      if (uploadBtn) uploadBtn.style.visibility = 'visible';
+      const link = document.createElement('a');
+      link.download = `Krishi_ID_${window.currentUgfid}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(err => {
+      console.error(err);
+      if (uploadBtn) uploadBtn.style.visibility = 'visible';
+      alert('Failed to generate image. Please try again.');
+    });
+  }
+
+  async function bootstrap() {
+    if (storedRole && storedRole !== 'farmer') {
+      window.location.href = '/stitch/signin';
+      return;
+    }
+    if (!currentPhone) {
+      window.location.href = '/stitch/signin';
+      return;
+    }
+
+    currentPhone = normalizePhone(currentPhone);
+    try {
+      localStorage.setItem('stitch_role', 'farmer');
+      await fetchProfile();
+    } catch (err) {
+      console.error('Profile bootstrap error:', err);
+    }
+  }
+
+  bootstrap();
+</script>
+</body></html>

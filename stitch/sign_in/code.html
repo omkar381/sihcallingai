@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi AI - Sign In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-primary": "#82d99c",
+              "primary-fixed-dim": "#82d99c",
+              "tertiary-container": "#72554b",
+              "background": "#faf9f7",
+              "inverse-surface": "#2f3130",
+              "on-secondary-fixed-variant": "#00522b",
+              "surface-container-low": "#f4f3f1",
+              "on-primary-fixed": "#00210e",
+              "tertiary": "#583e35",
+              "on-tertiary-fixed": "#2b160f",
+              "surface-container-highest": "#e3e2e0",
+              "tertiary-fixed": "#ffdbce",
+              "primary-container": "#006a39",
+              "on-primary-fixed-variant": "#00522b",
+              "surface-container": "#efeeec",
+              "on-primary": "#ffffff",
+              "on-secondary-container": "#00723e",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#e9e8e6",
+              "on-secondary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "secondary-container": "#7ff7a9",
+              "error": "#ba1a1a",
+              "outline-variant": "#bec9be",
+              "on-tertiary-container": "#f2ccbf",
+              "outline": "#6f7a70",
+              "tertiary-fixed-dim": "#e4beb2",
+              "surface": "#faf9f7",
+              "on-secondary-fixed": "#00210e",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "secondary": "#006d3b",
+              "primary": "#004f29",
+              "on-primary-container": "#8fe7aa",
+              "surface-dim": "#dadad8",
+              "surface-variant": "#e3e2e0",
+              "surface-bright": "#faf9f7",
+              "on-surface-variant": "#3f4940",
+              "secondary-fixed-dim": "#64dd91",
+              "on-surface": "#1a1c1b",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1c1b",
+              "surface-tint": "#066d3b",
+              "inverse-on-surface": "#f1f1ef",
+              "primary-fixed": "#9df6b7",
+              "secondary-fixed": "#82faab"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #004F29 0%, #006A39 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased">
+<main class="min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Left Branding Panel (Editorial / Visual) -->
+<section class="hidden md:flex md:w-5/12 editorial-gradient relative p-12 flex-col justify-between overflow-hidden">
+<!-- Background Decorative Texture -->
+<div class="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" data-alt="Overhead cinematic view of green farmland fields" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLLRf4TKKsLtAUmFVbT2PSHa71ESgLT8TCXL73r_A8DQW4Lgj83gaQUvdw_5Xagt4sZaj5jbP22Gg43uFZ41Ild696YpstK-8NVZE-d77mRWYFPWQ10iPJK7kVjk2HYO1n-VwXbDcNw-1RPip3GNpKq36slUTiiPQMo-tCURRRWY3meVK6HoJYDPlyTFnd-3pdB1mKd8Tv9blZj1wlLQ6wlM4ilzGgOWmx7KNPt0KaXfs7PkzXXeGqDF-gO4mzMiqXf217YqyMuNG0'); background-size: cover; background-position: center;">
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-4xl" data-icon="potted_plant">potted_plant</span>
+<h1 class="font-headline font-black text-3xl tracking-tight text-white">Krishi AI</h1>
+</div>
+</div>
+<div class="relative z-10 max-w-md">
+<span class="text-secondary-fixed font-headline font-bold tracking-widest text-xs uppercase mb-4 block">Precision Agriculture</span>
+<h2 class="font-headline text-white text-5xl font-extrabold leading-[1.1] mb-6 tracking-tight">
+                    Nurturing the <span class="text-secondary-fixed">future</span> of global farming.
+                </h2>
+<p class="text-white/80 text-lg font-light leading-relaxed">
+                    Integrated financial intelligence and real-time agronomy tailored for the modern producer.
+                </p>
+</div>
+<div class="relative z-10">
+<div class="glass-panel rounded-2xl p-6 inline-flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="psychology">psychology</span>
+</div>
+<div>
+<p class="text-white font-headline font-bold text-sm">AI Pulse Active</p>
+<p class="text-white/60 text-xs">Soil health data synchronizing...</p>
+</div>
+</div>
+</div>
+<!-- Bottom Graphic Element -->
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+</section>
+<!-- Right Form Panel -->
+<section class="flex-1 bg-background flex flex-col justify-center items-center p-6 md:p-24 relative">
+<!-- Mobile Branding (Hidden on Desktop) -->
+<div class="md:hidden flex items-center gap-2 absolute top-8 left-8">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="potted_plant">potted_plant</span>
+<span class="font-headline font-black text-xl text-primary">Krishi AI</span>
+</div>
+<div class="w-full max-w-[440px]">
+<div class="mb-12">
+<h3 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight mb-2">Welcome Back</h3>
+<p class="text-on-surface-variant font-medium">Access your digital agricultural dashboard.</p>
+</div>
+<!-- Role Switcher -->
+<div class="bg-surface-container-low p-1.5 rounded-2xl flex items-center mb-10">
+<button id="roleFarmerBtn" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white shadow-sm text-primary" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="agriculture" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+                        Farmer
+                    </button>
+<button id="roleAdminBtn" class="flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="admin_panel_settings">admin_panel_settings</span>
+                        Admin
+                    </button>
+</div>
+<form id="signinForm" class="space-y-6">
+<!-- Phone/Email Field -->
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Account Identifier</label>
+<div class="relative group">
+<input id="signinIdentifier" class="w-full bg-surface-container-high border-none rounded-xl px-4 py-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary-fixed/50 transition-all font-medium" placeholder="Phone number or Email address" type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-xl" data-icon="contact_mail">contact_mail</span>
+</div>
+</div>
+</div>
+<!-- Password/OTP Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-end ml-1">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Security Key</label>
+<button class="text-xs font-bold text-primary hover:underline" type="button">Request OTP Instead?</button>
+</div>
+<div class="relative group">
+<input id="signinSecret" class="w-full bg-surface-container-high border-none rounded-xl px-4 py-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary-fixed/50 transition-all font-medium" placeholder="Enter your password" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<div class="pt-4">
+<button id="signinSubmit" class="w-full bg-primary-container text-white py-4 px-6 rounded-2xl font-headline font-bold text-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all hover:bg-primary shadow-lg shadow-primary-container/10" type="submit">
+                            Continue
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<div class="mt-12 text-center">
+<p class="text-on-surface-variant text-sm font-medium">
+                        Don't have an account yet? 
+                        <a class="text-primary font-bold ml-1 hover:underline" href="#">Start growing with us</a>
+</p>
+</div>
+<div class="mt-16 flex items-center justify-between opacity-30 group">
+<div class="h-[1px] flex-1 bg-outline-variant"></div>
+<span class="mx-6 text-[10px] font-bold uppercase tracking-[0.2em]">Krishi AI Ecosystem</span>
+<div class="h-[1px] flex-1 bg-outline-variant"></div>
+</div>
+<!-- Subtle Help Footer -->
+<div class="mt-8 flex justify-center gap-8">
+<button class="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span> Help Center
+                    </button>
+<button class="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="language">language</span> English (US)
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<script>
+  const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+  let currentRole = 'farmer';
+
+  const roleFarmerBtn = document.getElementById('roleFarmerBtn');
+  const roleAdminBtn = document.getElementById('roleAdminBtn');
+  const form = document.getElementById('signinForm');
+  const identifierInput = document.getElementById('signinIdentifier');
+  const submitBtn = document.getElementById('signinSubmit');
+
+  function setRole(role) {
+    currentRole = role;
+    const farmerActive = role === 'farmer';
+    roleFarmerBtn.className = farmerActive
+      ? 'flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white shadow-sm text-primary'
+      : 'flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface';
+    roleAdminBtn.className = !farmerActive
+      ? 'flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white shadow-sm text-primary'
+      : 'flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface';
+  }
+
+  roleFarmerBtn.addEventListener('click', () => setRole('farmer'));
+  roleAdminBtn.addEventListener('click', () => setRole('admin'));
+
+  function parseIdentity(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return { name: 'Farmer', phone: '' };
+
+    const digits = raw.replace(/\D/g, '');
+    const phone = digits.length >= 10 ? digits.slice(-10) : '';
+
+    if (phone) {
+      return { name: 'Farmer', phone };
+    }
+    return { name: raw, phone: '' };
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (currentRole === 'admin') {
+      window.location.href = '/stitch/admin';
+      return;
+    }
+
+    const oldHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Opening Dashboard...';
+
+    try {
+      const parsed = parseIdentity(identifierInput.value);
+      if (!parsed.phone) {
+        throw new Error('Enter a valid 10-digit phone number for farmer login');
+      }
+
+      const res = await fetch(`${API_BASE}/api/farmer/session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: parsed.name, phone: parsed.phone, city: 'Kalaburgi' })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.detail || 'Farmer session creation failed');
+      }
+
+      const q = new URLSearchParams({
+        phone: data.farmer.phone || parsed.phone,
+        name: data.farmer.name || parsed.name,
+        city: data.farmer.city || 'Kalaburgi'
+      });
+      window.location.href = `/stitch/farmer?${q.toString()}`;
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = oldHtml;
+    }
+  });
+</script>
+</body></html>

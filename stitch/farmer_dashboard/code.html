@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi AI - Farmer Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-primary": "#82d99c",
+              "primary-fixed-dim": "#82d99c",
+              "tertiary-container": "#72554b",
+              "background": "#faf9f7",
+              "inverse-surface": "#2f3130",
+              "on-secondary-fixed-variant": "#00522b",
+              "surface-container-low": "#f4f3f1",
+              "on-primary-fixed": "#00210e",
+              "tertiary": "#583e35",
+              "on-tertiary-fixed": "#2b160f",
+              "surface-container-highest": "#e3e2e0",
+              "tertiary-fixed": "#ffdbce",
+              "primary-container": "#006a39",
+              "on-primary-fixed-variant": "#00522b",
+              "surface-container": "#efeeec",
+              "on-primary": "#ffffff",
+              "on-secondary-container": "#00723e",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#e9e8e6",
+              "on-secondary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "secondary-container": "#7ff7a9",
+              "error": "#ba1a1a",
+              "outline-variant": "#bec9be",
+              "on-tertiary-container": "#f2ccbf",
+              "outline": "#6f7a70",
+              "tertiary-fixed-dim": "#e4beb2",
+              "surface": "#faf9f7",
+              "on-secondary-fixed": "#00210e",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "secondary": "#006d3b",
+              "primary": "#004f29",
+              "on-primary-container": "#8fe7aa",
+              "surface-dim": "#dadad8",
+              "surface-variant": "#e3e2e0",
+              "surface-bright": "#faf9f7",
+              "on-surface-variant": "#3f4940",
+              "secondary-fixed-dim": "#64dd91",
+              "on-surface": "#1a1c1b",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1c1b",
+              "surface-tint": "#066d3b",
+              "inverse-on-surface": "#f1f1ef",
+              "primary-fixed": "#9df6b7",
+              "secondary-fixed": "#82faab"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    vertical-align: middle
+    }
+.farm-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCKipDkVRjEBTpO96oj--JKYBANrjh09JJS8PbMiukFtNBOz_BC7l90DIo0NLtdpiXJrv6G4YOJree07C6HnjcfhUPY4ZIUQ27rDZvtd7DfpBoc18SM7GRt-7E67lokkfGlvaAN86WARq7Znd7TMOArJkjDii-1nrAXtmlMNs-z10nc5R6xJ5WNQCRtWVRNz7lby0nTmUOYuv4RrwfsGQHcdccLDEnoZSoOie0jcRFYgigy4hsNBREWBwCHI3U596bXMku1HeV9UNTa);
+    opacity: 0.4
+    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px)
+    }</style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen relative overflow-x-hidden">
+<!-- Texture Overlay -->
+<div class="fixed inset-0 pointer-events-none farm-texture z-0"></div>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-[#FAF9F7]/80 dark:bg-[#1A1C1B]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(26,28,27,0.04)]">
+<nav class="flex justify-between items-center px-8 h-20 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-black text-[#004F29] dark:text-[#64DD91] font-['Manrope'] tracking-tight">
+                Krishi AI
+            </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-[#004F29] dark:text-[#64DD91] font-bold border-b-2 border-[#006A39] py-1 font-['Manrope']" href="#">Market</a>
+<a class="text-[#1A1C1B] dark:text-[#FAF9F7] opacity-70 hover:text-[#006A39] dark:hover:text-[#64DD91] transition-colors font-['Manrope']" href="#">Resources</a>
+<a class="text-[#1A1C1B] dark:text-[#FAF9F7] opacity-70 hover:text-[#006A39] dark:hover:text-[#64DD91] transition-colors font-['Manrope']" href="#">Support</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary px-6 py-2.5 rounded-xl font-bold active:scale-95 duration-200">Get Started</button>
+</div>
+</nav>
+<div class="bg-[#F4F3F1] dark:bg-[#2A2C2B] h-[1px] w-full"></div>
+</header>
+<!-- Side Navigation (Web) -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#F4F3F1] flex-col gap-2 p-4 pt-24 z-40">
+<div class="mb-6 px-4">
+<h2 class="text-xl font-bold text-[#004F29] font-headline">Krishi Admin</h2>
+<p class="text-xs text-on-surface-variant font-medium">Digital Agronomist</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 bg-[#FFFFFF] text-[#004F29] rounded-xl px-4 py-3 shadow-sm active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 text-[#1A1C1B]/60 px-4 py-3 hover:bg-[#FAF9F7] rounded-xl transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+<span class="font-medium text-sm">Calls</span>
+</a>
+<a class="flex items-center gap-3 text-[#1A1C1B]/60 px-4 py-3 hover:bg-[#FAF9F7] rounded-xl transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-medium text-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 text-[#1A1C1B]/60 px-4 py-3 hover:bg-[#FAF9F7] rounded-xl transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-medium text-sm">Market</span>
+</a>
+<a class="flex items-center gap-3 text-[#1A1C1B]/60 px-4 py-3 hover:bg-[#FAF9F7] rounded-xl transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-medium text-sm">Farmers</span>
+</a>
+<a class="flex items-center gap-3 text-[#1A1C1B]/60 px-4 py-3 hover:bg-[#FAF9F7] rounded-xl transition-all active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium text-sm">System</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-on-primary py-3 rounded-xl font-bold shadow-lg">New Report</button>
+</aside>
+<!-- Main Content -->
+<main class="pt-24 lg:pl-64 min-h-screen px-4 md:px-8 max-w-screen-2xl mx-auto pb-12 relative z-10">
+<!-- Welcome Hero & Identity -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-start">
+<div class="lg:col-span-7 space-y-6">
+<div class="flex items-center gap-4">
+<span class="bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        AI Active
+                    </span>
+<span class="text-on-surface-variant text-sm font-medium">Last synced: Just now</span>
+</div>
+<h1 id="farmerHeroName" class="text-5xl md:text-6xl font-headline font-extrabold text-primary tracking-tight leading-tight">
+                    Welcome back,<br/>Ramesh Gowda
+                </h1>
+<p class="text-on-surface-variant text-lg max-w-xl">
+                    Your digital agronomist has analyzed 14 new data points from your farm today. Everything is looking healthy.
+                </p>
+<div class="flex gap-4">
+<button id="farmerCallBtn" class="bg-primary-container text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl transition-shadow">
+<span class="material-symbols-outlined" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                        Call AI Assistant
+                    </button>
+<button id="farmerRefreshBtn" class="bg-surface-container-highest text-on-surface px-8 py-4 rounded-xl font-bold flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+                        Refresh
+                    </button>
+</div>
+</div>
+<!-- Identity Form Card -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-8 rounded-[32px] shadow-sm border border-outline-variant/10">
+<h3 class="text-xl font-headline font-bold text-primary mb-6">Profile Identity</h3>
+<form class="space-y-4">
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase tracking-wider">Full Name</label>
+<input id="identityName" class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-on-surface font-medium" readonly="" type="text" value="Ramesh Gowda"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase tracking-wider">Phone</label>
+<input id="identityPhone" class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-on-surface font-medium" readonly="" type="text" value="+91 98450 12345"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase tracking-wider">City</label>
+<input id="identityCity" class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-on-surface font-medium" readonly="" type="text" value="Mandya"/>
+</div>
+</div>
+</form>
+</div>
+</section>
+<!-- Bento Grid Stats -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+<!-- Wallet Card -->
+<div class="bg-primary text-on-primary p-8 rounded-[32px] flex flex-col justify-between min-h-[220px] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<p class="text-on-primary/70 font-medium">Digital Wallet</p>
+<div>
+<h2 id="walletValue" class="text-4xl font-headline font-extrabold">₹42,850</h2>
+<p class="text-sm font-medium text-secondary-fixed flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                        +12% from last sale
+                    </p>
+</div>
+</div>
+<!-- Soil Type Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[32px] flex flex-col justify-between min-h-[220px]">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary text-4xl" data-icon="landscape" style="font-variation-settings: 'FILL' 1;">landscape</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-xs font-bold">Optimal</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-sm font-medium">Soil Condition</p>
+<h3 id="soilTypeValue" class="text-2xl font-headline font-bold text-on-surface">Red Loamy</h3>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-3">
+<div class="bg-tertiary w-3/4 h-full rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Weather Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[32px] flex flex-col justify-between min-h-[220px]">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-blue-500 text-4xl" data-icon="partly_cloudy_day" style="font-variation-settings: 'FILL' 1;">partly_cloudy_day</span>
+<h3 id="weatherTempValue" class="text-3xl font-headline font-bold">28°C</h3>
+</div>
+<div>
+<p id="weatherCityValue" class="text-on-surface-variant text-sm font-medium">Mandya, Karnataka</p>
+<h3 id="weatherDescValue" class="text-xl font-headline font-bold text-on-surface">Mostly Sunny</h3>
+<p class="text-xs text-on-surface-variant mt-1 italic">Expect rain in 2 days</p>
+</div>
+</div>
+<!-- Profile Overview -->
+<div class="bg-surface-container-lowest p-6 rounded-[32px] flex flex-col gap-4 border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<img class="w-16 h-16 rounded-full object-cover" data-alt="Close up of a smiling elder farmer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa8WYDAlvmeNNXrkIvPIS_FIa5Z51nZxlQliKBVZ7TXU3sNL5SEPnUJNmllVOA7seaZhpL-8MMt4sC0jeLkHWClEOEUKM_MKIenGwauoU25JK3EgWIBwD-QI7wQb5D3vkJrbj--yJu6SE133hd3U0ShDWN9sxW0_0yprkeOcnCcBKXltl0ltJQbJeqZfLFecGHtiWScQNaWgTHUTDpOjtdxkt8zZTc3tmAZAoKOb9rTOXzUIhgWRl3W0XDAZE48mrsMMndlw8uOch6"/>
+<div>
+<h4 class="font-bold text-on-surface">Ramesh G.</h4>
+<p class="text-xs text-on-surface-variant">Platinum Member</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Farm Size</span>
+<span class="font-bold">12.5 Acres</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Main Crop</span>
+<span class="font-bold">Sugar Cane</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Rating</span>
+<span class="font-bold text-primary flex items-center gap-1">4.9 <span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Dashboard Split -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Activity & Orders -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Market Prices Panel -->
+<section class="bg-surface-container-low p-8 rounded-[32px]">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-2xl font-headline font-extrabold text-primary">Live Market Prices</h2>
+<p class="text-sm text-on-surface-variant">Average rates from nearest mandis</p>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</div>
+<div id="marketCards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-lowest p-5 rounded-2xl flex items-center gap-4">
+<div class="bg-red-50 p-3 rounded-xl text-red-600 font-bold">ON</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Onion</p>
+<p class="text-lg font-bold text-on-surface">₹24 <span class="text-xs font-medium">/ kg</span></p>
+<p class="text-[10px] text-error flex items-center">-₹2.50 today</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-2xl flex items-center gap-4">
+<div class="bg-orange-50 p-3 rounded-xl text-orange-600 font-bold">TO</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Tomato</p>
+<p class="text-lg font-bold text-on-surface">₹48 <span class="text-xs font-medium">/ kg</span></p>
+<p class="text-[10px] text-secondary flex items-center">+₹8.00 today</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-2xl flex items-center gap-4">
+<div class="bg-yellow-50 p-3 rounded-xl text-yellow-700 font-bold">PO</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Potato</p>
+<p class="text-lg font-bold text-on-surface">₹32 <span class="text-xs font-medium">/ kg</span></p>
+<p class="text-[10px] text-on-surface-variant flex items-center">Stable</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Orders Rich List -->
+<section>
+<h2 class="text-2xl font-headline font-extrabold text-primary mb-6">Recent Orders</h2>
+<div id="recentOrdersList" class="space-y-4">
+<div class="bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between hover:shadow-md transition-all border border-transparent hover:border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Organic Fertilizer Batch #409</h4>
+<p class="text-sm text-on-surface-variant">Scheduled Delivery: tomorrow, 10:00 AM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">₹12,400</p>
+<span class="text-[10px] px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-full font-bold">Paid</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between hover:shadow-md transition-all border border-transparent hover:border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container rounded-xl flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Seeds Package (Hybrid Corn)</h4>
+<p class="text-sm text-on-surface-variant">Delivered on Oct 24, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-on-surface">₹4,200</p>
+<span class="text-[10px] px-2 py-0.5 bg-surface-container-highest text-on-surface rounded-full font-bold">Completed</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: AI Live Activity -->
+<aside class="lg:col-span-1">
+<div class="bg-surface-container-high p-8 rounded-[32px] sticky top-24">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-xl font-headline font-extrabold text-primary">AI Insights</h2>
+<div class="flex gap-1">
+<span class="w-1 h-1 bg-primary rounded-full"></span>
+<span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+<span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+</div>
+</div>
+<div id="aiInsightsList" class="space-y-8 relative">
+<!-- Timeline Line -->
+<div class="absolute left-[19px] top-2 bottom-2 w-0.5 bg-outline-variant/30"></div>
+<div class="relative flex gap-6">
+<div class="z-10 bg-primary w-10 h-10 rounded-full flex items-center justify-center text-white ring-8 ring-surface-container-high">
+<span class="material-symbols-outlined text-sm" data-icon="sensors" style="font-variation-settings: 'FILL' 1;">sensors</span>
+</div>
+<div>
+<p class="text-xs font-bold text-primary uppercase">Active Now</p>
+<h4 class="font-bold text-on-surface">Analyzing moisture sensor #2</h4>
+<p class="text-sm text-on-surface-variant mt-1">Slight dehydration detected in North sector. Irrigation suggested.</p>
+</div>
+</div>
+<div class="relative flex gap-6">
+<div class="z-10 bg-secondary-container w-10 h-10 rounded-full flex items-center justify-center text-on-secondary-container ring-8 ring-surface-container-high">
+<span class="material-symbols-outlined text-sm" data-icon="bug_report">bug_report</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">2 Hours Ago</p>
+<h4 class="font-bold text-on-surface">Pest Risk Alert</h4>
+<p class="text-sm text-on-surface-variant mt-1">Satellite data suggests high aphid risk for next 48 hours.</p>
+</div>
+</div>
+<div class="relative flex gap-6">
+<div class="z-10 bg-surface-container-highest w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant ring-8 ring-surface-container-high">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Yesterday</p>
+<h4 class="font-bold text-on-surface">Soil health report generated</h4>
+<p class="text-sm text-on-surface-variant mt-1">Overall nutrient density increased by 4.2% since last month.</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-10 py-4 bg-primary text-on-primary rounded-2xl font-bold flex items-center justify-center gap-2">
+                        View Detailed Report
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</aside>
+</div>
+</main>
+<!-- Success Toast (Bottom Right) -->
+<div class="fixed bottom-8 right-8 z-[100] flex flex-col gap-4 max-w-sm pointer-events-none">
+<div class="glass-card p-4 rounded-2xl shadow-xl flex items-center gap-4 border border-secondary/20 pointer-events-auto transform transition-all translate-y-0">
+<div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Sync Complete</p>
+<p class="text-xs text-on-surface-variant">Your farm data is up to date.</p>
+</div>
+<button class="ml-auto text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Mobile Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 w-full bg-[#FAF9F7]/95 backdrop-blur-md z-50 px-6 py-4 flex justify-between items-center shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-outline-variant/10">
+<a class="flex flex-col items-center gap-1 text-[#004F29] font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#1A1C1B]/60" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="text-[10px]">Market</span>
+</a>
+<div class="relative -top-8">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl" data-icon="smart_toy">smart_toy</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-[#1A1C1B]/60" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-[10px]">Activity</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#1A1C1B]/60" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+  const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+  const params = new URLSearchParams(window.location.search);
+  let currentPhone = params.get('phone') || '';
+  let currentName = params.get('name') || 'Farmer';
+  let currentCity = params.get('city') || 'Kalaburgi';
+  let stream = null;
+
+  function normalizePhone(phone) {
+    const digits = String(phone || '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.length === 10) return `+91${digits}`;
+    if (digits.length === 12 && digits.startsWith('91')) return `+${digits}`;
+    if (digits.startsWith('+')) return digits;
+    return `+${digits}`;
+  }
+
+  function fmtCurrency(num) {
+    const n = Number(num || 0);
+    return `INR ${Math.round(n).toLocaleString('en-IN')}`;
+  }
+
+  function setHeroName(name) {
+    const el = document.getElementById('farmerHeroName');
+    el.innerHTML = `Welcome back,<br/>${name || 'Farmer'}`;
+  }
+
+  function setIdentity(name, phone, city) {
+    document.getElementById('identityName').value = name || 'Farmer';
+    document.getElementById('identityPhone').value = phone || '-';
+    document.getElementById('identityCity').value = city || '-';
+  }
+
+  function renderOrders(orders) {
+    const list = document.getElementById('recentOrdersList');
+    if (!Array.isArray(orders) || !orders.length) {
+      list.innerHTML = '<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/20"><p class="font-bold text-on-surface">No orders yet</p><p class="text-sm text-on-surface-variant">Your confirmed orders will appear here.</p></div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    orders.slice(0, 8).forEach((order) => {
+      const row = document.createElement('div');
+      row.className = 'bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between hover:shadow-md transition-all border border-transparent hover:border-outline-variant/30';
+      row.innerHTML = `
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">inventory_2</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-on-surface">${order.product || 'Product'} (${order.quantity || '-'})</h4>
+            <p class="text-sm text-on-surface-variant">Dealer: ${order.dealer_name || 'Dealer'} | ${order.order_id || 'ORDER'}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-on-surface">${fmtCurrency(order.amount)}</p>
+          <span class="text-[10px] px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-full font-bold">${String(order.status || 'placed').toUpperCase()}</span>
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function renderMarkets(rows) {
+    const wrap = document.getElementById('marketCards');
+    const data = Array.isArray(rows) ? rows.slice(0, 3) : [];
+    if (!data.length) return;
+    wrap.innerHTML = '';
+    data.forEach((item) => {
+      const abbr = String(item.crop || 'NA').slice(0, 2).toUpperCase();
+      const card = document.createElement('div');
+      card.className = 'bg-surface-container-lowest p-5 rounded-2xl flex items-center gap-4';
+      card.innerHTML = `
+        <div class="bg-green-50 p-3 rounded-xl text-green-700 font-bold">${abbr}</div>
+        <div>
+          <p class="text-xs font-bold text-on-surface-variant uppercase">${item.crop || '-'}</p>
+          <p class="text-lg font-bold text-on-surface">${item.price || 'N/A'}</p>
+          <p class="text-[10px] text-on-surface-variant">${item.note || item.trend || 'Live'}</p>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
+  }
+
+  function renderInsights(events) {
+    const list = document.getElementById('aiInsightsList');
+    if (!Array.isArray(events) || !events.length) return;
+
+    const top = events.slice(0, 3);
+    const html = ['<div class="absolute left-[19px] top-2 bottom-2 w-0.5 bg-outline-variant/30"></div>'];
+    top.forEach((event, idx) => {
+      const color = idx === 0 ? 'bg-primary text-white' : 'bg-secondary-container text-on-secondary-container';
+      html.push(`
+        <div class="relative flex gap-6">
+          <div class="z-10 ${color} w-10 h-10 rounded-full flex items-center justify-center ring-8 ring-surface-container-high">
+            <span class="material-symbols-outlined text-sm">notifications</span>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-on-surface-variant uppercase">${idx === 0 ? 'Active Now' : 'Recent'}</p>
+            <h4 class="font-bold text-on-surface">${event.title || event.event_type || 'Activity'}</h4>
+            <p class="text-sm text-on-surface-variant mt-1">${event.details || 'Update available.'}</p>
+          </div>
+        </div>
+      `);
+    });
+    list.innerHTML = html.join('');
+  }
+
+  async function fetchProfile() {
+    if (!currentPhone) return;
+    const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}`);
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.detail || 'Failed to fetch profile');
+    }
+
+    const farmer = data.farmer || {};
+    const context = data.context || {};
+    currentName = farmer.name || currentName;
+    currentPhone = farmer.phone || currentPhone;
+    currentCity = context.city || farmer.city || currentCity;
+
+    setHeroName(currentName);
+    setIdentity(currentName, currentPhone, currentCity);
+    document.getElementById('walletValue').textContent = fmtCurrency(farmer.wallet_balance);
+    document.getElementById('soilTypeValue').textContent = context.soil_type || 'Unknown';
+    document.getElementById('weatherTempValue').textContent = context.temperature != null ? `${context.temperature}°C` : 'N/A';
+    document.getElementById('weatherCityValue').textContent = context.city || currentCity;
+    document.getElementById('weatherDescValue').textContent = context.weather_description || 'Unknown';
+    renderOrders(Array.isArray(farmer.orders) ? farmer.orders : []);
+  }
+
+  async function fetchMarkets() {
+    const res = await fetch(`${API_BASE}/api/market-prices`);
+    const data = await res.json();
+    renderMarkets(data.data || []);
+  }
+
+  async function fetchFeedAndInsights() {
+    const res = await fetch(`${API_BASE}/api/activity-feed?limit=20`);
+    const data = await res.json();
+    renderInsights(data.events || []);
+  }
+
+  async function callAssistant() {
+    const btn = document.getElementById('farmerCallBtn');
+    const old = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined">sync</span> Connecting...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}/call`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: currentName })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.detail || 'Call failed');
+      }
+      alert(`Call started: ${data.call_sid}`);
+    } catch (err) {
+      alert(`Call failed: ${err.message}`);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = old;
+    }
+  }
+
+  function startActivityStream() {
+    if (stream) stream.close();
+    stream = new EventSource(`${API_BASE}/api/activity-stream?limit=25`);
+    stream.onmessage = async (evt) => {
+      try {
+        const payload = JSON.parse(evt.data || '{}');
+        const events = Array.isArray(payload.events) ? payload.events : [];
+        renderInsights(events);
+        const myNorm = normalizePhone(currentPhone);
+        const hasMyEvent = events.some((e) => normalizePhone(e?.meta?.farmer_phone || '') === myNorm);
+        if (hasMyEvent) {
+          await fetchProfile();
+        }
+      } catch {
+      }
+    };
+  }
+
+  async function bootstrap() {
+    if (!currentPhone) {
+      window.location.href = '/stitch/signin';
+      return;
+    }
+
+    currentPhone = normalizePhone(currentPhone);
+    try {
+      await fetchProfile();
+      await Promise.all([fetchMarkets(), fetchFeedAndInsights()]);
+      startActivityStream();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  document.getElementById('farmerCallBtn').addEventListener('click', callAssistant);
+  document.getElementById('farmerRefreshBtn').addEventListener('click', async () => {
+    await Promise.all([fetchProfile(), fetchMarkets(), fetchFeedAndInsights()]);
+  });
+
+  window.addEventListener('beforeunload', () => {
+    if (stream) stream.close();
+  });
+
+  bootstrap();
+</script>
+</body></html>

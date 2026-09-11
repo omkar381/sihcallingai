@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi AI - Your Personal AI Farming Expert</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-primary": "#82d99c",
+                        "primary-fixed-dim": "#82d99c",
+                        "tertiary-container": "#72554b",
+                        "background": "#faf9f7",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary-fixed-variant": "#00522b",
+                        "surface-container-low": "#f4f3f1",
+                        "on-primary-fixed": "#00210e",
+                        "tertiary": "#583e35",
+                        "on-tertiary-fixed": "#2b160f",
+                        "surface-container-highest": "#e3e2e0",
+                        "tertiary-fixed": "#ffdbce",
+                        "primary-container": "#006a39",
+                        "on-primary-fixed-variant": "#00522b",
+                        "surface-container": "#efeeec",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#00723e",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e9e8e6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#7ff7a9",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#bec9be",
+                        "on-tertiary-container": "#f2ccbf",
+                        "outline": "#6f7a70",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "surface": "#faf9f7",
+                        "on-secondary-fixed": "#00210e",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "secondary": "#006d3b",
+                        "primary": "#004f29",
+                        "on-primary-container": "#8fe7aa",
+                        "surface-dim": "#dadad8",
+                        "surface-variant": "#e3e2e0",
+                        "surface-bright": "#faf9f7",
+                        "on-surface-variant": "#3f4940",
+                        "secondary-fixed-dim": "#64dd91",
+                        "on-surface": "#1a1c1b",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1a1c1b",
+                        "surface-tint": "#066d3b",
+                        "inverse-on-surface": "#f1f1ef",
+                        "primary-fixed": "#9df6b7",
+                        "secondary-fixed": "#82faab"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .text-editorial {
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAF9F7]/80 dark:bg-[#1A1C1B]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(26,28,27,0.04)]">
+<div class="flex justify-between items-center px-8 h-20 w-full max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black text-[#004F29] dark:text-[#64DD91] font-['Manrope'] tracking-tight">Krishi AI</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#004F29] dark:text-[#64DD91] font-bold border-b-2 border-[#006A39] transition-colors" href="#">Market</a>
+<a class="text-[#1A1C1B] dark:text-[#FAF9F7] opacity-70 hover:text-[#006A39] transition-colors" href="#">Resources</a>
+<a class="text-[#1A1C1B] dark:text-[#FAF9F7] opacity-70 hover:text-[#006A39] transition-colors" href="#">Support</a>
+</div>
+<button id="navGetStartedBtn" class="bg-primary-container text-on-primary px-6 py-2.5 rounded-full font-bold active:scale-95 duration-200">
+                Get Started
+            </button>
+</div>
+<div class="bg-[#F4F3F1] dark:bg-[#2A2C2B] h-[1px] w-full"></div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Lush green farm landscape" class="w-full h-full object-cover" data-alt="Vibrant green farm landscape during golden hour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUrItxPayQeLG-Nqbs34YmqrzCnieICq20SEPvmB8VWPBM0aoyVY43qCFoeNypjgRAJoIH51-tr3nLSmYeAJ6spMYr8L8w2M7R81WqXRlulSjKJAjjTT9YBX96HgNF3TVdhY9RCksgAYm1pT8KxK3f-8Aivv259ktmjjHIsXEZoxfs-3Wd38_Z-lyCFcosuqXG77EJhrmirmq-6aIYqpnhw5uktdWZuPmK6e6Bb6h7PrriiTjt1hCYrWV-1UlJdv6yyliErF_HqUGQ"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/40 to-transparent"></div>
+</div>
+<div class="container mx-auto px-8 z-10 grid lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<h1 class="text-display-lg text-6xl md:text-7xl font-headline font-extrabold text-white leading-tight text-editorial">
+                        Your Personal AI Farming Expert – <span class="text-secondary-fixed">Just One Call Away</span>
+</h1>
+<p class="text-xl text-white/90 max-w-xl font-medium">
+                        Empowering farmers with Kannada-first AI assistance. Get instant insights on market rates, weather, and crop health through a simple voice call.
+                    </p>
+<!-- KPI Cluster -->
+<div class="grid grid-cols-3 gap-4">
+<div class="glass-card p-4 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="thermostat">thermostat</span>
+<div class="text-2xl font-bold text-primary">28°C</div>
+<div class="text-xs font-semibold text-on-surface/60 uppercase tracking-wider">Local Temp</div>
+</div>
+<div class="glass-card p-4 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="trending_up">trending_up</span>
+<div class="text-2xl font-bold text-primary">+12%</div>
+<div class="text-xs font-semibold text-on-surface/60 uppercase tracking-wider">Mandi Trend</div>
+</div>
+<div class="glass-card p-4 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="call" data-weight="fill" style="font-variation-settings: 'FILL' 1;">call</span>
+<div class="text-2xl font-bold text-primary">1.2k</div>
+<div class="text-xs font-semibold text-on-surface/60 uppercase tracking-wider">Active Calls</div>
+</div>
+</div>
+</div>
+<!-- CTA Card (Phone Input) -->
+<div class="lg:justify-self-end w-full max-w-md">
+<div class="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_12px_40px_rgba(26,28,27,0.06)] border border-outline-variant/15">
+<h3 class="text-2xl font-headline font-bold text-on-surface mb-6">Experience the AI now</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-semibold text-on-surface/70 mb-2">Phone Number</label>
+<div class="flex gap-2">
+<div class="bg-surface-container-highest px-3 py-4 rounded-xl text-on-surface font-medium flex items-center">+91</div>
+<input id="landingPhoneInput" class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary-fixed/50 transition-all outline-none" placeholder="Enter mobile number" type="tel"/>
+</div>
+</div>
+<button id="landingCallBtn" class="w-full bg-primary-container text-on-primary py-4 rounded-xl font-bold text-lg hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+                                Call Me Now
+                            </button>
+<p id="landingCallStatus" class="text-center text-xs text-on-surface/50">By clicking, you agree to receive an automated AI demonstration call.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Grid (Bento Style) -->
+<section class="py-24 bg-surface-container-low">
+<div class="container mx-auto px-8">
+<div class="mb-16">
+<h2 class="text-4xl font-headline font-extrabold text-on-surface mb-4">Intelligence for every acre</h2>
+<p class="text-lg text-on-surface/60 max-w-2xl">Bridging the gap between traditional wisdom and modern data with a human-centric approach.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+<!-- Large Feature -->
+<div class="md:col-span-8 bg-surface-container-lowest p-8 rounded-2xl flex flex-col justify-between border border-outline-variant/15">
+<div>
+<div class="w-12 h-12 bg-secondary-container rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="keyboard_voice">keyboard_voice</span>
+</div>
+<h3 class="text-3xl font-headline font-bold mb-4">Vernacular Voice AI</h3>
+<p class="text-on-surface/70 text-lg max-w-md">No typing, no apps, no friction. Just call and speak in Kannada. Our AI understands regional dialects and agricultural nuances.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<span class="px-4 py-2 bg-surface-container-high rounded-full text-sm font-semibold">98% Accuracy</span>
+<span class="px-4 py-2 bg-surface-container-high rounded-full text-sm font-semibold">Zero Latency</span>
+</div>
+</div>
+<!-- Vertical Feature -->
+<div class="md:col-span-4 bg-primary text-on-primary p-8 rounded-2xl border border-primary-container overflow-hidden relative">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-4xl mb-6" data-icon="monitoring">monitoring</span>
+<h3 class="text-2xl font-headline font-bold mb-4">Market Intelligence</h3>
+<p class="text-on-primary/80">Real-time Mandi prices across 500+ locations. Predictive trends to help you decide when to sell.</p>
+</div>
+<div class="absolute bottom-[-20px] right-[-20px] opacity-20">
+<span class="material-symbols-outlined text-[150px]" data-icon="show_chart">show_chart</span>
+</div>
+</div>
+<!-- Small Feature 1 -->
+<div class="md:col-span-4 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/15">
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h3 class="text-xl font-headline font-bold mb-2">Smart Wallet</h3>
+<p class="text-on-surface/60">Manage subsidies, government schemes, and payments directly through your voice-linked wallet.</p>
+</div>
+<!-- Small Feature 2 -->
+<div class="md:col-span-8 bg-surface text-on-surface p-8 rounded-2xl border border-outline-variant/15 flex items-center gap-8 overflow-hidden">
+<div class="flex-1">
+<h3 class="text-xl font-headline font-bold mb-2">Real-time Ops</h3>
+<p class="text-on-surface/60">From pest alerts to irrigation schedules, get proactive notifications based on your field's specific GPS data.</p>
+</div>
+<div class="hidden sm:block w-48 h-24 bg-secondary-fixed-dim/20 rounded-xl relative overflow-hidden">
+<!-- Simple Sparkline Representation -->
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-secondary-fixed-dim/30 to-transparent"></div>
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0 35 Q 25 5, 50 35 T 100 15" fill="none" stroke="#006D3B" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Process Section -->
+<section class="py-24 bg-background">
+<div class="container mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-headline font-extrabold text-on-surface">How it works</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-12">
+<div class="text-center group">
+<div class="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="text-2xl font-black text-primary group-hover:text-white">01</span>
+</div>
+<h4 class="text-xl font-bold mb-3">Register via Call</h4>
+<p class="text-on-surface/60">Simply dial our toll-free number. No app download or internet required.</p>
+</div>
+<div class="text-center group">
+<div class="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="text-2xl font-black text-primary group-hover:text-white">02</span>
+</div>
+<h4 class="text-xl font-bold mb-3">Ask in Kannada</h4>
+<p class="text-on-surface/60">Ask anything—from "What's the price of tomatoes in Mysore?" to "How to treat leaf blight?"</p>
+</div>
+<div class="text-center group">
+<div class="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="text-2xl font-black text-primary group-hover:text-white">03</span>
+</div>
+<h4 class="text-xl font-bold mb-3">Get Instant Advice</h4>
+<p class="text-on-surface/60">Receive human-like expert responses and follow-up SMS with detailed guides.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 bg-surface-container-low">
+<div class="container mx-auto px-8">
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/15 flex flex-col justify-between">
+<p class="text-on-surface italic mb-8 text-lg">"Krishi AI changed how I manage my paddy fields. I just call in the morning and I know exactly what the market price is."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Farmer Profile" class="w-full h-full object-cover" data-alt="Portrait of a smiling local farmer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtRi6mLgGrPINLDWUW4DcWyokm92pb2n9ldqlb0E4uRG9NOv4aX752Thco3-hz912FEqwJ8HxNYCuXW9MvfZt9DDl9GcI3vEoGsgCxNiaqGApoM5QF93Wsw-kp86OPwecRpGNvp42-Ve7xBEKoks-7uohhuwf3mLFni9phOdkA9HsjEe70tgM8__KUewHGvuHB4bsXUBuW9OZuMDkuV-aFXEG-_FwoSvc6zI4W33wvoxbCvmaMLHJGBF-tiiUxrjjU9xvQk6UIgUe9"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">Basavaraju K.</div>
+<div class="text-sm text-on-surface/50">Mandya, Karnataka</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/15 flex flex-col justify-between">
+<p class="text-on-surface italic mb-8 text-lg">"The voice recognition is amazing. It understands my local dialect perfectly. No other app has ever worked this well for us."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Farmer Profile" class="w-full h-full object-cover" data-alt="Portrait of a woman farmer in rural setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCqeTiXYwxASQhZyS--lChduDMFAhPQEMxKusDlhP_AMSlm-fOs-sJOubLDOfjicd7POpdcQnukY84LvUAeFpaz1OagmBn-07ZDoxq4RCX4O1OG3Y_6lKu-irmsUUc9FHNvcisiKASB_OiFDVmVheJeDKMzGBj2TwaSg9zq_eBqLFoAVdDvddXRb3nKauOp9ytVBYXLvgmSYTpwpWaXJGaBX0Nvfh4T7Pby2Smug8pYdjpdH2JeuhB7bjLPEmzFFj-Zvrzg59R34Bc"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">Shubha Gowda</div>
+<div class="text-sm text-on-surface/50">Hassan, Karnataka</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/15 flex flex-col justify-between">
+<p class="text-on-surface italic mb-8 text-lg">"The pest diagnosis saved my tomato crop this season. The AI told me exactly what spray to use and in what proportion."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Farmer Profile" class="w-full h-full object-cover" data-alt="Portrait of an elderly experienced farmer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZghhYkiDEIf9VGuP3jyOhlIdX-nAd5IDPeKRrjl2QcS7IkEZEkCJmysZKidWsY0RItebmT6756L9UD2HjYX3P9E9MaqhGK0fR4yFx869SpFju3J4QR6WoeT_N7FW0Lvk2ZIgD9t5iyvlv8kkHYV0ccBgxKRAA3XtlCtV1DLXNmSTfYNbJy-BFZuluylWzB8v5U-j7pxvgxxNLKVSyNdkYAWUTQoXquVONln9uK125QCt4l_stbf1ll4TzVaH4xYwvj8X2jtd0zA28"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">Ramesh Hegde</div>
+<div class="text-sm text-on-surface/50">Sirsi, Karnataka</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing -->
+<section class="py-24 bg-background">
+<div class="container mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-headline font-extrabold text-on-surface mb-4">Simple, transparent plans</h2>
+<p class="text-on-surface/60">Choose the level of intelligence your farm needs.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+<!-- Starter -->
+<div class="bg-surface-container-low p-8 rounded-2xl flex flex-col">
+<div class="mb-8">
+<h4 class="text-lg font-bold text-on-surface/60 uppercase">Starter</h4>
+<div class="text-4xl font-black text-on-surface mt-2">Free</div>
+<p class="text-sm text-on-surface/50 mt-2">For small scale farmers</p>
+</div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                3 AI Calls / Month
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                Basic Mandi Rates
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                Weather Alerts
+                            </li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all">Get Started</button>
+</div>
+<!-- Growth -->
+<div class="bg-primary text-on-primary p-8 rounded-2xl flex flex-col transform scale-105 shadow-xl">
+<div class="mb-8">
+<div class="inline-block px-3 py-1 bg-secondary-fixed text-primary text-xs font-black rounded-full mb-3 uppercase">Popular</div>
+<h4 class="text-lg font-bold text-on-primary/70 uppercase">Growth</h4>
+<div class="text-4xl font-black mt-2">₹199<span class="text-lg font-normal">/mo</span></div>
+<p class="text-sm text-on-primary/60 mt-2">For growing commercial farms</p>
+</div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-secondary-fixed text-xl" data-icon="check_circle">check_circle</span>
+                                Unlimited AI Calls
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-secondary-fixed text-xl" data-icon="check_circle">check_circle</span>
+                                Advanced Price Predictions
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-secondary-fixed text-xl" data-icon="check_circle">check_circle</span>
+                                Disease Diagnosis via SMS
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-secondary-fixed text-xl" data-icon="check_circle">check_circle</span>
+                                Priority Connect
+                            </li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-on-primary text-primary font-bold hover:bg-secondary-fixed transition-all">Select Plan</button>
+</div>
+<!-- Enterprise -->
+<div class="bg-surface-container-low p-8 rounded-2xl flex flex-col">
+<div class="mb-8">
+<h4 class="text-lg font-bold text-on-surface/60 uppercase">Enterprise</h4>
+<div class="text-4xl font-black text-on-surface mt-2">Custom</div>
+<p class="text-sm text-on-surface/50 mt-2">For Cooperatives &amp; FPOs</p>
+</div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                Bulk Farmer Management
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                Custom Data Dashboards
+                            </li>
+<li class="flex items-center gap-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle">check_circle</span>
+                                API Access
+                            </li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="py-24 bg-surface-container-low">
+<div class="container mx-auto px-8 max-w-3xl">
+<h2 class="text-3xl font-headline font-extrabold text-on-surface mb-12 text-center">Frequently Asked Questions</h2>
+<div class="space-y-6">
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/15">
+<h4 class="text-lg font-bold mb-2">Do I need an internet connection?</h4>
+<p class="text-on-surface/60">No, the core service works over a standard voice call. Internet is only required if you want to use the optional web dashboard.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/15">
+<h4 class="text-lg font-bold mb-2">Is the Kannada dialect supported?</h4>
+<p class="text-on-surface/60">Yes, we have trained our AI on multiple regional Kannada dialects across North and South Karnataka.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/15">
+<h4 class="text-lg font-bold mb-2">How accurate is the price data?</h4>
+<p class="text-on-surface/60">Our data is updated every 15 minutes from major APMCs and mandis across the country.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary py-16">
+<div class="container mx-auto px-8">
+<div class="grid md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-2">
+<span class="text-2xl font-black tracking-tight mb-6 block">Krishi AI</span>
+<p class="text-on-primary/60 max-w-sm mb-6">Revolutionizing agriculture through accessible artificial intelligence. Our mission is to put an expert agronomist in every farmer's pocket.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center hover:bg-secondary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center hover:bg-secondary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</a>
+</div>
+</div>
+<div>
+<h5 class="font-bold mb-6 uppercase text-xs tracking-widest text-on-primary/40">Platform</h5>
+<ul class="space-y-4">
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">Mandi Market</a></li>
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">Voice AI Support</a></li>
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">Weather Insights</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6 uppercase text-xs tracking-widest text-on-primary/40">Company</h5>
+<ul class="space-y-4">
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">About Us</a></li>
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-on-primary/70 hover:text-on-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-on-primary/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-primary/40 text-sm">© 2024 Krishi AI Technologies. All rights reserved.</p>
+<div class="flex items-center gap-2 text-on-primary/40 text-sm">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                    Bengaluru, India
+                </div>
+</div>
+</div>
+</footer>
+<script>
+    const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+
+    const getStartedBtn = document.getElementById('navGetStartedBtn');
+    if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', () => {
+            window.location.href = '/stitch/signin';
+        });
+    }
+
+    const callBtn = document.getElementById('landingCallBtn');
+    const phoneInput = document.getElementById('landingPhoneInput');
+    const statusEl = document.getElementById('landingCallStatus');
+
+    function normalizePhone(phone) {
+        const digits = String(phone || '').replace(/\D/g, '');
+        if (!digits) return '';
+        if (digits.length === 10) return `+91${digits}`;
+        if (digits.length === 12 && digits.startsWith('91')) return `+${digits}`;
+        if (digits.startsWith('+')) return digits;
+        return `+${digits}`;
+    }
+
+    async function placeDemoCall() {
+        const phone = normalizePhone(phoneInput?.value || '');
+        if (!phone || phone.length < 13) {
+            statusEl.textContent = 'Please enter a valid phone number.';
+            statusEl.className = 'text-center text-xs text-error font-semibold';
+            return;
+        }
+
+        const oldHtml = callBtn.innerHTML;
+        callBtn.disabled = true;
+        callBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">sync</span> Connecting...';
+        statusEl.textContent = 'Requesting AI demonstration call...';
+        statusEl.className = 'text-center text-xs text-primary font-semibold';
+
+        try {
+            const res = await fetch(`${API_BASE}/api/call`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone_number: phone, name: 'Farmer' })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.detail || 'Failed to initiate call');
+            }
+
+            statusEl.textContent = `AI call initiated (${data.call_sid || 'queued'}). Please pick up.`;
+            statusEl.className = 'text-center text-xs text-secondary font-semibold';
+        } catch (err) {
+            statusEl.textContent = `Call failed: ${err.message}`;
+            statusEl.className = 'text-center text-xs text-error font-semibold';
+        } finally {
+            callBtn.disabled = false;
+            callBtn.innerHTML = oldHtml;
+        }
+    }
+
+    if (callBtn) {
+        callBtn.addEventListener('click', placeDemoCall);
+    }
+</script>
+</body></html>

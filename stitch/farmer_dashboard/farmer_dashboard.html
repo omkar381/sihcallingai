@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>KrishiSaarthi | Digital Farming OS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#af8d11",
+            "surface-container-low": "#111e16",
+            "secondary-fixed-dim": "#e9c349",
+            "secondary-fixed": "#ffe088",
+            "on-tertiary-container": "#4e3d00",
+            "surface": "#09160e",
+            "on-tertiary-fixed": "#241a00",
+            "secondary": "#e9c349",
+            "outline-variant": "#404940",
+            "on-background": "#d7e7d9",
+            "tertiary-fixed": "#ffe088",
+            "surface-variant": "#2a382f",
+            "inverse-primary": "#1b6c3d",
+            "outline": "#899389",
+            "surface-tint": "#89d89e",
+            "on-error-container": "#ffdad6",
+            "background": "#09160e",
+            "surface-container": "#15221a",
+            "primary": "#89d89e",
+            "tertiary-fixed-dim": "#e9c349",
+            "surface-dim": "#09160e",
+            "on-tertiary": "#3c2f00",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#574500",
+            "surface-container-high": "#202d24",
+            "on-primary": "#00391b",
+            "surface-bright": "#2f3c33",
+            "on-primary-fixed": "#00210d",
+            "surface-container-highest": "#2a382f",
+            "on-surface-variant": "#bfc9be",
+            "on-secondary-container": "#342800",
+            "error": "#ffb4ab",
+            "on-primary-fixed-variant": "#005229",
+            "primary-container": "#1a6b3c",
+            "primary-fixed": "#a5f4b8",
+            "on-surface": "#d7e7d9",
+            "on-error": "#690005",
+            "surface-container-lowest": "#051109",
+            "on-secondary": "#3c2f00",
+            "inverse-surface": "#d7e7d9",
+            "tertiary": "#e9c349",
+            "on-secondary-fixed-variant": "#574500",
+            "on-secondary-fixed": "#241a00",
+            "tertiary-container": "#cca72f",
+            "on-primary-container": "#9ae9ae",
+            "primary-fixed-dim": "#89d89e",
+            "inverse-on-surface": "#26332a"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+
+    .glass-panel {
+      background: rgba(32, 45, 36, 0.4);
+      backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(64, 73, 64, 0.2);
+      border-left: 1px solid rgba(64, 73, 64, 0.2);
+    }
+
+    .active-nav-glow::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 4px;
+      height: 24px;
+      background: #89d89e;
+      box-shadow: 0 0 15px #1a6b3c;
+    }
+
+    .primary-gradient-btn {
+      background: linear-gradient(135deg, #1a6b3c 0%, #89d89e 100%);
+    }
+  </style>
+</head>
+
+<body class="bg-background font-body text-on-surface selection:bg-primary selection:text-on-primary antialiased">
+  <!-- SIDE NAV BAR -->
+  <aside
+    class="fixed left-0 top-0 h-full w-[240px] flex flex-col py-8 bg-[#111e16]/70 backdrop-blur-xl border-r border-[#404940]/15 z-50 shadow-[0px_24px_48px_rgba(0,0,0,0.4)]">
+    <div class="px-6 mb-10">
+      <h1 class="text-xl font-bold tracking-tighter text-[#89d89e] font-headline">KrishiSaarthi</h1>
+    </div>
+    <div class="px-6 mb-8 flex items-center gap-3">
+      <img alt="Ramesh Kumar" class="w-10 h-10 rounded-lg bg-surface-container-highest p-1"
+        data-alt="Stylized portrait avatar of an Indian farmer with a professional yet friendly look in a modern vector style"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1RS3SwOPcs7k276L01IARoF9EQlaX2iw3JrERg9xnnOFlZ0PK3T878hVxdoZbHC_bQ3Gl0TY61VFySnklmBeyf4VlsEF597LqpDF2UwqqT4xBvjvOm7k-b_2Y6O7YN9dQpM5VzqotUFH14aCv-jlwkQEGIkGDBF71KOQUwdRK9VMtfNl7qBnga1r6FRHUd7dnDrCO2LhuZMBKAnygoOyY7CKOvbWVO_Ai_t5QhxPGiHA73VMg0jyZTuW-z411dtSAiMUIAixzdRM" />
+      <div class="flex flex-col">
+        <span class="text-sm font-semibold text-on-surface leading-tight">Ramesh Kumar</span>
+        <span class="text-[10px] text-on-surface-variant font-mono">KS-2024-04521</span>
+      </div>
+    </div>
+    <nav class="flex-1 flex flex-col gap-1 px-3">
+      <!-- Nav Item: Overview (Active) -->
+      <a class="flex items-center gap-3 px-4 py-3 text-[#89d89e] relative transition-all duration-300 active-nav-glow hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-sm font-medium">Overview</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="grass">grass</span>
+        <span class="text-sm font-medium">My Crops</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="payments">payments</span>
+        <span class="text-sm font-medium">Sell Crops</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+        <span class="text-sm font-medium">Orders</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+        <span class="text-sm font-medium">Market Prices</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+        <span class="text-sm font-medium">Bidding</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+        <span class="text-sm font-medium">Retail Store</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+        <span class="text-sm font-medium text-primary">Saarthi AI</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 mt-auto text-[#bfc9be] hover:text-[#d7e7d9] transition-all duration-300 hover:bg-[#202d24]/50 rounded-lg"
+        href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-sm font-medium">Settings</span>
+      </a>
+    </nav>
+    <div class="px-6 mt-6 flex flex-col gap-4">
+      <div
+        class="flex items-center justify-between text-[10px] font-bold text-on-surface-variant uppercase tracking-widest border-t border-outline-variant/20 pt-4">
+        <span>EN / हिंदी</span>
+        <span class="material-symbols-outlined text-sm" data-icon="dark_mode">dark_mode</span>
+      </div>
+      <button
+        class="w-full py-3 text-xs font-bold primary-gradient-btn text-on-primary rounded-xl shadow-lg shadow-primary/10">Upgrade
+        to Pro</button>
+    </div>
+  </aside>
+  <!-- MAIN CONTENT -->
+  <main class="ml-[240px] min-h-screen flex flex-col pb-12">
+    <!-- TOP APP BAR -->
+    <header class="h-16 flex items-center justify-between px-10 bg-transparent sticky top-0 z-40 backdrop-blur-md">
+      <div class="flex flex-col">
+        <h2 class="font-headline font-extrabold text-2xl tracking-tighter text-on-surface">Overview</h2>
+        <p class="text-[10px] text-on-surface-variant uppercase tracking-[0.2em] font-medium">Digital Farming Operating
+          System</p>
+      </div>
+      <div class="flex items-center gap-6">
+        <div
+          class="relative flex items-center bg-surface-container-low border border-outline-variant/10 rounded-full px-4 py-1.5 w-64 group focus-within:ring-1 ring-primary/30 transition-all">
+          <span class="material-symbols-outlined text-on-surface-variant text-lg" data-icon="search">search</span>
+          <input
+            class="bg-transparent border-none text-xs focus:ring-0 text-on-surface w-full placeholder:text-on-surface-variant/50"
+            placeholder="Search crops, mandis..." type="text" />
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="relative text-on-surface-variant hover:text-primary transition-colors">
+            <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border border-surface"></span>
+          </button>
+          <button class="text-on-surface-variant hover:text-primary transition-colors">
+            <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <div class="px-10 space-y-8 mt-6">
+      <!-- TOP ROW: KPIs -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <!-- KPI 1 -->
+        <div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-32 relative overflow-hidden group">
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Active Crops</span>
+            <span class="text-2xl font-black text-primary font-headline">03</span>
+          </div>
+          <div class="flex gap-2 items-end">
+            <span class="text-[10px] px-2 py-0.5 bg-surface-container-highest rounded text-on-surface">Tomato
+              (45d)</span>
+            <span class="text-[10px] px-2 py-0.5 bg-surface-container-highest rounded text-on-surface">Wheat
+              (12d)</span>
+          </div>
+          <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <span class="material-symbols-outlined text-8xl" data-icon="grass">grass</span>
+          </div>
+        </div>
+        <!-- KPI 2 -->
+        <div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-32 relative overflow-hidden group">
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Earnings</span>
+            <div class="flex flex-col items-end">
+              <span class="text-xl font-black text-on-surface font-headline">₹48,240</span>
+              <span class="text-[10px] text-primary flex items-center">+18% <span
+                  class="material-symbols-outlined text-[10px]" data-icon="trending_up">trending_up</span></span>
+            </div>
+          </div>
+          <div class="w-full h-8 flex items-end gap-1">
+            <div class="w-2 bg-primary/20 h-[40%] rounded-t-sm"></div>
+            <div class="w-2 bg-primary/30 h-[60%] rounded-t-sm"></div>
+            <div class="w-2 bg-primary/40 h-[50%] rounded-t-sm"></div>
+            <div class="w-2 bg-primary/50 h-[80%] rounded-t-sm"></div>
+            <div class="w-2 bg-primary/70 h-[70%] rounded-t-sm"></div>
+            <div class="w-2 bg-primary h-full rounded-t-sm"></div>
+          </div>
+        </div>
+        <!-- KPI 3 -->
+        <div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-32 relative overflow-hidden group">
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Pending Orders</span>
+            <span class="text-2xl font-black text-on-surface font-headline">07</span>
+          </div>
+          <div class="flex gap-2">
+            <span
+              class="text-[9px] px-2 py-0.5 bg-secondary/10 border border-secondary/20 text-secondary rounded-full font-bold">3
+              URGENT</span>
+            <span class="text-[9px] px-2 py-0.5 bg-surface-container-highest text-on-surface-variant rounded-full">4
+              Pending</span>
+          </div>
+          <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <span class="material-symbols-outlined text-8xl" data-icon="shopping_bag">shopping_bag</span>
+          </div>
+        </div>
+        <!-- KPI 4 -->
+        <div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-32 relative overflow-hidden group">
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Best Price
+              Today</span>
+            <div class="flex flex-col items-end">
+              <span class="text-xs text-on-surface-variant">Tomato</span>
+              <span class="text-lg font-black text-on-surface">₹2,340/q</span>
+            </div>
+          </div>
+          <button
+            class="w-full py-1.5 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold rounded hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center gap-1">
+            Sell Now <span class="material-symbols-outlined text-xs" data-icon="north_east">north_east</span>
+          </button>
+        </div>
+      </div>
+      <!-- MIDDLE ROW: 60/40 Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+        <!-- Crop Roadmap (60%) -->
+        <div class="lg:col-span-6 glass-panel p-8 rounded-2xl relative overflow-hidden">
+          <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center border border-outline-variant/20">
+                <span class="material-symbols-outlined text-primary text-2xl" data-icon="agriculture">agriculture</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-headline font-bold text-on-surface leading-tight">CROP ROADMAP TRACKER</h3>
+                <p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold">Active Cycle: Tomato
+                  (Hybrid_T04)</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-[10px] text-on-surface-variant font-bold uppercase mb-1">Cycle Health</p>
+              <div class="flex items-center gap-1">
+                <div class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_#89d89e]"></div>
+                <span class="text-xs font-bold text-primary">OPTIMAL</span>
+              </div>
+            </div>
+          </div>
+          <!-- Timeline -->
+          <div class="relative flex items-center justify-between mb-12">
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant/20 -translate-y-1/2 z-0"></div>
+            <div class="absolute top-1/2 left-0 w-1/2 h-0.5 bg-primary/50 -translate-y-1/2 z-0"></div>
+            <!-- Step 1 -->
+            <div class="relative z-10 flex flex-col items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-[0_0_20px_rgba(137,216,158,0.3)]">
+                <span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+              </div>
+              <span class="text-[10px] font-bold text-on-surface">Sowing</span>
+            </div>
+            <!-- Step 2 -->
+            <div class="relative z-10 flex flex-col items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-[0_0_20px_rgba(137,216,158,0.3)]">
+                <span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+              </div>
+              <span class="text-[10px] font-bold text-on-surface">Germination</span>
+            </div>
+            <!-- Step 3 (Active) -->
+            <div class="relative z-10 flex flex-col items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-primary-container border-2 border-primary flex items-center justify-center text-primary animate-pulse shadow-[0_0_30px_rgba(137,216,158,0.4)]">
+                <span class="material-symbols-outlined text-sm" data-icon="cycle">cycle</span>
+              </div>
+              <span class="text-[10px] font-black text-primary uppercase">Fertilizer #2</span>
+            </div>
+            <!-- Step 4 -->
+            <div class="relative z-10 flex flex-col items-center gap-3 opacity-40">
+              <div
+                class="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-sm" data-icon="water_drop">water_drop</span>
+              </div>
+              <span class="text-[10px] font-bold text-on-surface-variant">Irrigation</span>
+            </div>
+            <!-- Step 5 -->
+            <div class="relative z-10 flex flex-col items-center gap-3 opacity-40">
+              <div
+                class="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-sm" data-icon="inventory_2">inventory_2</span>
+              </div>
+              <span class="text-[10px] font-bold text-on-surface-variant">Harvest</span>
+            </div>
+          </div>
+          <!-- AI Tip Box -->
+          <div class="p-4 border-l-4 border-primary bg-primary/5 rounded-r-xl flex items-start gap-4">
+            <div class="p-2 bg-primary/10 rounded-lg">
+              <span class="material-symbols-outlined text-primary" data-icon="psychology">psychology</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-on-surface mb-1">Saarthi AI Prediction</p>
+              <p class="text-sm text-on-surface-variant leading-relaxed">Apply 20kg NPK fertilizer in the next 3 days to
+                maximize yield. Current humidity (78%) is ideal for absorption.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Live Mandi (40%) -->
+        <div class="lg:col-span-4 glass-panel p-8 rounded-2xl flex flex-col">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Live Mandi Prices</h3>
+            <div
+              class="px-3 py-1 bg-surface-container-highest rounded-full text-[10px] font-bold text-on-surface border border-outline-variant/10">
+              Hubli APMC (12km)
+            </div>
+          </div>
+          <div class="space-y-6 flex-1">
+            <!-- Tomato Row -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-outline-variant/10">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-red-500/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-red-400 text-lg" data-icon="nutrition">nutrition</span>
+                </div>
+                <span class="font-bold text-sm">Tomato</span>
+              </div>
+              <div class="flex items-end flex-col">
+                <span class="font-bold text-sm">₹2,340</span>
+                <span class="text-[10px] text-primary font-bold flex items-center">↑ 12%</span>
+              </div>
+            </div>
+            <!-- Wheat Row -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-outline-variant/10">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-amber-500/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-amber-400 text-lg"
+                    data-icon="bakery_dining">bakery_dining</span>
+                </div>
+                <span class="font-bold text-sm">Wheat</span>
+              </div>
+              <div class="flex items-end flex-col">
+                <span class="font-bold text-sm">₹2,018</span>
+                <span class="text-[10px] text-error font-bold flex items-center">↓ 02%</span>
+              </div>
+            </div>
+            <!-- Onion Row -->
+            <div
+              class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-outline-variant/10">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-purple-500/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-purple-400 text-lg" data-icon="egg_alt">egg_alt</span>
+                </div>
+                <span class="font-bold text-sm">Onion</span>
+              </div>
+              <div class="flex items-end flex-col">
+                <span class="font-bold text-sm">₹1,890</span>
+                <span class="text-[10px] text-primary font-bold flex items-center">↑ 08%</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 pt-6 border-t border-outline-variant/10">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary text-sm" data-icon="bolt">bolt</span>
+                <span class="text-[11px] font-bold text-on-surface">Best time to sell: <span class="text-primary">In 3
+                    days</span></span>
+              </div>
+              <span
+                class="material-symbols-outlined text-on-surface-variant text-sm cursor-pointer hover:text-on-surface"
+                data-icon="info">info</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- BOTTOM ROW: 50/50 Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Active Listings -->
+        <div class="flex flex-col gap-6">
+          <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant px-2">Active Listings</h3>
+          <div class="glass-panel p-6 rounded-2xl border-l-2 border-primary">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-bold text-lg mb-1">Tomato (Premium Grade)</h4>
+                <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">LOT ID: TM-8821</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xl font-black text-on-surface">₹2,200<span
+                    class="text-xs text-on-surface-variant font-normal">/q</span></p>
+                <p class="text-xs font-bold text-primary">500kg Available</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="flex -space-x-2">
+                  <div class="w-6 h-6 rounded-full border border-surface bg-surface-container-highest"></div>
+                  <div class="w-6 h-6 rounded-full border border-surface bg-surface-container-high"></div>
+                  <div class="w-6 h-6 rounded-full border border-surface bg-surface-container"></div>
+                </div>
+                <span class="text-[10px] font-bold text-on-surface-variant">12 Interested Buyers</span>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  class="px-4 py-1.5 text-[10px] font-bold border border-outline-variant/30 rounded-lg hover:bg-surface-container transition-colors">Deactivate</button>
+                <button
+                  class="px-4 py-1.5 text-[10px] font-bold bg-primary text-on-primary rounded-lg shadow-lg shadow-primary/10">Edit
+                  Listing</button>
+              </div>
+            </div>
+          </div>
+          <div class="glass-panel p-6 rounded-2xl border-l-2 border-outline-variant">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-bold text-lg mb-1">Wheat (Malwa Gold)</h4>
+                <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">LOT ID: WH-9942</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xl font-black text-on-surface">₹2,000<span
+                    class="text-xs text-on-surface-variant font-normal">/q</span></p>
+                <p class="text-xs font-bold text-on-surface-variant">200kg Available</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-secondary font-bold text-[10px]">
+                <span class="material-symbols-outlined text-sm" data-icon="gavel">gavel</span>
+                5 Bids Active
+              </div>
+              <button
+                class="px-4 py-1.5 text-[10px] font-bold border border-primary/30 text-primary rounded-lg hover:bg-primary/10 transition-colors">View
+                Bids</button>
+            </div>
+          </div>
+        </div>
+        <!-- Bidding Panel -->
+        <div class="glass-panel rounded-2xl flex flex-col overflow-hidden">
+          <div
+            class="p-6 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low/50">
+            <div class="flex items-center gap-3">
+              <h3 class="text-sm font-bold uppercase tracking-widest">Bidding Panel</h3>
+              <span
+                class="flex items-center gap-1 px-2 py-0.5 bg-error/10 text-error rounded text-[9px] font-black animate-pulse">
+                <span class="w-1 h-1 rounded-full bg-error"></span> LIVE BIDS
+              </span>
+            </div>
+            <span class="text-[10px] text-on-surface-variant">Total: 14 Active</span>
+          </div>
+          <div class="p-0 flex-1">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="text-[10px] uppercase font-black text-on-surface-variant tracking-[0.15em] border-b border-outline-variant/5">
+                  <th class="px-6 py-4">Item</th>
+                  <th class="px-6 py-4">Price</th>
+                  <th class="px-6 py-4">Buyer</th>
+                  <th class="px-6 py-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm">
+                <tr class="border-b border-outline-variant/5 hover:bg-surface-container/30 transition-colors">
+                  <td class="px-6 py-5 font-bold">Tomato</td>
+                  <td class="px-6 py-5">₹2,180/q</td>
+                  <td class="px-6 py-5 text-on-surface-variant text-xs">Buyer_Karnataka_01</td>
+                  <td class="px-6 py-5">
+                    <div class="flex justify-end gap-2">
+                      <button class="p-1.5 text-primary hover:bg-primary/10 rounded transition-all" title="Accept">
+                        <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+                      </button>
+                      <button
+                        class="p-1.5 text-on-surface-variant hover:bg-surface-container-highest rounded transition-all"
+                        title="Counter">
+                        <span class="material-symbols-outlined text-lg" data-icon="edit_square">edit_square</span>
+                      </button>
+                      <button class="p-1.5 text-error hover:bg-error/10 rounded transition-all" title="Decline">
+                        <span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-outline-variant/5 hover:bg-surface-container/30 transition-colors">
+                  <td class="px-6 py-5 font-bold">Wheat</td>
+                  <td class="px-6 py-5">₹2,050/q</td>
+                  <td class="px-6 py-5 text-on-surface-variant text-xs">Agri_Trust_Depot</td>
+                  <td class="px-6 py-5">
+                    <div class="flex justify-end gap-2">
+                      <button class="p-1.5 text-primary hover:bg-primary/10 rounded transition-all" title="Accept">
+                        <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+                      </button>
+                      <button
+                        class="p-1.5 text-on-surface-variant hover:bg-surface-container-highest rounded transition-all"
+                        title="Counter">
+                        <span class="material-symbols-outlined text-lg" data-icon="edit_square">edit_square</span>
+                      </button>
+                      <button class="p-1.5 text-error hover:bg-error/10 rounded transition-all" title="Decline">
+                        <span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-outline-variant/5 hover:bg-surface-container/30 transition-colors">
+                  <td class="px-6 py-5 font-bold">Tomato</td>
+                  <td class="px-6 py-5">₹2,165/q</td>
+                  <td class="px-6 py-5 text-on-surface-variant text-xs">Prakash_Wholesale</td>
+                  <td class="px-6 py-5">
+                    <div class="flex justify-end gap-2">
+                      <button class="p-1.5 text-primary hover:bg-primary/10 rounded transition-all" title="Accept">
+                        <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+                      </button>
+                      <button
+                        class="p-1.5 text-on-surface-variant hover:bg-surface-container-highest rounded transition-all"
+                        title="Counter">
+                        <span class="material-symbols-outlined text-lg" data-icon="edit_square">edit_square</span>
+                      </button>
+                      <button class="p-1.5 text-error hover:bg-error/10 rounded transition-all" title="Decline">
+                        <span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- FOOTER -->
+      <footer class="flex items-center justify-between pt-8 border-t border-outline-variant/10 text-on-surface-variant">
+        <div class="flex items-center gap-4 text-[10px] uppercase font-bold tracking-widest">
+          <span>© 2024 KrishiSaarthi OS</span>
+          <span class="w-1 h-1 rounded-full bg-outline-variant/40"></span>
+          <span>System Status: Online</span>
+        </div>
+        <div class="flex items-center gap-2 text-[10px] font-medium italic">
+          <span class="material-symbols-outlined text-xs" data-icon="history">history</span>
+          Last updated: 2 min ago
+        </div>
+      </footer>
+    </div>
+  </main>
+  <!-- AI ASSISTANT BUBBLE -->
+  <button
+    class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary shadow-[0_0_40px_rgba(137,216,158,0.4)] flex items-center justify-center text-on-primary group z-50">
+    <span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform" data-icon="psychology"
+      style="font-variation-settings: 'FILL' 1;">psychology</span>
+    <span
+      class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-surface flex items-center justify-center text-[8px] font-black text-on-secondary">AI</span>
+  </button>
+<script>
+const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+let currentPhone = localStorage.getItem('ks_phone') || '';
+let currentName = localStorage.getItem('ks_name') || '';
+const _up = new URLSearchParams(window.location.search);
+if (_up.get('phone')) { currentPhone = _up.get('phone'); currentName = _up.get('name') || currentName; localStorage.setItem('ks_phone', currentPhone); localStorage.setItem('ks_name', currentName); }
+if (!currentPhone) {
+  try { const s = JSON.parse(localStorage.getItem('stitch_session') || '{}'); currentPhone = s.phone || ''; currentName = s.name || ''; if (currentPhone) { localStorage.setItem('ks_phone', currentPhone); localStorage.setItem('ks_name', currentName); } } catch(e) {}
+}
+
+// ---------- AUTH GUARD ----------
+(async function checkLogin() {
+  if (!currentPhone) { window.location.href = '/dashboard'; return; }
+  try {
+    const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}`);
+    const data = await res.json();
+    if (!res.ok || !data.phone) { window.location.href = '/dashboard'; return; }
+    currentName = data.name || currentName;
+    document.querySelector('aside .text-sm.font-semibold')?.textContent && (document.querySelector('aside .text-sm.font-semibold').textContent = currentName);
+    document.querySelector('aside .text-\\[10px\\]')?.textContent && (document.querySelector('aside .text-\\[10px\\]').textContent = data.phone);
+  } catch(e) { console.warn('Auth check failed', e); }
+})();
+
+// ---------- NAV LINKS ----------
+(function wireNav() {
+  const navMap = {
+    'Overview': '/stitch/farmer',
+    'My Crops': '/stitch/crop-prediction',
+    'Sell Crops': '/stitch/marketplace',
+    'Orders': '/stitch/marketplace',
+    'Market Prices': '/stitch/marketplace',
+    'Bidding': '/stitch/marketplace',
+    'Retail Store': '/stitch/marketplace',
+    'Saarthi AI': '/stitch/chatbot',
+    'Settings': '/stitch/farmer/profile'
+  };
+  document.querySelectorAll('aside nav a').forEach(a => {
+    const text = a.textContent.trim();
+    if (navMap[text]) a.href = navMap[text];
+  });
+})();
+
+// ---------- LIVE MANDI PRICES ----------
+async function fetchMandiPrices() {
+  try {
+    const res = await fetch(`${API_BASE}/api/market-prices?state=Karnataka`);
+    const data = await res.json();
+    const rows = data.data || [];
+    const container = document.querySelector('.lg\\:col-span-4 .space-y-6');
+    if (!container || !rows.length) return;
+    container.innerHTML = '';
+    const colors = ['red', 'amber', 'purple', 'blue', 'emerald', 'orange'];
+    const icons = ['nutrition', 'bakery_dining', 'egg_alt', 'grass', 'potted_plant', 'grain'];
+    rows.slice(0, 5).forEach((item, i) => {
+      const trend = item.trend_dir === 'down' ? `<span class="text-[10px] text-error font-bold flex items-center">↓ ${item.diff || '0'}</span>` : `<span class="text-[10px] text-primary font-bold flex items-center">↑ ${item.diff || '0'}</span>`;
+      const c = colors[i % colors.length];
+      const ic = icons[i % icons.length];
+      container.innerHTML += `
+        <div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-outline-variant/10">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-${c}-500/10 flex items-center justify-center">
+              <span class="material-symbols-outlined text-${c}-400 text-lg">${ic}</span>
+            </div>
+            <div>
+              <span class="font-bold text-sm">${item.crop || '-'}</span>
+              ${item.market ? `<p class="text-[9px] text-on-surface-variant">${item.market}</p>` : ''}
+            </div>
+          </div>
+          <div class="flex items-end flex-col">
+            <span class="font-bold text-sm">${item.price || 'N/A'}</span>
+            ${trend}
+          </div>
+        </div>`;
+    });
+    if (rows[0]) {
+      const bp = document.querySelector('.glass-panel:nth-child(4)');
+      if (bp) {
+        const cropEl = bp.querySelector('.text-xs.text-on-surface-variant');
+        const priceEl = bp.querySelector('.text-lg.font-black');
+        if (cropEl) cropEl.textContent = rows[0].crop || 'Tomato';
+        if (priceEl) priceEl.innerHTML = `${rows[0].price || '₹2,340'}<span class="text-xs text-on-surface-variant font-normal">/q</span>`;
+      }
+    }
+  } catch(e) { console.warn('Mandi fetch failed', e); }
+}
+
+// ---------- LISTINGS ----------
+async function fetchListings() {
+  try {
+    const res = await fetch(`${API_BASE}/api/listings?status=OPEN&limit=10`);
+    const data = await res.json();
+    const rows = data.listings || [];
+    const tbody = document.querySelector('table tbody');
+    if (!tbody || !rows.length) return;
+    tbody.innerHTML = '';
+    rows.slice(0, 5).forEach(item => {
+      tbody.innerHTML += `
+        <tr class="border-b border-outline-variant/5 hover:bg-surface-container/30 transition-colors">
+          <td class="px-6 py-5 font-bold">${item.crop || '-'}</td>
+          <td class="px-6 py-5">₹${item.price_per_kg || '-'}/kg</td>
+          <td class="px-6 py-5 text-on-surface-variant text-xs">${item.farmer_name || item.seller_name || '-'}</td>
+          <td class="px-6 py-5">
+            <div class="flex justify-end gap-2">
+              <button class="p-1.5 text-primary hover:bg-primary/10 rounded transition-all" title="Accept"><span class="material-symbols-outlined text-lg">check_circle</span></button>
+              <button class="p-1.5 text-error hover:bg-error/10 rounded transition-all" title="Decline"><span class="material-symbols-outlined text-lg">cancel</span></button>
+            </div>
+          </td>
+        </tr>`;
+    });
+    const ordersKpi = document.querySelector('.glass-panel:nth-child(3) .text-2xl');
+    if (ordersKpi) ordersKpi.textContent = String(rows.length).padStart(2, '0');
+  } catch(e) { console.warn('Listings fetch failed', e); }
+}
+
+// ---------- CALL AGENT ----------
+const sellNowBtn = document.querySelector('.glass-panel:nth-child(4) button');
+if (sellNowBtn) {
+  sellNowBtn.addEventListener('click', async () => {
+    if (!currentPhone) { alert('Please login first'); return; }
+    sellNowBtn.disabled = true;
+    sellNowBtn.innerHTML = '<span class="material-symbols-outlined text-xs animate-spin">sync</span> Calling...';
+    try {
+      const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(currentPhone)}/call`, {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name: currentName })
+      });
+      const data = await res.json();
+      if (data.success) alert('Call started! Saarthi AI will call you.');
+      else throw new Error(data.detail || 'Call failed');
+    } catch(e) { alert('Call failed: ' + e.message); }
+    finally { sellNowBtn.disabled = false; sellNowBtn.innerHTML = 'Sell Now <span class="material-symbols-outlined text-xs">north_east</span>'; }
+  });
+}
+
+// AI bubble link
+document.querySelector('.fixed.bottom-8.right-8')?.addEventListener('click', () => { window.location.href = '/stitch/chatbot'; });
+
+// ---------- INIT ----------
+fetchMandiPrices();
+fetchListings();
+</script>
+</body>
+
+</html>

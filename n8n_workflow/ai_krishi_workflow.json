@@ -1,0 +1,312 @@
+{
+  "name": "AI Krishi Voice Assistant - Call Me Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "krishi-call",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Call Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 300],
+      "webhookId": "krishi-call-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "phone-check",
+              "leftValue": "={{ $json.body.phone_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "validate-input",
+      "name": "Validate Phone Number",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.KRISHI_API_URL || 'http://localhost:8000' }}/api/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone_number: $json.body.phone_number }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "initiate-call",
+      "name": "Initiate Call via FastAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [690, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Call initiated', call_sid: $json.call_sid }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-success",
+      "name": "Respond - Call Initiated",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [910, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: 'phone_number is required' }) }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "respond-error-validation",
+      "name": "Respond - Validation Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [690, 420]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: $json.error || 'Failed to initiate call' }) }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "respond-error-api",
+      "name": "Respond - API Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [910, 420]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "krishi-process",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-process",
+      "name": "Webhook - Process Speech",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 620],
+      "webhookId": "krishi-process-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.KRISHI_API_URL || 'http://localhost:8000' }}/api/process-speech",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "process-speech",
+      "name": "Process Speech via FastAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [490, 620]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-process-success",
+      "name": "Respond - Process Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [710, 620]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "krishi-health",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-health",
+      "name": "Webhook - Health Check",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [250, 860],
+      "webhookId": "krishi-health-webhook"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.KRISHI_API_URL || 'http://localhost:8000' }}/health",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "check-health",
+      "name": "Check FastAPI Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [490, 860]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ n8n_status: 'ok', api_status: $json.status || 'unknown', service: $json.service || 'unknown' }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-health",
+      "name": "Respond - Health Status",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [710, 860]
+    }
+  ],
+  "connections": {
+    "Webhook - Call Request": {
+      "main": [
+        [
+          {
+            "node": "Validate Phone Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Phone Number": {
+      "main": [
+        [
+          {
+            "node": "Initiate Call via FastAPI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initiate Call via FastAPI": {
+      "main": [
+        [
+          {
+            "node": "Respond - Call Initiated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Process Speech": {
+      "main": [
+        [
+          {
+            "node": "Process Speech via FastAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Speech via FastAPI": {
+      "main": [
+        [
+          {
+            "node": "Respond - Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Health Check": {
+      "main": [
+        [
+          {
+            "node": "Check FastAPI Health",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check FastAPI Health": {
+      "main": [
+        [
+          {
+            "node": "Respond - Health Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "AI Krishi",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "versionId": "1"
+}

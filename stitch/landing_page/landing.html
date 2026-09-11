@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KrishiSaarthi — India's Digital Farming OS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#ffcf92",
+                        "surface-container": "#15221a",
+                        "on-background": "#d7e7d9",
+                        "on-surface-variant": "#bfc9be",
+                        "inverse-on-surface": "#26332a",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#004932",
+                        "outline-variant": "#404940",
+                        "inverse-primary": "#1b6c3d",
+                        "on-primary-container": "#9ae9ae",
+                        "secondary-fixed": "#63fcc0",
+                        "surface-tint": "#89d89e",
+                        "on-secondary-fixed": "#002114",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "secondary": "#3fdfa5",
+                        "tertiary-fixed": "#ffddb4",
+                        "surface-container-low": "#111e16",
+                        "secondary-container": "#00c38b",
+                        "surface-variant": "#2a382f",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "tertiary-fixed-dim": "#ffb955",
+                        "primary-fixed-dim": "#89d89e",
+                        "on-secondary": "#003825",
+                        "on-tertiary": "#452b00",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#005229",
+                        "surface-container-high": "#202d24",
+                        "tertiary-container": "#825400",
+                        "on-secondary-fixed-variant": "#005138",
+                        "on-primary-fixed": "#00210d",
+                        "on-surface": "#d7e7d9",
+                        "primary-container": "#1a6b3c",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2a382f",
+                        "surface-container-lowest": "#051109",
+                        "surface": "#09160e",
+                        "inverse-surface": "#d7e7d9",
+                        "on-primary": "#00391b",
+                        "primary": "#89d89e",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#291800",
+                        "background": "#09160e",
+                        "outline": "#899389",
+                        "surface-dim": "#09160e",
+                        "tertiary": "#ffb955",
+                        "surface-bright": "#2f3c33",
+                        "primary-fixed": "#a5f4b8"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #09160e;
+            color: #d7e7d9;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(21, 34, 26, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(137, 216, 158, 0.1);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, transparent 0%, #09160e 95%);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(26, 107, 60, 0) 0%, rgba(137, 216, 158, 0.4) 50%, rgba(26, 107, 60, 0) 100%);
+            background-size: 200% 100%;
+        }
+        .mandi-sparkline {
+            height: 40px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(0, 196, 140, 0.1) 50%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-950/60 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_32px_0_rgba(26,107,60,0.2)]">
+<div class="flex justify-between items-center px-8 h-20 w-full max-w-screen-2xl mx-auto font-['Inter'] font-bold tracking-tight">
+<div class="text-xl font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+                <span data-i18n="brand">KrishiSaarthi</span>
+            </div>
+<div class="hidden md:flex items-center gap-12">
+<a class="text-emerald-400 border-b-2 border-emerald-500 pb-1" href="/app" data-i18n="nav_home">Home</a>
+<a class="text-white/70 hover:text-white transition-colors" href="/stitch/marketplace" data-i18n="nav_markets">Markets</a>
+<a class="text-white/70 hover:text-white transition-colors" href="/stitch/gov-schemes" data-i18n="nav_schemes">Schemes</a>
+<a class="text-white/70 hover:text-white transition-colors" href="/stitch/chatbot" data-i18n="nav_gyan">Saarthi Gyan</a>
+<a class="text-white/70 hover:text-white transition-colors" href="/stitch/marketplace" data-i18n="nav_store">Store</a>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative" id="langDropdown">
+  <button onclick="document.getElementById('langMenu').classList.toggle('hidden')" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-bold hover:bg-white/10 transition-all">
+    <span class="material-symbols-outlined text-sm">translate</span>
+    <span id="langLabel">EN</span>
+    <span class="material-symbols-outlined text-xs">expand_more</span>
+  </button>
+  <div id="langMenu" class="hidden absolute right-0 top-12 bg-[#15221a] border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[140px] z-50 backdrop-blur-xl">
+    <button onclick="switchLang('en')" class="w-full px-4 py-2.5 text-left text-sm font-bold text-white/80 hover:bg-primary/20 hover:text-primary transition-all flex items-center gap-3">🇬🇧 English</button>
+    <button onclick="switchLang('hi')" class="w-full px-4 py-2.5 text-left text-sm font-bold text-white/80 hover:bg-primary/20 hover:text-primary transition-all flex items-center gap-3">🇮🇳 हिन्दी</button>
+    <button onclick="switchLang('kn')" class="w-full px-4 py-2.5 text-left text-sm font-bold text-white/80 hover:bg-primary/20 hover:text-primary transition-all flex items-center gap-3">🇮🇳 ಕನ್ನಡ</button>
+  </div>
+</div>
+<a href="/dashboard" class="bg-primary text-on-primary px-6 py-2.5 rounded-full text-sm font-bold active:scale-95 duration-200 transition-all shadow-[0_0_20px_rgba(137,216,158,0.3)] inline-block">
+                    <span data-i18n="login_btn">Login/Register</span>
+                </a>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="Cinematic aerial view of terraced rice fields in India at golden hour with dramatic long shadows and soft sun rays" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJucFiDxlvwTDtvpKh7NbWpvqMtp59BELzkRNME75cQMZzaBsDncpshJgnPrc3z74Se-ZSkPiYdb_e6Ohoo_0ZKJkQ_DSzrUzUq9z4wZCCHkOpfdMNDJvm3vKK3wxb-C2UbNVhhK6lXjnLNwpm464CsaoEU95QeFkBGs6yPONKEfUym0xt8a3bCbjwIx4zht9lqzMRc_BtxPbc6d-wq7wkif8bin_mBM4sK5XfPNR9cVyUINv7-7u8L3C7cP69q_gNO7FvZ4S3eC4"/>
+<div class="absolute inset-0 hero-gradient"></div>
+<div class="absolute inset-0 bg-emerald-950/20 mix-blend-multiply"></div>
+</div>
+<div class="relative z-10 container mx-auto px-8 text-center max-w-5xl pt-20">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-container/20 border border-secondary/30 backdrop-blur-md mb-8">
+<span class="flex h-2 w-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-[11px] uppercase tracking-[0.2em] font-bold text-secondary" data-i18n="hero_badge">Powered by Real-Time Gov APIs</span>
+</div>
+<h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6 leading-[0.9]" data-i18n-html="hero_title">
+                Smart Farming <br/>Starts Here
+            </h1>
+<p class="text-xl text-white/70 font-medium mb-10 max-w-2xl mx-auto leading-relaxed" data-i18n="hero_desc">
+                AI-powered crop planning, live mandi prices &amp; government schemes — all in one platform designed for the modern Indian farmer.
+            </p>
+<div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+<a href="/dashboard" class="group relative px-10 py-5 bg-gradient-to-r from-primary-container to-primary text-on-primary font-bold rounded-full overflow-hidden shadow-2xl active:scale-95 duration-200 inline-block">
+<span class="relative z-10 flex items-center gap-2 text-lg">
+                        <span data-i18n="hero_cta1">Start Farming Smart</span> 
+                        <span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+</span>
+<div class="absolute inset-0 shimmer opacity-50"></div>
+</a>
+<a href="/stitch/chatbot" class="px-10 py-5 bg-white/5 backdrop-blur-xl border border-white/10 text-white font-bold rounded-full flex items-center gap-2 text-lg hover:bg-white/10 transition-all active:scale-95 duration-200">
+                    <span data-i18n="hero_cta2">Talk to Saarthi AI</span>
+                    <span class="material-symbols-outlined text-secondary">mic</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Stats Bar (TopAppBar Context) -->
+<div class="sticky top-20 w-full z-40 bg-emerald-900/40 backdrop-blur-md flex justify-center items-center py-4 px-4 shadow-xl border-y border-white/5">
+<div class="flex flex-wrap justify-center gap-8 md:gap-16 text-[11px] uppercase tracking-[0.2em] font-bold text-emerald-300">
+<div class="flex items-center gap-2">
+<span class="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span data-i18n="stat1">2.4M+ Farmers</span>
+            </div>
+<div class="flex items-center gap-2 border-l border-white/10 pl-8">
+<span class="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span data-i18n="stat2">₹1,240 Avg Price Today</span>
+            </div>
+<div class="flex items-center gap-2 border-l border-white/10 pl-8">
+<span class="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span data-i18n="stat3">47 Crops Tracked</span>
+            </div>
+<div class="flex items-center gap-2 border-l border-white/10 pl-8">
+<span class="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span data-i18n="stat4">18 States Covered</span>
+            </div>
+</div>
+</div>
+<!-- Bento Grid Section -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Live Weather (2 cols) -->
+<div class="md:col-span-2 glass-card rounded-3xl p-10 flex flex-col justify-between min-h-[400px] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[160px] text-primary">cloudy_snowing</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-8">
+<span class="px-3 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold tracking-widest uppercase">Live Weather</span>
+<span class="text-on-surface-variant text-sm font-medium">Nashik, Maharashtra</span>
+</div>
+<div class="flex items-end gap-6 mb-8">
+<h2 class="text-8xl font-black text-white">28°C</h2>
+<div class="pb-3">
+<p class="text-secondary font-bold text-xl">Rain Likely Today</p>
+<p class="text-on-surface-variant">Humidity: 67% • Wind: 12km/h</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-5 gap-4 relative z-10 pt-8 border-t border-white/5">
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant font-bold mb-2">14:00</p>
+<span class="material-symbols-outlined text-secondary">partly_cloudy_day</span>
+<p class="text-sm font-bold text-white mt-1">29°</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant font-bold mb-2">15:00</p>
+<span class="material-symbols-outlined text-secondary">rainy</span>
+<p class="text-sm font-bold text-white mt-1">27°</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant font-bold mb-2">16:00</p>
+<span class="material-symbols-outlined text-secondary">rainy</span>
+<p class="text-sm font-bold text-white mt-1">26°</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant font-bold mb-2">17:00</p>
+<span class="material-symbols-outlined text-white/50">cloudy</span>
+<p class="text-sm font-bold text-white mt-1">26°</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant font-bold mb-2">18:00</p>
+<span class="material-symbols-outlined text-white/50">nights_stay</span>
+<p class="text-sm font-bold text-white mt-1">24°</p>
+</div>
+</div>
+</div>
+<!-- Card 2: Today's Mandi Price -->
+<div class="glass-card rounded-3xl p-8 flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="px-3 py-1 rounded bg-tertiary/20 text-tertiary text-[10px] font-bold tracking-widest uppercase">Market Data</span>
+<h3 class="text-xl font-bold text-white mt-2">Mandi Prices</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">trending_up</span>
+</div>
+<div class="space-y-6 flex-grow">
+<div class="flex justify-between items-center group cursor-pointer">
+<div>
+<p class="text-sm font-bold text-white">Tomato (F1)</p>
+<p class="text-xs text-on-surface-variant">Nashik Mandi</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-white">₹2,340/q</p>
+<p class="text-xs text-secondary font-bold">+12%</p>
+</div>
+</div>
+<div class="w-full h-px bg-white/5"></div>
+<div class="flex justify-between items-center group cursor-pointer">
+<div>
+<p class="text-sm font-bold text-white">Wheat</p>
+<p class="text-xs text-on-surface-variant">Punjab APMC</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-white">₹2,018/q</p>
+<p class="text-xs text-error font-bold">-2%</p>
+</div>
+</div>
+<div class="w-full h-px bg-white/5"></div>
+<div class="flex justify-between items-center group cursor-pointer">
+<div>
+<p class="text-sm font-bold text-white">Rice (Basmati)</p>
+<p class="text-xs text-on-surface-variant">Haryana Mandi</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-white">₹3,100/q</p>
+<p class="text-xs text-secondary font-bold">+5%</p>
+</div>
+</div>
+</div>
+<a href="/stitch/marketplace" class="mt-8 text-xs font-bold text-primary flex items-center gap-2 hover:gap-3 transition-all uppercase tracking-widest">
+                    View Live Dashboard <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+</a>
+</div>
+<!-- Card 3: Saarthi AI -->
+<div class="glass-card rounded-3xl p-8 relative overflow-hidden group">
+<div class="absolute -bottom-12 -right-12 w-48 h-48 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all duration-700"></div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="text-xs font-bold tracking-widest text-secondary uppercase">Saarthi AI</span>
+</div>
+<h3 class="text-2xl font-black text-white mb-4">"Ask anything about farming"</h3>
+<div class="space-y-3 mb-8">
+<div class="bg-white/5 p-3 rounded-xl text-sm text-on-surface-variant border border-white/5">
+                        What's the best crop for black soil in July?
+                    </div>
+<div class="bg-secondary/10 p-3 rounded-xl text-sm text-secondary border border-secondary/20 self-end ml-6">
+                        Considering current moisture levels, Soybeans are ideal...
+                    </div>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 rounded-xl px-4 py-3 text-sm focus:ring-1 focus:ring-secondary placeholder:text-white/20" placeholder="Type message..." type="text"/>
+<button class="absolute right-2 top-2 p-1.5 bg-secondary text-on-secondary rounded-lg">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Agri News -->
+<div class="glass-card rounded-3xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Close-up of healthy vibrant green soybean sprouts emerging from dark rich fertile soil with shallow depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmKKJmKrBeH3tbP044w9CAiCFEcGis10tbc6RwGpniZDeN6Elzvs4L6ieFMdBhxNjwuRT-dgHhJBFYzir59zhdvRxdCzCe1o4MEO2h2CG2iLfiAuRp-g7j-LmWZfWBbPTGZIOtS23KuJvbjakishaoXS__MVU0wde0wfhSUQp3_guYK2LnzgXvhDTjepLG3MyMUFULR7m6YolyXkdkjEJdzmdx_bDl970Yw02ZoBMDP80Z5nP72BTiLPhvyP86HnpdPdWFNd0J1Ak"/>
+<div class="absolute top-4 left-4">
+<span class="px-2 py-1 rounded bg-white/20 backdrop-blur-md text-white text-[9px] font-bold uppercase">Latest News</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="text-lg font-bold text-white mb-2 leading-snug">New Organic Certification Subsidy Announced for 2024</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">The Central Government has cleared a ₹5,000 Cr fund to boost organic farming exports through regional hubs...</p>
+</div>
+</div>
+<!-- Card 5: Govt Schemes -->
+<div class="glass-card rounded-3xl p-8 flex flex-col border-l-2 border-l-tertiary">
+<span class="text-[10px] font-bold tracking-[0.2em] text-tertiary uppercase mb-4">Kisan Samman Nidhi</span>
+<h3 class="text-2xl font-black text-white mb-6">3 schemes you qualify for</h3>
+<div class="space-y-4 flex-grow">
+<div class="flex items-center gap-4 p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">verified_user</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">PM-KMY Pension</p>
+<p class="text-[10px] text-tertiary-fixed-dim">Eligible via Aadhaar</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">potted_plant</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Seed Subsidy</p>
+<p class="text-[10px] text-primary">Rabi Season Special</p>
+</div>
+</div>
+</div>
+<a href="/stitch/gov-schemes" class="mt-6 w-full py-3 bg-tertiary/10 text-tertiary font-bold rounded-xl text-sm hover:bg-tertiary hover:text-on-tertiary transition-all block text-center">
+                    Apply Now
+                </a>
+</div>
+</div>
+</section>
+<!-- Market Trends Chart Section -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24 border-t border-white/5">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+<div>
+<h2 class="text-4xl md:text-5xl font-black text-white flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary text-4xl">monitoring</span>
+                    Live Market Intelligence
+                </h2>
+<div class="h-1 w-32 bg-tertiary mt-4 rounded-full"></div>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-2 rounded-full bg-primary text-on-primary text-sm font-bold">All Crops</button>
+<button class="px-5 py-2 rounded-full bg-white/5 text-white/60 text-sm font-bold hover:bg-white/10 transition-colors">Vegetables</button>
+<button class="px-5 py-2 rounded-full bg-white/5 text-white/60 text-sm font-bold hover:bg-white/10 transition-colors">Grains</button>
+<button class="px-5 py-2 rounded-full bg-white/10 text-white text-sm font-bold flex items-center gap-2">
+                    Maharashtra <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-12 h-[500px] relative overflow-hidden flex flex-col">
+<div class="flex justify-between items-start mb-12">
+<div class="flex gap-8">
+<div>
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-1 tracking-widest">Tomato Trend</p>
+<p class="text-2xl font-black text-secondary">₹2,340 <span class="text-sm font-medium ml-2">↑ 12.4%</span></p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant font-bold uppercase mb-1 tracking-widest">Wheat Trend</p>
+<p class="text-2xl font-black text-tertiary">₹2,018 <span class="text-sm font-medium ml-2">↓ 2.1%</span></p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-secondary"></span>
+<span class="text-xs font-bold text-white/60">Tomato</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+<span class="text-xs font-bold text-white/60">Wheat</span>
+</div>
+</div>
+</div>
+<!-- Simulated Chart Area -->
+<div class="flex-grow relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="grad-green" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(0,196,140,0.2);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(0,196,140,0);stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 Q10,75 20,85 T40,60 T60,40 T80,50 T100,20 L100,100 L0,100 Z" fill="url(#grad-green)"></path>
+<path d="M0,80 Q10,75 20,85 T40,60 T60,40 T80,50 T100,20" fill="none" stroke="#00C48C" stroke-width="2"></path>
+<path d="M0,40 Q15,45 30,35 T50,55 T70,45 T100,60" fill="none" stroke="#F5A623" stroke-dasharray="4" stroke-width="2"></path>
+</svg>
+<!-- Floating Tooltip -->
+<div class="absolute left-1/2 top-1/4 -translate-x-1/2 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-2xl">
+<p class="text-[10px] font-bold text-white/60 mb-1">MAY 24, 2024</p>
+<div class="space-y-1">
+<div class="flex justify-between gap-8">
+<span class="text-xs font-bold text-secondary">Tomato</span>
+<span class="text-xs font-bold text-white">₹2,340/q</span>
+</div>
+<div class="flex justify-between gap-8">
+<span class="text-xs font-bold text-tertiary">Wheat</span>
+<span class="text-xs font-bold text-white">₹2,018/q</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between mt-8 text-[10px] font-bold text-white/20 tracking-[0.3em]">
+<span>JAN</span>
+<span>FEB</span>
+<span>MAR</span>
+<span>APR</span>
+<span>MAY</span>
+<span>JUN</span>
+<span>JUL</span>
+</div>
+</div>
+</section>
+<!-- Farmer Access Cards -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Farmer -->
+<a href="/dashboard" class="glass-card rounded-3xl p-8 hover:bg-primary-container/20 transition-all cursor-pointer group border-l-4 border-primary block">
+<span class="material-symbols-outlined text-4xl text-primary mb-6" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+<h4 class="text-xl font-bold text-white mb-2" data-i18n="role_farmer">I'm a Farmer</h4>
+<div class="flex items-center gap-2 text-primary/60 text-xs font-bold mb-8">
+<span class="material-symbols-outlined text-xs">verified</span>
+                    2-STEP VERIFICATION
+                </div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-bold text-white" data-i18n="enter_portal">Enter Portal</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Seller -->
+<a href="/dashboard" class="glass-card rounded-3xl p-8 hover:bg-tertiary-container/20 transition-all cursor-pointer group border-l-4 border-tertiary block">
+<span class="material-symbols-outlined text-4xl text-tertiary mb-6" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<h4 class="text-xl font-bold text-white mb-2" data-i18n="role_seller">I'm a Seller</h4>
+<div class="flex items-center gap-2 text-tertiary/60 text-xs font-bold mb-8">
+<span class="material-symbols-outlined text-xs">verified</span>
+                    2-STEP VERIFICATION
+                </div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-bold text-white" data-i18n="open_store">Open Store</span>
+<span class="material-symbols-outlined text-tertiary group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Buyer -->
+<a href="/dashboard" class="glass-card rounded-3xl p-8 hover:bg-secondary-container/20 transition-all cursor-pointer group border-l-4 border-secondary block">
+<span class="material-symbols-outlined text-4xl text-secondary mb-6" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<h4 class="text-xl font-bold text-white mb-2" data-i18n="role_buyer">I'm a Buyer</h4>
+<div class="flex items-center gap-2 text-secondary/60 text-xs font-bold mb-8">
+<span class="material-symbols-outlined text-xs">verified</span>
+                    2-STEP VERIFICATION
+                </div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-bold text-white" data-i18n="source_now">Source Now</span>
+<span class="material-symbols-outlined text-secondary group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Bidder -->
+<a href="/dashboard" class="glass-card rounded-3xl p-8 hover:bg-white/10 transition-all cursor-pointer group border-l-4 border-white/20 block">
+<span class="material-symbols-outlined text-4xl text-white mb-6" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<h4 class="text-xl font-bold text-white mb-2" data-i18n="role_bidder">I'm a Bidder</h4>
+<div class="flex items-center gap-2 text-white/40 text-xs font-bold mb-8">
+<span class="material-symbols-outlined text-xs">verified</span>
+                    2-STEP VERIFICATION
+                </div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-bold text-white" data-i18n="join_auctions">Join Auctions</span>
+<span class="material-symbols-outlined text-white group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</a>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="max-w-screen-2xl mx-auto px-8 py-32 relative">
+<div class="text-center mb-24">
+<h2 class="text-5xl font-black text-white mb-4" data-i18n="how_title">How it works</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto" data-i18n="how_desc">Get started in under 5 minutes. Connect your fields to the future of digital agriculture.</p>
+</div>
+<div class="relative">
+<!-- Connecting Line -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent -translate-y-1/2 hidden lg:block"></div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
+<div class="flex flex-col items-center text-center group">
+<div class="h-20 w-20 rounded-full bg-surface-container-highest border-2 border-primary flex items-center justify-center mb-8 relative group-hover:scale-110 transition-transform shadow-[0_0_30px_rgba(137,216,158,0.2)]">
+<span class="text-2xl font-black text-primary">01</span>
+</div>
+<h5 class="text-2xl font-bold text-white mb-4" data-i18n="step1_title">Register Kisan ID</h5>
+<p class="text-on-surface-variant max-w-xs" data-i18n="step1_desc">Verify your identity with Aadhaar &amp; Land records to unlock government benefits and marketplace access.</p>
+</div>
+<div class="flex flex-col items-center text-center group">
+<div class="h-20 w-20 rounded-full bg-surface-container-highest border-2 border-secondary flex items-center justify-center mb-8 relative group-hover:scale-110 transition-transform shadow-[0_0_30px_rgba(0,196,140,0.2)]">
+<span class="text-2xl font-black text-secondary">02</span>
+</div>
+<h5 class="text-2xl font-bold text-white mb-4" data-i18n="step2_title">Connect Live Data</h5>
+<p class="text-on-surface-variant max-w-xs" data-i18n="step2_desc">Link your local weather sensors or use our satellite-based field monitoring for precision tracking.</p>
+</div>
+<div class="flex flex-col items-center text-center group">
+<div class="h-20 w-20 rounded-full bg-surface-container-highest border-2 border-tertiary flex items-center justify-center mb-8 relative group-hover:scale-110 transition-transform shadow-[0_0_30px_rgba(245,166,35,0.2)]">
+<span class="text-2xl font-black text-tertiary">03</span>
+</div>
+<h5 class="text-2xl font-bold text-white mb-4" data-i18n="step3_title">Grow with AI</h5>
+<p class="text-on-surface-variant max-w-xs" data-i18n="step3_desc">Receive real-time alerts, sowing advice, and high-profit selling times powered by Saarthi Intelligence.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#09160e] w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-screen-2xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="text-lg font-bold text-white flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+                    KrishiSaarthi
+                </div>
+<p class="text-sm text-white/40 leading-relaxed mb-6">
+                    India's premier digital operating system for farmers, enabling transparent markets and data-driven agriculture.
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-white/40 hover:text-primary transition-colors cursor-pointer">social_leaderboard</span>
+<span class="material-symbols-outlined text-white/40 hover:text-primary transition-colors cursor-pointer">public</span>
+<span class="material-symbols-outlined text-white/40 hover:text-primary transition-colors cursor-pointer">mail</span>
+</div>
+</div>
+<div>
+<h6 class="text-white font-bold mb-6">Product</h6>
+<ul class="space-y-4 font-['Inter'] text-sm text-white/60">
+<li><a class="hover:text-emerald-400 transition-colors" href="/stitch/marketplace">Marketplace</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/stitch/yield-prediction">Yield Predictor</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/stitch/marketplace">Price Tracker</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/stitch/marketplace">Krishi Store</a></li>
+</ul>
+</div>
+<div>
+<h6 class="text-white font-bold mb-6">Company</h6>
+<ul class="space-y-4 font-['Inter'] text-sm text-white/60">
+<li><a class="hover:text-emerald-400 transition-colors" href="/app">About Us</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/app">Terms of Service</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/app">Privacy Policy</a></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="/stitch/chatbot">Contact Support</a></li>
+</ul>
+</div>
+<div>
+<h6 class="text-white font-bold mb-6">Newsletter</h6>
+<p class="text-xs text-white/40 mb-4">Get the latest agri-tech updates directly in your inbox.</p>
+<div class="relative">
+<input class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:ring-1 focus:ring-primary focus:border-transparent outline-none" placeholder="Email address" type="email"/>
+<button class="absolute right-1 top-1 bottom-1 px-3 bg-primary text-on-primary rounded font-bold text-xs uppercase">Join</button>
+</div>
+</div>
+</div>
+<div class="max-w-screen-2xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-white/40 font-['Inter']">
+                <span data-i18n="footer_made">Made in India for Indian Farmers</span> 🇮🇳
+            </p>
+<p class="text-xs text-white/20">
+                © 2024 KrishiSaarthi Technologies Pvt. Ltd.
+            </p>
+</div>
+</footer>
+<script>
+const T = {
+  en: {
+    brand: 'KrishiSaarthi', nav_home: 'Home', nav_markets: 'Markets', nav_schemes: 'Schemes', nav_gyan: 'Saarthi Gyan', nav_store: 'Store',
+    login_btn: 'Login/Register', hero_badge: 'Powered by Real-Time Gov APIs',
+    hero_title: 'Smart Farming <br/>Starts Here',
+    hero_desc: 'AI-powered crop planning, live mandi prices & government schemes \u2014 all in one platform designed for the modern Indian farmer.',
+    hero_cta1: 'Start Farming Smart', hero_cta2: 'Talk to Saarthi AI',
+    stat1: '2.4M+ Farmers', stat2: '\u20B91,240 Avg Price Today', stat3: '47 Crops Tracked', stat4: '18 States Covered',
+    role_farmer: "I'm a Farmer", role_seller: "I'm a Seller", role_buyer: "I'm a Buyer", role_bidder: "I'm a Bidder",
+    enter_portal: 'Enter Portal', open_store: 'Open Store', source_now: 'Source Now', join_auctions: 'Join Auctions',
+    how_title: 'How it works', how_desc: 'Get started in under 5 minutes. Connect your fields to the future of digital agriculture.',
+    step1_title: 'Register Kisan ID', step1_desc: 'Verify your identity with Aadhaar & Land records to unlock government benefits and marketplace access.',
+    step2_title: 'Connect Live Data', step2_desc: 'Link your local weather sensors or use our satellite-based field monitoring for precision tracking.',
+    step3_title: 'Grow with AI', step3_desc: 'Receive real-time alerts, sowing advice, and high-profit selling times powered by Saarthi Intelligence.',
+    footer_made: 'Made in India for Indian Farmers'
+  },
+  hi: {
+    brand: '\u0915\u0943\u0937\u093F\u0938\u093E\u0930\u0925\u0940', nav_home: '\u0939\u094B\u092E', nav_markets: '\u092E\u0902\u0921\u0940', nav_schemes: '\u092F\u094B\u091C\u0928\u093E\u090F\u0901', nav_gyan: '\u0938\u093E\u0930\u0925\u0940 \u091C\u094D\u091E\u093E\u0928', nav_store: '\u0926\u0941\u0915\u093E\u0928',
+    login_btn: '\u0932\u0949\u0917\u093F\u0928 / \u0930\u091C\u093F\u0938\u094D\u091F\u0930', hero_badge: '\u0930\u093F\u092F\u0932-\u091F\u093E\u0907\u092E \u0938\u0930\u0915\u093E\u0930\u0940 API \u0938\u0947 \u0938\u0902\u091A\u093E\u0932\u093F\u0924',
+    hero_title: '\u0938\u094D\u092E\u093E\u0930\u094D\u091F \u0916\u0947\u0924\u0940 <br/>\u092F\u0939\u093E\u0901 \u0938\u0947 \u0936\u0941\u0930\u0942',
+    hero_desc: 'AI-\u0938\u0902\u091A\u093E\u0932\u093F\u0924 \u092B\u0938\u0932 \u092F\u094B\u091C\u0928\u093E, \u0932\u093E\u0907\u0935 \u092E\u0902\u0921\u0940 \u092D\u093E\u0935 \u0914\u0930 \u0938\u0930\u0915\u093E\u0930\u0940 \u092F\u094B\u091C\u0928\u093E\u090F\u0901 \u2014 \u0906\u0927\u0941\u0928\u093F\u0915 \u092D\u093E\u0930\u0924\u0940\u092F \u0915\u093F\u0938\u093E\u0928 \u0915\u0947 \u0932\u093F\u090F \u090F\u0915 \u092A\u094D\u0932\u0947\u091F\u092B\u0949\u0930\u094D\u092E\u0964',
+    hero_cta1: '\u0938\u094D\u092E\u093E\u0930\u094D\u091F \u0916\u0947\u0924\u0940 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902', hero_cta2: '\u0938\u093E\u0930\u0925\u0940 AI \u0938\u0947 \u092C\u093E\u0924 \u0915\u0930\u0947\u0902',
+    stat1: '24 \u0932\u093E\u0916+ \u0915\u093F\u0938\u093E\u0928', stat2: '\u20B91,240 \u0914\u0938\u0924 \u092D\u093E\u0935 \u0906\u091C', stat3: '47 \u092B\u0938\u0932\u0947\u0902 \u091F\u094D\u0930\u0948\u0915', stat4: '18 \u0930\u093E\u091C\u094D\u092F \u0915\u0935\u0930',
+    role_farmer: '\u092E\u0948\u0902 \u0915\u093F\u0938\u093E\u0928 \u0939\u0942\u0901', role_seller: '\u092E\u0948\u0902 \u0935\u093F\u0915\u094D\u0930\u0947\u0924\u093E \u0939\u0942\u0901', role_buyer: '\u092E\u0948\u0902 \u0916\u0930\u0940\u0926\u0926\u093E\u0930 \u0939\u0942\u0901', role_bidder: '\u092E\u0948\u0902 \u092C\u094B\u0932\u0940\u0926\u093E\u0924\u093E \u0939\u0942\u0901',
+    enter_portal: '\u092A\u094B\u0930\u094D\u091F\u0932 \u0916\u094B\u0932\u0947\u0902', open_store: '\u0926\u0941\u0915\u093E\u0928 \u0916\u094B\u0932\u0947\u0902', source_now: '\u0905\u092D\u0940 \u0916\u0930\u0940\u0926\u0947\u0902', join_auctions: '\u0928\u0940\u0932\u093E\u092E\u0940 \u092E\u0947\u0902 \u0936\u093E\u092E\u093F\u0932 \u0939\u094B\u0902',
+    how_title: '\u0915\u0948\u0938\u0947 \u0915\u093E\u092E \u0915\u0930\u0924\u093E \u0939\u0948', how_desc: '5 \u092E\u093F\u0928\u091F \u092E\u0947\u0902 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902\u0964 \u0905\u092A\u0928\u0947 \u0916\u0947\u0924\u094B\u0902 \u0915\u094B \u0921\u093F\u091C\u093F\u091F\u0932 \u0915\u0943\u0937\u093F \u0915\u0947 \u092D\u0935\u093F\u0937\u094D\u092F \u0938\u0947 \u091C\u094B\u0921\u093C\u0947\u0902\u0964',
+    step1_title: '\u0915\u093F\u0938\u093E\u0928 ID \u0930\u091C\u093F\u0938\u094D\u091F\u0930 \u0915\u0930\u0947\u0902', step1_desc: '\u0938\u0930\u0915\u093E\u0930\u0940 \u0932\u093E\u092D \u0914\u0930 \u092E\u093E\u0930\u094D\u0915\u0947\u091F\u092A\u094D\u0932\u0947\u0938 \u0905\u0928\u0932\u0949\u0915 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0906\u0927\u093E\u0930 \u0914\u0930 \u092D\u0942\u092E\u093F \u0930\u093F\u0915\u0949\u0930\u094D\u0921 \u0938\u0947 \u0938\u0924\u094D\u092F\u093E\u092A\u093F\u0924 \u0915\u0930\u0947\u0902\u0964',
+    step2_title: '\u0932\u093E\u0907\u0935 \u0921\u0947\u091F\u093E \u0915\u0928\u0947\u0915\u094D\u091F \u0915\u0930\u0947\u0902', step2_desc: '\u0938\u094D\u0925\u093E\u0928\u0940\u092F \u092E\u094C\u0938\u092E \u0938\u0947\u0902\u0938\u0930 \u092F\u093E \u0938\u0948\u091F\u0947\u0932\u093E\u0907\u091F \u092E\u0949\u0928\u093F\u091F\u0930\u093F\u0902\u0917 \u0938\u0947 \u0905\u092A\u0928\u0947 \u0916\u0947\u0924 \u0915\u094B \u091F\u094D\u0930\u0948\u0915 \u0915\u0930\u0947\u0902\u0964',
+    step3_title: 'AI \u0915\u0947 \u0938\u093E\u0925 \u092C\u0922\u093C\u0947\u0902', step3_desc: '\u0930\u093F\u092F\u0932-\u091F\u093E\u0907\u092E \u0905\u0932\u0930\u094D\u091F, \u092C\u0941\u0906\u0908 \u0938\u0932\u093E\u0939 \u0914\u0930 \u0905\u0927\u093F\u0915\u0924\u092E \u0932\u093E\u092D \u0935\u093E\u0932\u0947 \u092C\u0947\u091A\u0928\u0947 \u0915\u093E \u0938\u092E\u092F \u092A\u093E\u090F\u0902\u0964',
+    footer_made: '\u092D\u093E\u0930\u0924 \u092E\u0947\u0902 \u092C\u0928\u093E \u092D\u093E\u0930\u0924\u0940\u092F \u0915\u093F\u0938\u093E\u0928\u094B\u0902 \u0915\u0947 \u0932\u093F\u090F'
+  },
+  kn: {
+    brand: '\u0C95\u0CC3\u0CB7\u0CBF\u0CB8\u0CBE\u0CB0\u0CA5\u0CBF', nav_home: '\u0CAE\u0CC1\u0C96\u0CAA\u0CC1\u0C9F', nav_markets: '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6', nav_schemes: '\u0CAF\u0CCB\u0C9C\u0CA8\u0CC6\u0C97\u0CB3\u0CC1', nav_gyan: '\u0CB8\u0CBE\u0CB0\u0CA5\u0CBF \u0C9C\u0CCD\u0C9E\u0CBE\u0CA8', nav_store: '\u0C85\u0C82\u0C97\u0CA1\u0CBF',
+    login_btn: '\u0CB2\u0CBE\u0C97\u0CBF\u0CA8\u0CCD / \u0CA8\u0CCB\u0C82\u0CA6\u0CA3\u0CBF', hero_badge: '\u0CB0\u0CBF\u0CAF\u0CB2\u0CCD-\u0C9F\u0CC8\u0CAE\u0CCD \u0CB8\u0CB0\u0CCD\u0C95\u0CBE\u0CB0\u0CBF API \u0C87\u0C82\u0CA6 \u0CA8\u0CA1\u0CC6\u0CAF\u0CC1\u0CA4\u0CCD\u0CA4\u0CA6\u0CC6',
+    hero_title: '\u0CB8\u0CCD\u0CAE\u0CBE\u0CB0\u0CCD\u0C9F\u0CCD \u0C95\u0CC3\u0CB7\u0CBF <br/>\u0C87\u0CB2\u0CCD\u0CB2\u0CBF \u0CAA\u0CCD\u0CB0\u0CBE\u0CB0\u0C82\u0CAD',
+    hero_desc: 'AI-\u0C86\u0CA7\u0CBE\u0CB0\u0CBF\u0CA4 \u0CAC\u0CC6\u0CB3\u0CC6 \u0CAF\u0CCB\u0C9C\u0CA8\u0CC6, \u0CB2\u0CC8\u0CB5\u0CCD \u0CAE\u0C82\u0CA1\u0CBF \u0CA7\u0CB0\u0C97\u0CB3\u0CC1 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CB8\u0CB0\u0CCD\u0C95\u0CBE\u0CB0\u0CBF \u0CAF\u0CCB\u0C9C\u0CA8\u0CC6\u0C97\u0CB3\u0CC1 \u2014 \u0C86\u0CA7\u0CC1\u0CA8\u0CBF\u0C95 \u0CAD\u0CBE\u0CB0\u0CA4\u0CC0\u0CAF \u0CB0\u0CC8\u0CA4\u0CB0\u0CBF\u0C97\u0CBE\u0C97\u0CBF \u0C92\u0C82\u0CA6\u0CC1 \u0CB5\u0CC7\u0CA6\u0CBF\u0C95\u0CC6.',
+    hero_cta1: '\u0CB8\u0CCD\u0CAE\u0CBE\u0CB0\u0CCD\u0C9F\u0CCD \u0C95\u0CC3\u0CB7\u0CBF \u0CAA\u0CCD\u0CB0\u0CBE\u0CB0\u0C82\u0CAD\u0CBF\u0CB8\u0CBF', hero_cta2: '\u0CB8\u0CBE\u0CB0\u0CA5\u0CBF AI \u0C9C\u0CCA\u0CA4\u0CC6 \u0CAE\u0CBE\u0CA4\u0CA8\u0CBE\u0CA1\u0CBF',
+    stat1: '24 \u0CB2\u0C95\u0CCD\u0CB7+ \u0CB0\u0CC8\u0CA4\u0CB0\u0CC1', stat2: '\u20B91,240 \u0CB8\u0CB0\u0CBE\u0CB8\u0CB0\u0CBF \u0CA7\u0CB0 \u0C87\u0C82\u0CA6\u0CC1', stat3: '47 \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3\u0CC1 \u0C9F\u0CCD\u0CB0\u0CCD\u0CAF\u0CBE\u0C95\u0CCD', stat4: '18 \u0CB0\u0CBE\u0C9C\u0CCD\u0CAF\u0C97\u0CB3\u0CC1 \u0C92\u0CB3\u0C97\u0CCA\u0C82\u0CA1\u0CBF\u0CA6\u0CC6',
+    role_farmer: '\u0CA8\u0CBE\u0CA8\u0CC1 \u0CB0\u0CC8\u0CA4', role_seller: '\u0CA8\u0CBE\u0CA8\u0CC1 \u0CAE\u0CBE\u0CB0\u0CBE\u0C9F\u0C97\u0CBE\u0CB0', role_buyer: '\u0CA8\u0CBE\u0CA8\u0CC1 \u0C96\u0CB0\u0CC0\u0CA6\u0CBF\u0CA6\u0CBE\u0CB0', role_bidder: '\u0CA8\u0CBE\u0CA8\u0CC1 \u0CAC\u0CBF\u0CA1\u0CCD\u0CA1\u0CB0\u0CCD',
+    enter_portal: '\u0CAA\u0CCB\u0CB0\u0CCD\u0C9F\u0CB2\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', open_store: '\u0C85\u0C82\u0C97\u0CA1\u0CBF \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', source_now: '\u0C88\u0C97 \u0C96\u0CB0\u0CC0\u0CA6\u0CBF\u0CB8\u0CBF', join_auctions: '\u0CB9\u0CB0\u0CBE\u0C9C\u0CC1 \u0CB8\u0CC7\u0CB0\u0CBF',
+    how_title: '\u0CB9\u0CC7\u0C97\u0CC6 \u0C95\u0CC6\u0CB2\u0CB8 \u0CAE\u0CBE\u0CA1\u0CC1\u0CA4\u0CCD\u0CA4\u0CA6\u0CC6', how_desc: '5 \u0CA8\u0CBF\u0CAE\u0CBF\u0CB7\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0CAA\u0CCD\u0CB0\u0CBE\u0CB0\u0C82\u0CAD\u0CBF\u0CB8\u0CBF. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CCA\u0CB2\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA1\u0CBF\u0C9C\u0CBF\u0C9F\u0CB2\u0CCD \u0C95\u0CC3\u0CB7\u0CBF\u0C97\u0CC6 \u0C9C\u0CCB\u0CA1\u0CBF\u0CB8\u0CBF.',
+    step1_title: '\u0C95\u0CBF\u0CB8\u0CBE\u0CA8\u0CCD ID \u0CA8\u0CCB\u0C82\u0CA6\u0CA3\u0CBF', step1_desc: '\u0CB8\u0CB0\u0CCD\u0C95\u0CBE\u0CB0\u0CBF \u0CB2\u0CBE\u0CAD\u0C97\u0CB3\u0CC1 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAA\u0CCD\u0CB0\u0CB5\u0CC7\u0CB6\u0C95\u0CCD\u0C95\u0CBE\u0C97\u0CBF \u0C86\u0CA7\u0CBE\u0CB0\u0CCD \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAD\u0CC2\u0CAE\u0CBF \u0CA6\u0CBE\u0C96\u0CB2\u0CC6\u0C97\u0CB3\u0CBF\u0C82\u0CA6 \u0CAA\u0CB0\u0CBF\u0CB6\u0CC0\u0CB2\u0CBF\u0CB8\u0CBF.',
+    step2_title: '\u0CB2\u0CC8\u0CB5\u0CCD \u0CA1\u0CC7\u0C9F\u0CBE \u0C95\u0CA8\u0CC6\u0C95\u0CCD\u0C9F\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF', step2_desc: '\u0CB8\u0CCD\u0CA5\u0CB3\u0CC0\u0CAF \u0CB9\u0CB5\u0CBE\u0CAE\u0CBE\u0CA8 \u0CB8\u0CC6\u0CA8\u0CCD\u0CB8\u0CB0\u0CCD \u0C85\u0CA5\u0CB5\u0CBE \u0C89\u0CAA\u0C97\u0CCD\u0CB0\u0CB9 \u0CAE\u0CBE\u0CA8\u0CBF\u0C9F\u0CB0\u0CBF\u0C82\u0C97\u0CCD \u0CAC\u0CB3\u0CB8\u0CBF \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CCA\u0CB2 \u0C9F\u0CCD\u0CB0\u0CCD\u0CAF\u0CBE\u0C95\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF.',
+    step3_title: 'AI \u0C9C\u0CCA\u0CA4\u0CC6 \u0CAC\u0CC6\u0CB3\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', step3_desc: '\u0CB0\u0CBF\u0CAF\u0CB2\u0CCD-\u0C9F\u0CC8\u0CAE\u0CCD \u0C8E\u0C9A\u0CCD\u0C9A\u0CB0\u0CBF\u0C95\u0CC6, \u0CAC\u0CBF\u0CA4\u0CCD\u0CA4\u0CA8\u0CC6 \u0CB8\u0CB2\u0CB9\u0CC6 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0C85\u0CA7\u0CBF\u0C95 \u0CB2\u0CBE\u0CAD\u0CA6 \u0CAE\u0CBE\u0CB0\u0CBE\u0C9F \u0CB8\u0CAE\u0CAF \u0CAA\u0CA1\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF.',
+    footer_made: '\u0CAD\u0CBE\u0CB0\u0CA4\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0CA8\u0CBF\u0CB0\u0CCD\u0CAE\u0CBF\u0CB8\u0CB2\u0CBE\u0C97\u0CBF\u0CA6\u0CC6 \u0CAD\u0CBE\u0CB0\u0CA4\u0CC0\u0CAF \u0CB0\u0CC8\u0CA4\u0CB0\u0CBF\u0C97\u0CBE\u0C97\u0CBF'
+  }
+};
+const langLabels = {en: 'EN', hi: '\u0939\u093F', kn: '\u0C95\u0CA8'};
+function switchLang(lang) {
+  const dict = T[lang] || T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key]) el.innerHTML = dict[key];
+  });
+  document.getElementById('langLabel').textContent = langLabels[lang] || 'EN';
+  document.getElementById('langMenu').classList.add('hidden');
+  localStorage.setItem('ks_lang', lang);
+}
+// Auto-load saved language
+(function(){ const s = localStorage.getItem('ks_lang'); if (s && s !== 'en') switchLang(s); })();
+// Close dropdown on outside click
+document.addEventListener('click', e => { if (!document.getElementById('langDropdown').contains(e.target)) document.getElementById('langMenu').classList.add('hidden'); });
+</script>
+</body></html>

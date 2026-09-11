@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi Saathi - Crop AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = { darkMode: "class", theme: { extend: {
+  colors: {
+    "primary": "#10B981", "primary-dim": "#059669", "primary-glow": "rgba(16,185,129,0.15)",
+    "accent": "#34D399", "accent-soft": "rgba(52,211,153,0.1)",
+    "bg-base": "#0B0F19", "bg-surface": "#111827", "bg-elevated": "#1F2937", "bg-hover": "#374151",
+    "card": "#111827", "card-hover": "#1a2332",
+    "text-primary": "#F9FAFB", "text-secondary": "#D1D5DB", "text-muted": "#6B7280",
+    "border-dark": "#1F2937", "border-glow": "rgba(16,185,129,0.2)",
+    "danger": "#EF4444", "warning": "#F59E0B", "info": "#3B82F6",
+    "surface-dim": "#1a2332"
+  },
+  fontFamily: { "headline": ["Manrope"], "body": ["Inter"] },
+  boxShadow: {
+    "card": "0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2)",
+    "card-hover": "0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1)",
+    "glow": "0 0 30px rgba(16,185,129,0.15)",
+    "glow-strong": "0 0 40px rgba(16,185,129,0.25)"
+  }
+}}}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; vertical-align: middle }
+  body { background: #0B0F19; }
+  /* Subtle animated gradient mesh */
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: 0.4;
+    background: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(139,92,246,0.05) 0%, transparent 50%); }
+  .sidebar-link { transition: all 0.2s ease; }
+  .sidebar-link:hover { background: rgba(16,185,129,0.08); transform: translateX(4px); }
+  .sidebar-link.active { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.08)); color: #10B981; border: 1px solid rgba(16,185,129,0.2); }
+  .sidebar-link.active .material-symbols-outlined { color: #34D399; }
+  .glass-dark { background: rgba(17,24,39,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .metric-card { transition: all 0.25s ease; border: 1px solid #1F2937; }
+  .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
+  .action-card { transition: all 0.25s ease; }
+  .action-card:hover { transform: translateY(-2px); }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.4 } }
+  .form-input { background: #1F2937; border: 1px solid #374151; color: #F9FAFB; transition: all 0.2s; }
+  .form-input:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); outline: none; }
+  .form-input::placeholder { color: #6B7280; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0B0F19; }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+</style>
+</head>
+<body class="font-body text-text-primary min-h-screen">
+
+<!-- Top Navbar -->
+<header class="fixed top-0 w-full z-50 glass-dark">
+<nav class="flex items-center justify-between px-6 h-16 max-w-[1600px] mx-auto">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+      <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">eco</span>
+    </div>
+    <span class="text-lg font-headline font-extrabold text-text-primary tracking-tight">Krishi<span class="text-primary"> Saathi</span></span>
+  </div>
+  <div class="hidden md:flex flex-1 max-w-lg mx-8">
+    <div class="relative w-full">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-lg">search</span>
+      <input type="text" placeholder="Search crops, markets, schemes..." class="w-full bg-bg-elevated border border-border-dark rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none transition-all placeholder:text-text-muted"/>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <button class="relative p-2 rounded-xl hover:bg-bg-elevated transition-colors">
+      <span class="material-symbols-outlined text-text-muted">notifications</span>
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
+    </button>
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dim text-white flex items-center justify-center text-sm font-bold cursor-pointer shadow-glow" id="profileMiniName" onclick="window.location.href='/stitch/farmer/profile'">F</div>
+  </div>
+</nav>
+</header>
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex h-screen w-56 fixed left-0 top-0 flex-col gap-1 p-3 pt-20 z-40 border-r border-border-dark bg-bg-surface/80" style="backdrop-filter: blur(12px);">
+<div class="mb-4 px-3 pt-2">
+  <p class="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Navigation</p>
+</div>
+<nav class="space-y-0.5 flex-1">
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/farmer">
+    <span class="material-symbols-outlined text-[20px]">space_dashboard</span>
+    <span class="font-semibold text-[13px]">Overview</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/farmer/profile">
+    <span class="material-symbols-outlined text-[20px]">badge</span>
+    <span class="font-semibold text-[13px]">My Identity</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/marketplace">
+    <span class="material-symbols-outlined text-[20px]">store</span>
+    <span class="font-semibold text-[13px]">Market</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/insurance">
+    <span class="material-symbols-outlined text-[20px]">health_and_safety</span>
+    <span class="font-semibold text-[13px]">Insurance</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/gov-schemes">
+    <span class="material-symbols-outlined text-[20px]">account_balance</span>
+    <span class="font-semibold text-[13px]">Gov Schemes</span>
+  </a>
+  <a class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-2.5" href="/stitch/crop-prediction">
+    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">psychology</span>
+    <span class="font-semibold text-[13px]">Crop AI</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/yield-prediction">
+    <span class="material-symbols-outlined text-[20px]">calculate</span>
+    <span class="font-semibold text-[13px]">Yield Calc</span>
+  </a>
+  <a class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-2.5 text-text-muted hover:text-text-secondary" href="/stitch/chatbot">
+    <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+    <span class="font-semibold text-[13px]">AI Assistant</span>
+  </a>
+</nav>
+<a href="/stitch/chatbot" class="mb-3 mx-1 bg-gradient-to-r from-primary to-primary-dim text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-glow-strong transition-all shadow-glow">
+  <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">smart_toy</span> AI Assistant
+</a>
+</aside>
+
+<!-- Main Dashboard Content -->
+<main class="pt-20 pb-20 px-4 md:px-8 lg:pl-56 max-w-[1200px] mx-auto">
+
+<!-- ======== AI CROP PREDICTION ======== -->
+<section id="sectionCropPredict" class="mt-4">
+<h2 class="text-3xl font-headline font-extrabold text-primary mb-2">AI Crop Prediction</h2>
+<p class="text-sm text-text-secondary mb-8">Get AI-powered crop recommendations tailored to your soil composition, location weather, and season.</p>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+  <!-- Input Form -->
+  <div class="lg:col-span-5">
+    <div class="bg-card p-8 rounded-3xl border border-border-dark shadow-sm">
+      <h3 class="text-lg font-bold text-text-primary mb-6 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">edit_document</span> Input Parameters
+      </h3>
+      
+      <div class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wide">Soil Type</label>
+          <select id="cpSoil" class="w-full bg-bg-elevated border border-transparent focus:border-primary/30 rounded-xl p-3.5 text-text-primary font-medium transition-colors">
+            <option value="">Auto-detect (from profile)</option>
+            <option>Red</option>
+            <option>Black</option>
+            <option>Alluvial</option>
+            <option>Laterite</option>
+            <option>Clay</option>
+            <option>Loamy</option>
+            <option>Sandy</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wide">Location (City)</label>
+          <input id="cpLocation" class="w-full bg-bg-elevated border border-transparent focus:border-primary/30 rounded-xl p-3.5 text-text-primary font-medium transition-colors" placeholder="e.g. Kalaburgi"/>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wide">Growing Season</label>
+          <select id="cpSeason" class="w-full bg-bg-elevated border border-transparent focus:border-primary/30 rounded-xl p-3.5 text-text-primary font-medium transition-colors">
+            <option value="">Auto-detect (Current)</option>
+            <option>Kharif (Monsoon: Jun-Oct)</option>
+            <option>Rabi (Winter: Nov-Mar)</option>
+            <option>Zaid (Summer: Mar-Jun)</option>
+            <option>Annual</option>
+          </select>
+        </div>
+        
+        <button id="cpPredictBtn" onclick="runCropPrediction()" class="w-full mt-4 bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-200">
+          <span class="material-symbols-outlined text-xl">psychology</span>
+          Analyze & Predict Best Crops
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Results Display -->
+  <div class="lg:col-span-7">
+    <div id="cpResults" class="h-full min-h-[400px] bg-bg-elevated p-8 rounded-3xl border border-border-dark/10 flex flex-col items-center justify-center text-center">
+      <div class="w-20 h-20 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
+        <span class="material-symbols-outlined text-4xl">psychology_alt</span>
+      </div>
+      <h3 class="text-xl font-bold text-text-primary mb-2">Ready to Analyze</h3>
+      <p class="text-text-secondary max-w-sm">Enter your farm details and click predict. Our AI will analyze weather patterns, soil data, and current trends to recommend the most profitable crops.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 px-4 py-3 flex justify-around items-center border-t border-border-dark" style="background: rgba(11,15,25,0.95); backdrop-filter: blur(20px);">
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/farmer"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span class="text-[9px]">Home</span></a>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/marketplace"><span class="material-symbols-outlined text-[20px]">store</span><span class="text-[9px]">Market</span></a>
+<div class="relative -top-6"><a href="/stitch/chatbot" class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dim text-white rounded-full shadow-glow flex items-center justify-center"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">smart_toy</span></a></div>
+<a class="flex flex-col items-center gap-0.5 text-text-muted" href="/stitch/farmer/profile"><span class="material-symbols-outlined text-[20px]">badge</span><span class="text-[9px]">Identity</span></a>
+<a class="flex flex-col items-center gap-0.5 text-primary font-bold" href="/stitch/crop-prediction"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">psychology</span><span class="text-[9px]">Crop AI</span></a>
+</nav>
+
+<script>
+  const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+  const storedRole = localStorage.getItem('stitch_role') || '';
+  let storedSession = {};
+  try { storedSession = JSON.parse(localStorage.getItem('stitch_session') || '{}'); } catch {}
+
+  let currentPhone = storedSession.phone || '';
+  let currentName = storedSession.name || 'Farmer';
+  let currentCity = storedSession.city || 'Kalaburgi';
+
+  document.addEventListener('DOMContentLoaded', () => {
+      const _pn = document.getElementById('profileMiniName'); if (_pn) _pn.textContent = (currentName || 'F')[0].toUpperCase();
+      document.getElementById('cpLocation').value = currentCity;
+  });
+
+  async function runCropPrediction() {
+    const btn = document.getElementById('cpPredictBtn');
+    btn.disabled=true; btn.innerHTML='<span class="material-symbols-outlined text-xl animate-spin">sync</span> Analyzing Data...';
+    
+    const wrap = document.getElementById('cpResults');
+    wrap.classList.remove('flex', 'flex-col', 'items-center', 'justify-center', 'text-center');
+    wrap.innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full space-y-4">
+        <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+        <p class="text-primary font-bold animate-pulse">Running Gemini AI Analysis...</p>
+        <p class="text-xs text-text-secondary max-w-xs text-center">Checking openweather data, analyzing soil composites, and evaluating market trends.</p>
+      </div>
+    `;
+
+    try {
+      const seasonVal = document.getElementById('cpSeason').value;
+      const cleanSeason = seasonVal.split('(')[0].trim();
+      
+      const res = await fetch(`${API_BASE}/api/predict/crops`, { 
+          method:'POST', 
+          headers:{'Content-Type':'application/json'}, 
+          body: JSON.stringify({ 
+              soil_type: document.getElementById('cpSoil').value, 
+              location: document.getElementById('cpLocation').value.trim()||currentCity, 
+              season: cleanSeason 
+          }) 
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail||'Prediction failed');
+      
+      const preds = data.predictions||[];
+      
+      wrap.innerHTML = `
+      <h3 class="text-lg font-bold text-text-primary mb-4">Analysis Results</h3>
+      <div class="flex items-center gap-4 mb-6 bg-card p-4 rounded-2xl border border-border-dark shadow-sm">
+        <div class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center"><span class="material-symbols-outlined text-xl">thermostat</span></div>
+        <div>
+            <p class="text-sm font-bold text-text-primary">${data.temperature||'N/A'}°C <span class="text-text-secondary font-normal px-2">|</span> ${data.humidity||'N/A'}% humidity <span class="text-text-secondary font-normal px-2">|</span> ${data.soil_type||'Unknown'} Soil</p>
+            <p class="text-xs text-text-secondary">Environmental context used for AI prediction.</p>
+        </div>
+      </div>
+      <div class="space-y-4">
+      ` + preds.map((p,i) => `
+        <div class="bg-card p-5 rounded-2xl flex items-center justify-between ${i===0?'border-2 border-primary/40 shadow-md transform scale-[1.02]':'border border-border-dark/10 hover:border-primary/20 transition-colors'}">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl ${i===0?'bg-primary text-white':'bg-secondary-container text-on-secondary-container'} flex flex-col items-center justify-center font-bold text-lg shadow-inner">
+                    <span class="text-xs leading-none opacity-80 font-normal">Rank</span>
+                    ${i+1}
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg text-text-primary flex items-center gap-2">
+                        ${p.crop}
+                        ${i===0 ? '<span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded-full uppercase tracking-wide">Highly Recommended</span>' : ''}
+                    </h4>
+                    <p class="text-sm text-text-secondary mt-0.5 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">water_drop</span> ${p.water_need} Requirements · Season: ${p.season}</p>
+                </div>
+            </div>
+            <div class="text-right pl-4 border-l border-border-dark/10">
+                <p class="text-3xl font-headline font-black ${i===0?'text-primary':'text-text-primary'}">${p.confidence}%</p>
+                <p class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">AI Confidence</p>
+            </div>
+        </div>
+      `).join('') + `</div>`;
+    } catch(e) { 
+        wrap.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'text-center');
+        wrap.innerHTML=`
+        <div class="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-3xl">error</span>
+        </div>
+        <p class="text-error font-bold text-lg">${e.message}</p>
+        <p class="text-sm text-text-secondary mt-2">Please check your network connection or API keys.</p>
+        `; 
+    }
+    finally { 
+        btn.disabled=false; 
+        btn.innerHTML='<span class="material-symbols-outlined text-xl">psychology</span> Analyze & Predict Best Crops'; 
+    }
+  }
+</script>
+</body>
+</html>

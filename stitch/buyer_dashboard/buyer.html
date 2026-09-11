@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krishi AI - Buyer Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#faf9f7",
+            "surface-container-low": "#f4f3f1",
+            "surface-container-high": "#e9e8e6",
+            "surface-container-highest": "#e3e2e0",
+            "on-surface": "#1a1c1b",
+            "on-surface-variant": "#3f4940",
+            "outline-variant": "#bec9be",
+            "primary": "#004f29",
+            "primary-container": "#006a39",
+            "secondary-container": "#7ff7a9",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen">
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <section class="rounded-3xl bg-gradient-to-r from-[#004f29] via-[#006a39] to-[#0d8f4f] text-white p-8 mb-6">
+      <div class="flex flex-wrap gap-3 items-center justify-between">
+        <div>
+          <p class="uppercase text-xs tracking-[0.2em] text-white/70">Buyer Console</p>
+          <h1 class="font-headline text-3xl font-extrabold mt-1">Live Auction Bidding</h1>
+          <p class="text-white/80 mt-2">Track open listings and place bids instantly.</p>
+        </div>
+        <div class="flex gap-2 items-center w-full md:w-auto">
+          <input id="buyerPhone" class="rounded-xl bg-white/20 border-0 px-4 py-3 placeholder:text-white/70 text-white w-full md:w-64" placeholder="Buyer phone (+91...)" />
+          <button id="loadBuyerBtn" class="rounded-xl bg-white text-primary px-4 py-3 font-bold">Load</button>
+        </div>
+      </div>
+    </section>
+
+    <p id="statusMsg" class="text-sm text-on-surface-variant mb-4"></p>
+
+    <section id="kpis" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-6"></section>
+
+    <section class="rounded-3xl bg-white border border-outline-variant p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-headline text-2xl font-extrabold text-primary">Open Listings</h2>
+        <button id="refreshBtn" class="bg-surface-container-highest text-on-surface px-4 py-2 rounded-lg text-sm font-bold">Refresh</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-on-surface-variant border-b border-surface-container-highest">
+              <th class="text-left py-2 pr-3">Listing ID</th>
+              <th class="text-left py-2 pr-3">Crop</th>
+              <th class="text-left py-2 pr-3">Qty</th>
+              <th class="text-left py-2 pr-3">Base / kg</th>
+              <th class="text-left py-2 pr-3">Top Bid / kg</th>
+              <th class="text-left py-2">Bid Action</th>
+            </tr>
+          </thead>
+          <tbody id="openRows" class="divide-y divide-surface-container-high"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rounded-3xl bg-white border border-outline-variant p-6">
+      <h2 class="font-headline text-2xl font-extrabold text-primary mb-4">My Recent Bids</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-on-surface-variant border-b border-surface-container-highest">
+              <th class="text-left py-2 pr-3">Bid ID</th>
+              <th class="text-left py-2 pr-3">Listing</th>
+              <th class="text-left py-2 pr-3">Crop</th>
+              <th class="text-left py-2 pr-3">Price / kg</th>
+              <th class="text-left py-2 pr-3">Qty</th>
+              <th class="text-left py-2 pr-3">Status</th>
+              <th class="text-left py-2">Time</th>
+            </tr>
+          </thead>
+          <tbody id="bidRows" class="divide-y divide-surface-container-high"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+    let stream = null;
+    const state = { phone: '' };
+
+    const el = {
+      phone: document.getElementById('buyerPhone'),
+      load: document.getElementById('loadBuyerBtn'),
+      refresh: document.getElementById('refreshBtn'),
+      status: document.getElementById('statusMsg'),
+      kpis: document.getElementById('kpis'),
+      openRows: document.getElementById('openRows'),
+      bidRows: document.getElementById('bidRows')
+    };
+
+    function setStatus(msg, isError = false) {
+      el.status.textContent = msg || '';
+      el.status.className = isError ? 'text-sm text-error mb-4' : 'text-sm text-on-surface-variant mb-4';
+    }
+
+    function money(v) { return `INR ${Number(v || 0).toFixed(2)}`; }
+    function tm(ts) { return ts ? new Date(ts * 1000).toLocaleString() : '-'; }
+
+    async function api(path, options) {
+      const res = await fetch(`${API_BASE}${path}`, options);
+      const data = await res.json();
+      if (!res.ok || data.success === false) throw new Error(data.detail || data.error || 'API error');
+      return data;
+    }
+
+    function renderKpis(k) {
+      const items = [
+        ['Total Bids', k.total_bids],
+        ['Active Bids', k.active_bids],
+        ['Won Bids', k.won_bids],
+        ['Highest Bid Value', money(k.highest_bid_value)],
+        ['Open Listings', k.open_listings]
+      ];
+      el.kpis.innerHTML = items.map(([label, val]) => `<article class="rounded-2xl bg-white border border-outline-variant p-4"><p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">${label}</p><p class="mt-2 text-2xl font-headline font-extrabold">${val}</p></article>`).join('');
+    }
+
+    function renderOpenListings(rows) {
+      if (!rows.length) {
+        el.openRows.innerHTML = '<tr><td class="py-4 text-on-surface-variant" colspan="6">No open listings available.</td></tr>';
+        return;
+      }
+      el.openRows.innerHTML = rows.map((row) => {
+        const top = row.highest_bid ? money(row.highest_bid.bid_price_per_unit) : 'No bids';
+        return `
+          <tr>
+            <td class="py-3 pr-3 text-xs">${row.id}</td>
+            <td class="py-3 pr-3 font-semibold">${row.crop_name}</td>
+            <td class="py-3 pr-3">${Number(row.quantity || 0).toFixed(0)} kg</td>
+            <td class="py-3 pr-3">${money(row.base_price_per_unit)}</td>
+            <td class="py-3 pr-3">${top}</td>
+            <td class="py-3">
+              <div class="flex flex-wrap gap-2 items-center">
+                <input id="p-${row.id}" type="number" step="0.1" min="1" class="rounded-lg bg-surface-container-low border-0 text-xs w-28" placeholder="Price/kg" />
+                <input id="q-${row.id}" type="number" step="0.1" min="1" class="rounded-lg bg-surface-container-low border-0 text-xs w-24" placeholder="Qty" value="${Number(row.quantity || 1).toFixed(0)}" />
+                <button onclick="placeBid('${row.id}', ${Number(row.quantity || 1)})" class="px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-bold">Place Bid</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderBids(rows) {
+      if (!rows.length) {
+        el.bidRows.innerHTML = '<tr><td class="py-4 text-on-surface-variant" colspan="7">No bids placed yet.</td></tr>';
+        return;
+      }
+      el.bidRows.innerHTML = rows.map((row) => `
+        <tr>
+          <td class="py-3 pr-3 text-xs">${row.bid_id}</td>
+          <td class="py-3 pr-3 text-xs">${row.listing_id}</td>
+          <td class="py-3 pr-3">${row.crop_name}</td>
+          <td class="py-3 pr-3">${money(row.bid_price_per_unit)}</td>
+          <td class="py-3 pr-3">${Number(row.quantity || 0).toFixed(0)} kg</td>
+          <td class="py-3 pr-3">${String(row.listing_status || '').toUpperCase()}</td>
+          <td class="py-3">${tm(row.created_at)}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadDashboard() {
+      if (!state.phone) return;
+      const data = await api(`/api/buyer/${encodeURIComponent(state.phone)}/dashboard`);
+      renderKpis(data.kpis || {});
+      renderOpenListings(data.open_listings || []);
+      renderBids(data.recent_bids || []);
+    }
+
+    window.placeBid = async function(listingId, maxQty) {
+      try {
+        const price = Number(document.getElementById(`p-${listingId}`).value || 0);
+        const qtyInput = Number(document.getElementById(`q-${listingId}`).value || 0);
+        const qty = Math.min(Math.max(qtyInput, 1), Number(maxQty || qtyInput || 1));
+        if (!price || price <= 0) {
+          setStatus('Enter valid bid price', true);
+          return;
+        }
+
+        await api(`/api/listings/${encodeURIComponent(listingId)}/bid`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ buyer_id: state.phone, bid_price_per_unit: price, quantity: qty })
+        });
+
+        setStatus('Bid placed successfully');
+        await loadDashboard();
+      } catch (err) {
+        setStatus(err.message || 'Bid failed', true);
+      }
+    }
+
+    function startStream() {
+      if (stream) stream.close();
+      stream = new EventSource(`${API_BASE}/api/activity-stream?limit=25`);
+      stream.onmessage = async (evt) => {
+        try {
+          const payload = JSON.parse(evt.data || '{}');
+          const events = payload.events || [];
+          const hasBidEvent = events.some((e) => ['listing_created', 'new_bid', 'bid_accepted', 'listing_closed'].includes(String(e?.event_type || '')));
+          if (hasBidEvent && state.phone) {
+            await loadDashboard();
+          }
+        } catch (_e) {
+        }
+      };
+    }
+
+    el.load.addEventListener('click', async () => {
+      state.phone = String(el.phone.value || '').trim();
+      if (!state.phone) {
+        setStatus('Enter buyer phone to continue', true);
+        return;
+      }
+      localStorage.setItem('stitch_role', 'buyer');
+      localStorage.setItem('stitch_session', JSON.stringify({ phone: state.phone, name: 'Buyer', city: 'Kalaburgi', at: Date.now() }));
+      localStorage.setItem('buyer_phone', state.phone);
+      try {
+        await loadDashboard();
+        startStream();
+        setStatus('Buyer dashboard synced');
+      } catch (err) {
+        setStatus(err.message || 'Failed to load buyer dashboard', true);
+      }
+    });
+
+    el.refresh.addEventListener('click', loadDashboard);
+
+    (function init() {
+      const fromQuery = new URLSearchParams(window.location.search).get('phone') || '';
+      let fromSession = '';
+      try {
+        fromSession = JSON.parse(localStorage.getItem('stitch_session') || '{}').phone || '';
+      } catch (_e) {
+        fromSession = '';
+      }
+      const cached = fromQuery || localStorage.getItem('buyer_phone') || fromSession || '';
+      if (!cached) return;
+
+      el.phone.value = cached;
+      state.phone = cached;
+      loadDashboard().catch((err) => setStatus(err.message || 'Failed to load buyer dashboard', true));
+      startStream();
+    })();
+  </script>
+</body>
+</html>

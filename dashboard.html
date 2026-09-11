@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishi AI • Operations Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        headline: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#10b981', // Emerald 500
+                        secondary: '#3b82f6', // Blue 500
+                        surface: '#09090b', // Zinc 950
+                        surfaceHigh: '#18181b', // Zinc 900
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #09090b; color: #f4f4f5; }
+        .glass-panel {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+        .blinking-dot {
+            animation: blink 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        /* Scrollbar to match dark theme */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-primary/30 text-zinc-100">
+    
+    <!-- Top Navigation -->
+    <nav class="border-b border-white/5 bg-surface/50 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">eco</span>
+                </div>
+                <span class="font-headline font-extrabold text-xl tracking-tight text-white">Krishi AI <span class="text-zinc-500 font-medium">Ops Dashboard</span></span>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 blinking-dot"></div>
+                    SYSTEM OPERATIONAL
+                </div>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff" class="w-8 h-8 rounded-full border border-white/20">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-6 space-y-6">
+        
+        <!-- Top KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- KPI 1 -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-zinc-400 font-medium text-sm text-outline">Active Voice Sessions</span>
+                    <span class="material-symbols-outlined text-emerald-500 bg-emerald-500/10 p-2 rounded-lg">record_voice_over</span>
+                </div>
+                <p class="text-4xl font-headline font-black text-white">12<span class="text-lg text-emerald-500 ml-2 animate-pulse">●</span></p>
+                <p class="text-xs text-emerald-400 font-bold mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-xs">trending_up</span> +3 today</p>
+            </div>
+            
+            <!-- KPI 2 -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-zinc-400 font-medium text-sm text-outline">Agent Tools Invoked (24h)</span>
+                    <span class="material-symbols-outlined text-blue-500 bg-blue-500/10 p-2 rounded-lg">build</span>
+                </div>
+                <p class="text-4xl font-headline font-black text-white">148</p>
+                <p class="text-xs text-zinc-500 font-medium mt-2">API calls automatically fired by Gemini</p>
+            </div>
+            
+            <!-- KPI 3 -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-zinc-400 font-medium text-sm text-outline">Dealers Contacted</span>
+                    <span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-2 rounded-lg">storefront</span>
+                </div>
+                <p class="text-4xl font-headline font-black text-white">45</p>
+                <p class="text-xs text-emerald-400 font-bold mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-xs">trending_up</span> +22% vs yesterday</p>
+            </div>
+
+            <!-- KPI 4 -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-zinc-400 font-medium text-sm text-outline">Orders Placed Autonomously</span>
+                    <span class="material-symbols-outlined text-purple-500 bg-purple-500/10 p-2 rounded-lg">local_shipping</span>
+                </div>
+                <p class="text-4xl font-headline font-black text-white">18</p>
+                <p class="text-xs text-zinc-500 font-medium mt-2">Worth approx ₹1.2 Lakhs</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Live Agent Activity Stream -->
+            <div class="lg:col-span-2 glass-panel rounded-2xl flex flex-col h-[600px] overflow-hidden">
+                <div class="p-5 border-b border-white/5 flex justify-between items-center bg-surfaceHigh/50">
+                    <h2 class="font-headline font-bold text-lg text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-500">memory</span> 
+                        Live Agent Intelligence Log
+                    </h2>
+                    <span id="activity-status" class="text-xs font-mono text-zinc-500">AWAITING_EVENTS</span>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto p-5 space-y-4 font-mono text-sm" id="log-container">
+                    <div class="text-zinc-500 text-xs animate-pulse" id="activity-loading">Waiting for live activity events...</div>
+
+                </div>
+            </div>
+
+            <!-- Right Column Cards -->
+            <div class="space-y-6">
+                
+                <!-- Live Calls Queue -->
+                <div class="glass-panel p-5 rounded-2xl space-y-4">
+                    <h3 class="font-headline font-bold text-white flex items-center justify-between">
+                        Active Calls 
+                        <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse">Live</span>
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-surfaceHigh/80 rounded-xl border border-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                                    <span class="material-symbols-outlined text-blue-400 text-sm">call</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-zinc-100">+91 98765 43210</p>
+                                    <p class="text-xs text-zinc-500">Kannada • Hubli</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">03:45</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-surfaceHigh/80 rounded-xl border border-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                                    <span class="material-symbols-outlined text-blue-400 text-sm">call</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-zinc-100">+91 99887 76655</p>
+                                    <p class="text-xs text-zinc-500">Kannada • Mysore</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">01:12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Anomalies Board -->
+                <div class="glass-panel p-5 rounded-2xl relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl"></div>
+                    <h3 class="font-headline font-bold text-white flex items-center gap-2 mb-4 relative z-10">
+                        <span class="material-symbols-outlined text-amber-500">warning</span>
+                        Data Anomalies
+                    </h3>
+                    <div class="space-y-4 relative z-10">
+                        <div class="group">
+                            <p class="text-sm font-bold text-amber-400">Tomato prices up 25% today</p>
+                            <p class="text-xs text-zinc-400 mt-1">Agent is advising farmers in South Karnataka to hold sales for 2 days.</p>
+                        </div>
+                        <div class="h-px w-full bg-white/5"></div>
+                        <div class="group">
+                            <p class="text-sm font-bold text-emerald-400">Heavy rain predicted in Belgaum</p>
+                            <p class="text-xs text-zinc-400 mt-1">Agent automatically rescheduled 3 Urea delivery orders via Dealer APIs.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- NEW ROW: Market Prices & Dealers Data -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+            
+            <!-- Live Market Index -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <h3 class="font-headline font-bold text-white flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-500">monitoring</span>
+                        Live Market Index
+                    </div>
+                    <span class="text-xs text-zinc-500 font-normal flex items-center gap-1"><span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Live Sync from APMC</span>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-zinc-400 border-b border-white/10 uppercase tracking-wider">
+                            <tr><th class="py-3 font-semibold">Commodity</th><th class="py-3 font-semibold">Price (INR)</th><th class="py-3 font-semibold">Trend</th><th class="py-3 text-right font-semibold">Mandi</th></tr>
+                        </thead>
+                        <tbody class="text-zinc-100 divide-y divide-white/5" id="market-index-body">
+                            <tr>
+                                <td colspan="4" class="py-6 text-center text-zinc-500 text-xs animate-pulse">
+                                    Fetching live mandi metrics...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Verified Dealers Network -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <h3 class="font-headline font-bold text-white flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-blue-500">storefront</span>
+                        Verified Dealers Network
+                    </div>
+                </h3>
+                <div class="space-y-4">
+                    <!-- Dealer 1 -->
+                    <div class="p-4 bg-surfaceHigh/80 rounded-xl border border-white/5 hover:border-blue-500/30 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-zinc-100 text-lg flex items-center gap-2">Kisan Agro Kendra <span class="material-symbols-outlined text-emerald-500 text-sm" title="Verified">verified</span></h4>
+                                <p class="text-xs text-zinc-500 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[14px]">location_on</span> APMC Yard, Hubli</p>
+                            </div>
+                            <span class="text-xs font-mono bg-blue-500/10 text-blue-400 px-2 py-1 rounded">DLR-101</span>
+                        </div>
+                        <div class="mt-3 flex gap-2 flex-wrap">
+                            <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded-full text-zinc-300">Urea Stocked</span>
+                            <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded-full text-zinc-300">DAP</span>
+                            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-full text-emerald-400">Neem Oil (In Stock)</span>
+                        </div>
+                    </div>
+
+                    <!-- Dealer 2 -->
+                    <div class="p-4 bg-surfaceHigh/80 rounded-xl border border-white/5 hover:border-blue-500/30 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-zinc-100 text-lg flex items-center gap-2">Green Earth Seeds <span class="material-symbols-outlined text-emerald-500 text-sm" title="Verified">verified</span></h4>
+                                <p class="text-xs text-zinc-500 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[14px]">location_on</span> Main Market, Mysore</p>
+                            </div>
+                            <span class="text-xs font-mono bg-blue-500/10 text-blue-400 px-2 py-1 rounded">DLR-102</span>
+                        </div>
+                        <div class="mt-3 flex gap-2 flex-wrap">
+                            <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded-full text-zinc-300">Hybrid Seeds</span>
+                            <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded-full text-zinc-300">Tractors</span>
+                            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-full text-emerald-400">Pesticides (In Stock)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    <script>
+        function relativeTime(tsSeconds) {
+            const diff = Math.max(0, Math.floor(Date.now() / 1000) - Number(tsSeconds || 0));
+            if (diff < 5) return 'just now';
+            if (diff < 60) return `${diff}s ago`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            return `${Math.floor(diff / 3600)}h ago`;
+        }
+
+        function renderActivityIcon(eventType) {
+            if (eventType === 'order_done') return { icon: 'shopping_cart', color: 'text-emerald-500' };
+            if (eventType === 'sell_done') return { icon: 'payments', color: 'text-emerald-500' };
+            if (eventType === 'order_proposed') return { icon: 'storefront', color: 'text-blue-400' };
+            if (eventType === 'sell_proposed') return { icon: 'sell', color: 'text-amber-400' };
+            if (eventType === 'action_cancelled') return { icon: 'cancel', color: 'text-red-400' };
+            return { icon: 'terminal', color: 'text-zinc-400' };
+        }
+
+        function renderActivityEvents(events) {
+            const statusEl = document.getElementById('activity-status');
+            const container = document.getElementById('log-container');
+
+            if (!Array.isArray(events) || events.length === 0) {
+                statusEl.textContent = 'AWAITING_EVENTS';
+                container.innerHTML = '<div class="text-zinc-500 text-xs">No live order/sell events yet.</div>';
+                return;
+            }
+
+            statusEl.textContent = 'LIVE_FEED';
+            container.innerHTML = '';
+
+            events.forEach((event) => {
+                const style = renderActivityIcon(event.event_type);
+                const card = document.createElement('div');
+                card.className = 'flex gap-4 p-4 rounded-xl bg-surfaceHigh/80 border border-white/5 hover:border-emerald-500/30 transition-colors';
+                card.innerHTML = `
+                    <div class="${style.color} mt-0.5"><span class="material-symbols-outlined">${style.icon}</span></div>
+                    <div class="flex-1 space-y-1">
+                        <div class="flex justify-between text-xs text-zinc-500">
+                            <span>Agent Event • ${event.event_type || 'system'}</span>
+                            <span class="opacity-70">${relativeTime(event.timestamp)}</span>
+                        </div>
+                        <p class="text-zinc-100 font-semibold">${event.title || 'Activity update'}</p>
+                        <p class="text-zinc-400 text-xs">${event.details || ''}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function fetchActivityFeed() {
+            const statusEl = document.getElementById('activity-status');
+
+            try {
+                const response = await fetch('/api/activity-feed?limit=20');
+                const result = await response.json();
+                const events = Array.isArray(result.events) ? result.events : [];
+                renderActivityEvents(events);
+            } catch (error) {
+                console.error('Error fetching activity feed:', error);
+                statusEl.textContent = 'FEED_ERROR';
+            }
+        }
+
+        function connectActivityStream() {
+            if (!window.EventSource) {
+                fetchActivityFeed();
+                setInterval(fetchActivityFeed, 5000);
+                return;
+            }
+
+            const statusEl = document.getElementById('activity-status');
+            const stream = new EventSource('/api/activity-stream?limit=20');
+
+            stream.onopen = () => {
+                statusEl.textContent = 'STREAM_CONNECTED';
+            };
+
+            stream.onmessage = (event) => {
+                try {
+                    const payload = JSON.parse(event.data || '{}');
+                    renderActivityEvents(Array.isArray(payload.events) ? payload.events : []);
+                } catch (err) {
+                    console.error('Invalid stream payload:', err);
+                }
+            };
+
+            stream.onerror = () => {
+                statusEl.textContent = 'STREAM_RETRYING';
+            };
+        }
+
+        async function fetchMarketPrices() {
+            try {
+                const response = await fetch('/api/market-prices');
+                const result = await response.json();
+                const tbody = document.getElementById('market-index-body');
+                
+                if (result.data && result.data.length > 0) {
+                    tbody.innerHTML = ''; // clear loading
+                    
+                    result.data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-white/5 transition-colors group";
+                        tr.innerHTML = `
+                            <td class="py-3 flex items-center gap-2">
+                                <div class="w-6 h-6 rounded ${item.bg_color || 'bg-blue-500/10'} text-xl flex items-center justify-center">${item.emoji}</div> 
+                                ${item.crop}
+                            </td>
+                            <td class="py-3 font-mono">${item.price}</td>
+                            <td class="py-3 ${item.trend_color} flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">${item.trend_icon}</span> ${item.trend}
+                            </td>
+                            <td class="py-3 text-right text-zinc-500 text-xs">${item.mandi}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching market prices:", error);
+                document.getElementById('market-index-body').innerHTML = `
+                    <tr><td colspan="4" class="py-6 text-center text-red-500 text-xs text-bold">Failed to connect to market API</td></tr>
+                `;
+            }
+        }
+        
+        // Fetch initially and then poll every 5 minutes.
+        // The server now pre-warms and refreshes market cache in the background.
+        connectActivityStream();
+        fetchMarketPrices();
+        setInterval(fetchMarketPrices, 300000);
+    </script>
+</body>
+</html>

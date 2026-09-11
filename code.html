@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Krishi AI — Your Personal AI Farming Expert</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e2e0",
+              "secondary-container": "#bdefbe",
+              "surface-container-low": "#f4f3f1",
+              "inverse-surface": "#2f3130",
+              "on-primary-container": "#f6fff4",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "on-primary-fixed": "#00210e",
+              "secondary": "#3c6842",
+              "primary-container": "#008649",
+              "tertiary": "#72554b",
+              "on-tertiary-container": "#fffbff",
+              "on-surface-variant": "#3e4a3f",
+              "surface-container-high": "#e9e8e6",
+              "error-container": "#ffdad6",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-secondary-container": "#426e47",
+              "on-error-container": "#93000a",
+              "tertiary-fixed": "#ffdbce",
+              "surface-container": "#efeeec",
+              "on-secondary-fixed": "#002109",
+              "secondary-fixed-dim": "#a2d3a4",
+              "on-tertiary": "#ffffff",
+              "surface-tint": "#006d3a",
+              "on-surface": "#1a1c1b",
+              "outline": "#6d7a6f",
+              "on-secondary-fixed-variant": "#24502c",
+              "on-secondary": "#ffffff",
+              "primary": "#006a39",
+              "surface-bright": "#faf9f7",
+              "background": "#faf9f7",
+              "primary-fixed-dim": "#64dd91",
+              "on-background": "#1a1c1b",
+              "inverse-primary": "#64dd91",
+              "primary-fixed": "#82faab",
+              "tertiary-fixed-dim": "#e4beb2",
+              "surface": "#faf9f7",
+              "on-primary-fixed-variant": "#00522b",
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#8d6e63",
+              "outline-variant": "#bdcabc",
+              "inverse-on-surface": "#f1f1ef",
+              "surface-variant": "#e3e2e0",
+              "secondary-fixed": "#bdefbe",
+              "on-tertiary-fixed": "#2b160f",
+              "surface-dim": "#dadad8"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sunlight-shadow {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .tapered-progress {
+            background: linear-gradient(90deg, #ffdbce 0%, #006a39 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full border border-white/20 bg-white/70 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] flex justify-between items-center px-8 py-3 z-50 font-headline tracking-tight font-medium text-sm">
+<div class="text-2xl font-black text-emerald-800 tracking-tighter">Krishi AI</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-emerald-700 font-bold hover:scale-105 hover:text-emerald-600 transition-all duration-300" href="#">How It Works</a>
+<a class="text-zinc-600 hover:scale-105 hover:text-emerald-600 transition-all duration-300" href="#">Features</a>
+<a class="text-zinc-600 hover:scale-105 hover:text-emerald-600 transition-all duration-300" href="#">Pricing</a>
+<a class="text-zinc-600 hover:scale-105 hover:text-emerald-600 transition-all duration-300" href="#">Testimonials</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-zinc-600 hover:text-emerald-600 px-4 py-2 transition-all">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold shadow-lg hover:scale-105 active:scale-95 transition-all duration-300">Get Started</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-24 pb-16 px-6 lg:px-12 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="Indian farmer in a lush green field holding a smartphone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3R40927GkfalPNsccxBUrxkdUxwbgobSGTLcWODjmWs2ttCJtJdCBRqVYvrofAFLguFBx2wBIIolJROBw7KQURqJov051jGt9AAlfEfcHiLBdvGd8usaV4IsJyNACSuOYsy7-IJJEOseTY52mm9qtrEgyBEGzy4k5BSWUEB9JZkf626E-ZF7tbTb1Sc2AEfkwzCwO-gErhi1OoyGKOiKWQObIjgMrU6jpo0sq9uwi2hN5VCIOI0mEnofcaGxOvP3udAruY5dnb8Q"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8 max-w-2xl">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Available Now in 12+ Languages
+                </div>
+<h1 class="font-headline text-5xl lg:text-7xl font-extrabold text-on-surface leading-[1.1] tracking-tighter">
+                    Your Personal AI Farming Expert – <span class="text-primary italic">Just One Call Away</span>
+</h1>
+<p class="text-lg lg:text-xl text-on-surface-variant leading-relaxed opacity-90">
+                    Get instant advice in your language for crops, soil, and farming problems. No internet? No problem. Just talk to Krishi AI.
+                </p>
+<!-- Live Data KPI -->
+<div class="glass-panel p-5 rounded-2xl sunlight-shadow border border-white/40 flex items-center justify-between mb-8 bg-gradient-to-br from-white/60 to-white/30 transform hover:scale-[1.02] transition-transform">
+    <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-3xl text-blue-600">rainy</span>
+        </div>
+        <div>
+            <p class="text-sm font-bold text-on-surface tracking-tight">Live Farm Conditions</p>
+            <p class="text-xs font-medium text-emerald-700">Rain expected today</p>
+        </div>
+    </div>
+    <div class="text-right">
+        <p class="text-3xl font-headline font-black text-on-surface tracking-tighter">32°C</p>
+        <p class="text-[10px] uppercase tracking-widest text-outline font-bold mt-1">Karnataka</p>
+    </div>
+</div>
+
+<!-- Lead Form Card -->
+<div class="glass-panel p-8 rounded-xl sunlight-shadow border border-white/30 space-y-6 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline">Full Name (Optional)</label>
+<input id="farmerName" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 focus:ring-2 ring-primary/20 transition-all text-on-surface" placeholder="e.g. Rajesh Kumar" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline">Phone Number</label>
+<div class="flex gap-2">
+<input id="farmerPhone" class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 focus:ring-2 ring-primary/20 transition-all text-on-surface" placeholder="+919876543210" type="tel"/>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline">Select Language</label>
+<select disabled class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 focus:ring-2 ring-primary/20 transition-all opacity-70">
+<option>Kannada (ಕನ್ನಡ)</option>
+</select>
+</div>
+<button id="callBtn" onclick="makeCall()" class="w-full bg-primary text-on-primary font-headline text-lg font-extrabold py-4 rounded-full flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all group">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">call</span>
+                        Call Me Now
+                    </button>
+<p id="callStatus" class="text-center text-xs text-outline italic mt-2">Experience a live AI consult in less than 30 seconds.</p>
+</div>
+</div>
+
+<script>
+async function makeCall() {
+    const name = document.getElementById('farmerName').value;
+    const phone = document.getElementById('farmerPhone').value;
+    const btn = document.getElementById('callBtn');
+    const status = document.getElementById('callStatus');
+
+    if (!phone) {
+        status.innerText = "Please enter a valid phone number.";
+        status.className = "text-center text-sm font-bold text-red-500 mt-2";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">radar</span> Connecting...`;
+    
+    // UX Magic: "AI is Thinking" Animation
+    const loadingMessages = [
+        "📡 Connecting to Azure AI...",
+        "🌾 Fetching live farm insights...",
+        "☁️ Analyzing regional weather data...",
+        "🧠 Preparing agricultural context...",
+        "🎙️ Synthesizing Neural Voice..."
+    ];
+    let msgIndex = 0;
+    status.innerText = loadingMessages[0];
+    status.className = "text-center text-sm font-bold text-emerald-600 mt-2 animate-pulse";
+    
+    const msgInterval = setInterval(() => {
+        msgIndex++;
+        if (msgIndex < loadingMessages.length) {
+            status.innerText = loadingMessages[msgIndex];
+        }
+    }, 1800);
+
+    try {
+        const response = await fetch('http://localhost:8001/api/call', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone_number: phone, name: name })
+        });
+        
+        const data = await response.json();
+        clearInterval(msgInterval);
+
+        if (response.ok) {
+            status.innerText = "✅ Krishi AI is calling you now! Please pick up.";
+            status.className = "text-center text-sm font-bold text-emerald-700 mt-2";
+            btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Call Initiated`;
+        } else {
+            status.innerText = "Error: " + (data.detail || "Failed to call");
+            status.className = "text-center text-sm font-bold text-red-500 mt-2";
+            btn.disabled = false;
+            btn.innerHTML = `<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">call</span> Call Me Now`;
+        }
+    } catch (err) {
+        clearInterval(msgInterval);
+        status.innerText = "Server is not running. Please start the AI server.";
+        status.className = "text-center text-sm font-bold text-red-500 mt-2";
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined">error</span> Server Error`;
+    }
+}
+</script>
+<!-- Visual Decorative Element -->
+<div class="hidden lg:flex justify-end">
+<div class="relative w-80 h-[500px] bg-zinc-900 rounded-[3rem] border-[8px] border-zinc-800 shadow-2xl overflow-hidden">
+<div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-6">
+<div class="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center animate-pulse">
+<span class="material-symbols-outlined text-4xl text-emerald-400" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-white font-bold text-xl">Incoming Call</h3>
+<p class="text-emerald-400 font-medium">Krishi AI Assistant</p>
+</div>
+<div class="flex gap-4 items-center h-12">
+<div class="w-1 h-4 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+<div class="w-1 h-8 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+<div class="w-1 h-6 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+<div class="w-1 h-10 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+<div class="w-1 h-5 bg-emerald-500 rounded-full animate-bounce" style="animation-delay: 0.5s"></div>
+</div>
+<div class="pt-8 flex justify-center gap-8">
+<div class="w-14 h-14 rounded-full bg-red-500 flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">call_end</span></div>
+<div class="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">call</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-24 bg-surface">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-headline text-4xl lg:text-5xl font-extrabold tracking-tighter">Simple As A Phone Call</h2>
+<div class="w-24 h-1 tapered-progress mx-auto rounded-full"></div>
+</div>
+<div class="grid md:grid-cols-3 gap-12">
+<!-- Step 1 -->
+<div class="relative group">
+<div class="mb-6 w-16 h-16 rounded-2xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-3xl text-primary">edit_note</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-3">Provide Details</h3>
+<p class="text-on-surface-variant leading-relaxed">Enter your number and select your native language. We support 12+ Indian regional dialects.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative group">
+<div class="mb-6 w-16 h-16 rounded-2xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-3xl text-primary">phone_callback</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-3">Receive AI Call</h3>
+<p class="text-on-surface-variant leading-relaxed">In seconds, our AI agronomist calls your phone. Simply answer and start talking like a normal call.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative group">
+<div class="mb-6 w-16 h-16 rounded-2xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-3xl text-primary">psychology</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-3">Expert Advice</h3>
+<p class="text-on-surface-variant leading-relaxed">Get specific solutions for pest control, soil health, and weather alerts instantly tailored to your farm.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col lg:flex-row justify-between items-end mb-16 gap-8">
+<div class="max-w-2xl space-y-4">
+<h2 class="font-headline text-4xl lg:text-5xl font-extrabold tracking-tighter">Advanced Tech, <br/><span class="text-primary">Grounded for Farmers</span></h2>
+<p class="text-on-surface-variant text-lg">Sophisticated AI models trained on 20 years of agricultural data, delivered via the world's simplest interface: Voice.</p>
+</div>
+<div class="flex gap-4">
+<div class="px-6 py-3 rounded-full border border-outline/20 font-bold text-sm bg-white sunlight-shadow">100% Offline Accessible</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="glass-panel p-8 rounded-xl sunlight-shadow border border-white/40 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">keyboard_voice</span>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Voice-First AI</h4>
+<p class="text-sm text-on-surface-variant">No typing required. Simply speak naturally as if you're talking to a village elder.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-panel p-8 rounded-xl sunlight-shadow border border-white/40 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-tertiary" style="font-variation-settings: 'FILL' 1;">translate</span>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Multi-language Support</h4>
+<p class="text-sm text-on-surface-variant">Available in Kannada, Hindi, Marathi, Telugu, Tamil, and English.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-panel p-8 rounded-xl sunlight-shadow border border-white/40 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-secondary" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">Crop-Specific Advice</h4>
+<p class="text-sm text-on-surface-variant">Deep expertise in Rice, Wheat, Sugarcane, Cotton, and local vegetables.</p>
+</div>
+</div>
+<!-- Card 4: Double width -->
+<div class="md:col-span-2 relative overflow-hidden glass-panel p-8 rounded-xl sunlight-shadow border border-white/40 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-300">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">partly_cloudy_day</span>
+<div class="mt-8 max-w-md">
+<h4 class="font-headline text-2xl font-bold mb-2">Weather-Based Planning</h4>
+<p class="text-on-surface-variant">AI correlates your farm location with real-time satellite weather data to suggest irrigation and harvest times.</p>
+</div>
+</div>
+<img class="absolute right-0 top-0 h-full w-1/2 object-cover opacity-20" data-alt="Fields from above with atmospheric weather patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp4D42BTS_Dsq9IcLB07pslotpGzf4QY2Wh1SChb7DDwfre_jbyxvyJEbCLts1iautzsr6C4y7ndWd74fJcOgH9rGVpdpyxK9kOly0wMLkiXLpqZfWkVbTA2xWYOsLwPN9hKTqMf0EXmwmw8lL9zZJm525Y_j5EzpjUjen8bTdSXSQQ8s_ojEZPGBHva5I4Tp_bQO9seOXcH5q-IlBhoQ2u6CZacshiexvA-SRNlx2kxUeq5T0EwpPctbJKUYVkCvh39hx5vj5sUU"/>
+</div>
+<!-- Card 5 -->
+<div class="glass-panel p-8 rounded-xl sunlight-shadow border border-white/40 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-tertiary" style="font-variation-settings: 'FILL' 1;">timer</span>
+<div>
+<h4 class="font-headline text-xl font-bold mb-2">24/7 Availability</h4>
+<p class="text-sm text-on-surface-variant">Problems don't wait for office hours. Krishi AI is awake whenever you are.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof / Testimonials -->
+<section class="py-24 bg-surface">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16 space-y-4">
+<span class="text-primary font-bold tracking-widest text-xs uppercase">The Voice of Trust</span>
+<h2 class="font-headline text-4xl lg:text-5xl font-extrabold tracking-tighter">Trusted by 10,000+ Farmers</h2>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl sunlight-shadow space-y-6">
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface italic leading-relaxed">"Krishi AI helped me identify a stem borer infection in my paddy crop just by describing the leaf pattern. I saved 30% of my harvest."</p>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Smiling Indian farmer wearing a traditional turban" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVLJ2qDgDvPhBmDh9mOCgbDYk7bwW5yDyxDIkJEokniNWTBiFesYpPerloDfWqlPKEnHc-yBxfRelWaTQmJR0DhNK6qMYxgbwCIkO8TKKs-zCd6iK160PwGYlZxBzzt2AT7s5opDZ2XfUZbVs94gRsa2mzHcq9i1GTJ6rM6VfZQJrubxGYKoks-tRuG-EImNEdb2rijinw4kyZxi2dLue1su5m8o5qmXX5grQBweRoaccZ8ZWaPSv1ha7AZH3BC0NVrqV-ovgJzwg"/>
+<div>
+<p class="font-bold">Animesh Gowda</p>
+<p class="text-xs text-outline">Paddy Farmer, Karnataka</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl sunlight-shadow space-y-6">
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface italic leading-relaxed">"Being able to talk in Hindi makes a huge difference. I don't have to struggle with apps or websites anymore. It's like having a scientist on call."</p>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of an experienced farmer in Uttar Pradesh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvVhbgSEj4_hjjAohCEJyR1fqAL9-I9xrtZU-L2CaRtDCCj8ZK_Furu3sn135PAXGEXaUMoVV9daDu_DTHex5gnTFt-652fmyB7XBhr5qUkeOGoAjfK0J9vdUi3CpGQvzr-Kty5H5OWDsONCl5VUzRVUv0ZjJGYQ6KST8DraRk-aEDNgp3_IPEAooajSzebEFIxM6PHDuT3KyNuq2-9VZSfFOH8MW23lhgdsMo6y5sM2TbjPdB3slmajAxvfCPE8nORXv2LrSlGJk"/>
+<div>
+<p class="font-bold">Vikram Singh</p>
+<p class="text-xs text-outline">Wheat Farmer, UP</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl sunlight-shadow space-y-6">
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface italic leading-relaxed">"The weather alerts are incredibly accurate. It told me to wait two days for sowing due to unseasonal rain. It saved me thousands in seeds."</p>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Indian farmer checking soil moisture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY1DV4Pd2VLsQAcOSTC7-7pBa8og7JjJYUUX_UgBwprpEaBw1tLfwZ4MO2_gC6ZU2_BBNxz5RCfLx-F1astnIayiLIXUu-gtGJ6qKDIUjO9QVcvaMGCHG9V-AgPq1cSk9qwbSnrRgUSezoz0JvyI3r4oCub8kqhBRewPA57j0A3enmBCJYsRgczEtzPsbdZQiM_MfqSkPt7B198igwHERfH6HaTC_3XRzhfV8hxaDk46TNXMX3JQCxKfZaw_tWRLTU2L06y15gn3k"/>
+<div>
+<p class="font-bold">Laxmi Devi</p>
+<p class="text-xs text-outline">Organic Farmer, Telangana</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Logo Cloud -->
+<div class="mt-20 flex flex-wrap justify-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="font-headline font-black text-2xl">AGRI-VENTURES</div>
+<div class="font-headline font-black text-2xl">FARMERS UNION</div>
+<div class="font-headline font-black text-2xl">ECO-HARVEST</div>
+<div class="font-headline font-black text-2xl">RURAL-TECH</div>
+<div class="font-headline font-black text-2xl">GREEN-IND</div>
+</div>
+</div>
+</section>
+<!-- Call to Action Footer Section -->
+<section class="py-24 px-6">
+<div class="max-w-5xl mx-auto rounded-xl bg-primary-container p-12 lg:p-20 relative overflow-hidden text-center text-on-primary-container">
+<div class="absolute inset-0 opacity-10">
+<img class="w-full h-full object-cover" data-alt="Vast agricultural fields stretching into the horizon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRDEtWCLs7Ei79UzfuajE0fCyAh8mUzHZ8DMXZtGNWeBkRY9S2A40PC727uYILbygWXfw0p-kouA_w5hDy_BWWQtm7FlOH_cpAMsfo1biQMZk6wXHKtAtYmLX0zIDbvE1i3_o9PnJov97DCzX7qOqt-meye2hPuEVPXnWrhZsn46pxlQA6BpTwk7dD8tYMOthEAhurU2dG8w7aLwui3g9A7I4780cQkUTvmoLOXJez4Rv6fLTjFQYmftw2lfZjhhGUMNBWzEKEWk8"/>
+</div>
+<div class="relative z-10 space-y-8">
+<h2 class="font-headline text-4xl lg:text-6xl font-extrabold tracking-tighter">Ready to boost your harvest?</h2>
+<p class="text-xl max-w-2xl mx-auto opacity-90">Join thousands of modern farmers using Krishi AI to secure their future. First call is on us.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-white text-primary px-8 py-4 rounded-full font-headline font-extrabold text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">Get a Free Consult Now</button>
+<button class="bg-primary/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-headline font-bold text-xl hover:bg-primary/30 transition-all">Watch Demo Video</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full pt-24 pb-12 bg-[#faf9f7] dark:bg-zinc-950 font-inter text-sm leading-relaxed">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start border-t border-zinc-200/50 dark:border-zinc-800/50 pt-12">
+<div class="space-y-6 max-w-sm mb-12 md:mb-0">
+<div class="text-xl font-bold text-emerald-800 dark:text-emerald-500">Krishi AI</div>
+<p class="text-zinc-500">The first Indian AI platform built specifically for the rural landscape, bringing world-class expertise to every corner of the country via voice.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">public</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">contact_page</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">chat</span></a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div class="space-y-4">
+<p class="font-bold text-on-surface uppercase tracking-widest text-xs">Platform</p>
+<ul class="space-y-3">
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">How it works</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">AI Capabilities</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Language Support</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Pricing</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<p class="font-bold text-on-surface uppercase tracking-widest text-xs">Company</p>
+<ul class="space-y-3">
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">About Us</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Our Mission</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Contact Support</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Careers</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<p class="font-bold text-on-surface uppercase tracking-widest text-xs">Legal</p>
+<ul class="space-y-3">
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Privacy Policy</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Terms of Service</a></li>
+<li><a class="text-zinc-500 hover:text-emerald-600 transition-all" href="#">Data Security</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 mt-24 flex flex-col md:flex-row justify-between items-center gap-6 text-zinc-400">
+<p>© 2024 Krishi AI. Cultivating the future of farming.</p>
+<p class="flex items-center gap-2">Made with <span class="material-symbols-outlined text-tertiary text-xs" style="font-variation-settings: 'FILL' 1;">favorite</span> for Bharat.</p>
+</div>
+</footer>
+</body></html>

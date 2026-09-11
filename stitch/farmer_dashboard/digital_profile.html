@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Krishi AI - Verified Digital Identity</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#006a39",
+                        "on-primary": "#ffffff",
+                        "background": "#faf9f7",
+                        "surface-container-low": "#f4f3f1",
+                        "on-surface": "#1a1c1b",
+                        "on-surface-variant": "#3f4940",
+                        "primary": "#004f29",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24; vertical-align: middle; }
+        .bg-pattern {
+            background-image: radial-gradient(#004f29 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-low font-body text-on-surface min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden relative border border-gray-100">
+        <div class="absolute inset-0 pointer-events-none bg-pattern z-0"></div>
+        
+        <!-- Header -->
+        <div class="bg-primary text-on-primary p-6 relative z-10 flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-3">
+                <span class="material-symbols-outlined text-3xl">verified_user</span>
+            </div>
+            <h1 class="font-headline font-extrabold text-xl tracking-wide uppercase">Krishi AI Identity</h1>
+            <p class="text-on-primary/70 text-sm mt-1">Government-Linked Digital Farm Profile</p>
+        </div>
+
+        <div id="loadingState" class="p-12 text-center text-on-surface-variant relative z-10">
+            <span class="material-symbols-outlined text-4xl animate-spin text-primary">sync</span>
+            <p class="mt-4 font-bold">Verifying Identity...</p>
+        </div>
+
+        <div id="errorState" class="hidden p-12 text-center text-red-600 relative z-10">
+            <span class="material-symbols-outlined text-4xl">error</span>
+            <p class="mt-4 font-bold" id="errorMsg">Identity not found.</p>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profileState" class="hidden relative z-10 p-6 space-y-6">
+            <div class="flex items-center gap-4 pb-4">
+                <img id="profPhoto" class="w-20 h-20 rounded-full object-cover border-4 border-primary/20 shadow-sm" src="" alt="Profile Photo" />
+                <div>
+                    <h2 id="profName" class="text-2xl font-headline font-extrabold text-on-surface">Farmer Name</h2>
+                    <span id="profUgfid" class="font-mono text-sm font-bold text-primary px-2 py-0.5 bg-primary/10 rounded mt-1 inline-block">KR-IND-XXX</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center my-2 p-2 bg-white rounded-xl mx-auto w-max border border-gray-100 shadow-sm border-b pb-6 mb-2">
+                <img id="profQr" class="w-32 h-32 object-contain" src="" alt="QR Code" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Mobile Number</p>
+                    <p id="profPhone" class="font-semibold text-sm mt-0.5">+91 98****345</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">State</p>
+                    <p id="profState" class="font-semibold text-sm mt-0.5">-</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">District</p>
+                    <p id="profDist" class="font-semibold text-sm mt-0.5">-</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Taluk</p>
+                    <p id="profTaluk" class="font-semibold text-sm mt-0.5">-</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Village / City</p>
+                    <p id="profVillage" class="font-semibold text-sm mt-0.5">-</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Land Size</p>
+                    <p id="profLand" class="font-semibold text-sm mt-0.5">-</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 mt-2">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Registered Crop Types</p>
+                <p id="profCrops" class="font-semibold text-sm">-</p>
+            </div>
+            
+            <div class="text-center pt-4 border-t border-gray-100">
+                <p class="text-xs text-on-surface-variant flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px] text-green-600">lock</span> Verified electronically via Krishi AI Network
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+        const pathSegments = window.location.pathname.split('/');
+        const ugfid = pathSegments[pathSegments.length - 1];
+
+        async function init() {
+            if(!ugfid) {
+                showError("No ID provided in URL.");
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/ugfid/${encodeURIComponent(ugfid)}`);
+                const data = await res.json();
+                if(!res.ok || !data.success) {
+                    throw new Error(data.detail || "Identity not found");
+                }
+                const f = data.farmer;
+                document.getElementById('profPhoto').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=004F29&color=fff&size=150`;
+                document.getElementById('profName').textContent = f.name;
+                document.getElementById('profUgfid').textContent = f.ugfid;
+                document.getElementById('profPhone').textContent = f.phone;
+                document.getElementById('profState').textContent = f.state || 'N/A';
+                document.getElementById('profDist').textContent = f.district || 'N/A';
+                document.getElementById('profTaluk').textContent = f.taluk || 'N/A';
+                document.getElementById('profVillage').textContent = f.village !== 'N/A' ? f.village : f.city;
+                document.getElementById('profLand').textContent = f.land_size || 'N/A';
+                document.getElementById('profCrops').textContent = f.crop_types || 'N/A';
+                
+                const qrUrl = window.location.origin + '/farmer/profile/' + f.ugfid;
+                document.getElementById('profQr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrUrl)}`;
+
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('profileState').classList.remove('hidden');
+            } catch(e) {
+                showError(e.message);
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('errorMsg').textContent = msg;
+        }
+
+        init();
+    </script>
+</body>
+</html>

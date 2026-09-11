@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krishi AI - Seller Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#faf9f7",
+            "surface-container-low": "#f4f3f1",
+            "surface-container-high": "#e9e8e6",
+            "surface-container-highest": "#e3e2e0",
+            "on-surface": "#1a1c1b",
+            "on-surface-variant": "#3f4940",
+            "outline-variant": "#bec9be",
+            "primary": "#004f29",
+            "primary-container": "#006a39",
+            "secondary": "#006d3b",
+            "secondary-container": "#7ff7a9",
+            "error": "#ba1a1a",
+            "warning": "#c77d00",
+            "info": "#0b7285"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+    .hero-gradient { background: linear-gradient(120deg, #004f29 0%, #006a39 60%, #0e8a4f 100%); }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased">
+  <main class="min-h-screen">
+    <section class="hero-gradient text-white px-6 py-8 md:px-10 md:py-10 relative overflow-hidden">
+      <div class="absolute -right-24 -top-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="flex flex-wrap gap-4 justify-between items-center">
+          <div>
+            <p class="uppercase tracking-[0.2em] text-xs text-white/70 font-semibold">Seller Operations</p>
+            <h1 class="font-headline text-3xl md:text-4xl font-extrabold mt-1">Auction Seller Dashboard</h1>
+            <p class="text-white/80 mt-2">Manage listings, track bids in real-time, and close revenue lifecycle.</p>
+          </div>
+          <div class="w-full md:w-auto flex gap-2 items-center">
+            <input id="phone" class="w-full md:w-64 rounded-xl border-0 bg-white/20 text-white placeholder:text-white/60 px-4 py-3" placeholder="Seller phone (+91...)" />
+            <button id="loadBtn" class="rounded-xl bg-white text-primary font-semibold px-4 py-3">Load</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-6 py-6 md:px-10 md:py-8 space-y-6">
+      <p id="statusMsg" class="text-sm text-on-surface-variant"></p>
+
+      <div id="kpis" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4"></div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-1 rounded-2xl bg-white border border-outline-variant p-5 shadow-sm">
+          <h2 class="font-headline text-xl font-bold">Create Listing</h2>
+          <p class="text-sm text-on-surface-variant mt-1">Start a reverse auction instantly.</p>
+
+          <div class="mt-4 space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Crop</label>
+              <input id="crop" class="mt-1 rounded-xl border-outline-variant" placeholder="Onion" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Quantity (kg)</label>
+              <input id="qty" type="number" min="1" step="0.1" class="mt-1 rounded-xl border-outline-variant" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Base Price / kg</label>
+              <input id="price" type="number" min="1" step="0.1" class="mt-1 rounded-xl border-outline-variant" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Expiry (minutes)</label>
+              <input id="exp" type="number" min="1" value="30" class="mt-1 rounded-xl border-outline-variant" />
+            </div>
+            <button id="createBtn" class="w-full rounded-xl bg-primary-container text-white font-semibold py-3">Create Listing</button>
+          </div>
+        </div>
+
+        <div class="xl:col-span-2 rounded-2xl bg-white border border-outline-variant p-5 shadow-sm overflow-hidden">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <h2 class="font-headline text-xl font-bold">Listings</h2>
+            <p class="text-xs text-on-surface-variant">Live updates via activity stream</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="text-on-surface-variant">
+                <tr class="border-b border-surface-container-highest">
+                  <th class="text-left py-2 pr-3">Crop</th>
+                  <th class="text-left py-2 pr-3">Qty</th>
+                  <th class="text-left py-2 pr-3">Base</th>
+                  <th class="text-left py-2 pr-3">Top Bid</th>
+                  <th class="text-left py-2 pr-3">Status</th>
+                  <th class="text-left py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listingRows" class="divide-y divide-surface-container-high"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-outline-variant p-5 shadow-sm overflow-hidden">
+        <h2 class="font-headline text-xl font-bold mb-4">Bid History (Selected Listing)</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="text-on-surface-variant">
+              <tr class="border-b border-surface-container-highest">
+                <th class="text-left py-2 pr-3">Buyer</th>
+                <th class="text-left py-2 pr-3">Price / kg</th>
+                <th class="text-left py-2 pr-3">Quantity</th>
+                <th class="text-left py-2">Time</th>
+              </tr>
+            </thead>
+            <tbody id="bidRows" class="divide-y divide-surface-container-high"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = { phone: "", selectedListing: null, listings: [] };
+    let streamRef = null;
+
+    const el = {
+      phone: document.getElementById("phone"),
+      loadBtn: document.getElementById("loadBtn"),
+      statusMsg: document.getElementById("statusMsg"),
+      kpis: document.getElementById("kpis"),
+      crop: document.getElementById("crop"),
+      qty: document.getElementById("qty"),
+      price: document.getElementById("price"),
+      exp: document.getElementById("exp"),
+      createBtn: document.getElementById("createBtn"),
+      listingRows: document.getElementById("listingRows"),
+      bidRows: document.getElementById("bidRows"),
+    };
+
+    function setStatus(text, isError = false) {
+      el.statusMsg.textContent = text || "";
+      el.statusMsg.className = isError ? "text-sm text-error" : "text-sm text-on-surface-variant";
+    }
+
+    function money(v) { return `Rs ${Number(v || 0).toFixed(2)}`; }
+    function tm(ts) { return ts ? new Date(ts * 1000).toLocaleString() : "-"; }
+
+    async function api(path, options) {
+      const res = await fetch(path, options);
+      const data = await res.json();
+      if (!res.ok || data.success === false) throw new Error(data.detail || data.error || "API error");
+      return data;
+    }
+
+    function kpiCard(label, value, tone = "") {
+      const toneClass = tone === "good" ? "text-secondary" : tone === "warn" ? "text-warning" : "text-on-surface";
+      return `<div class="rounded-2xl bg-white border border-outline-variant p-4 shadow-sm"><p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">${label}</p><p class="text-2xl font-headline font-extrabold mt-2 ${toneClass}">${value}</p></div>`;
+    }
+
+    function renderKpis(k) {
+      el.kpis.innerHTML = [
+        kpiCard("Active Listings", k.active_listings, "good"),
+        kpiCard("Expired Listings", k.expired_listings, "warn"),
+        kpiCard("Sold Listings", k.sold_listings),
+        kpiCard("Total Earnings", money(k.total_earnings), "good"),
+        kpiCard("Pending Orders", k.pending_orders, "warn"),
+        kpiCard("Completed Sales", k.completed_sales, "good"),
+      ].join("");
+    }
+
+    function statusChip(status, orderStatus) {
+      const s = String(status || "").toUpperCase();
+      if (s === "OPEN") return `<span class="px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-800">OPEN</span>`;
+      if (s === "CLOSED") return `<span class="px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-800">CLOSED</span>`;
+      if (s === "SOLD") {
+        const done = String(orderStatus || "").toUpperCase() === "COMPLETED";
+        const o = done ? `<span class="ml-1 px-2 py-1 rounded-full text-xs bg-sky-100 text-sky-800">COMPLETED</span>` : `<span class="ml-1 px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800">PENDING</span>`;
+        return `<span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">SOLD</span>${o}`;
+      }
+      return `<span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">${s || '-'}</span>`;
+    }
+
+    function renderListings() {
+      if (!state.listings.length) {
+        el.listingRows.innerHTML = `<tr><td class="py-4 text-on-surface-variant" colspan="6">No listings found.</td></tr>`;
+        return;
+      }
+
+      el.listingRows.innerHTML = state.listings.map(l => {
+        const top = l.highest_bid ? money(l.highest_bid.bid_price_per_unit) : "No bids";
+        const soldPending = String(l.status).toUpperCase() === "SOLD" && String(l.order_status || "PENDING").toUpperCase() !== "COMPLETED";
+
+        return `
+          <tr>
+            <td class="py-3 pr-3 font-medium">${l.crop_name}</td>
+            <td class="py-3 pr-3">${l.quantity}</td>
+            <td class="py-3 pr-3">${money(l.base_price_per_unit)}</td>
+            <td class="py-3 pr-3">${top}</td>
+            <td class="py-3 pr-3">${statusChip(l.status, l.order_status)}</td>
+            <td class="py-3">
+              <div class="flex flex-wrap gap-2">
+                <button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface text-xs font-semibold" onclick="viewBids('${l.id}')">View</button>
+                <button class="px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-semibold" onclick="acceptTopBid('${l.id}')">Accept Top Bid</button>
+                <button class="px-3 py-1.5 rounded-lg bg-amber-600 text-white text-xs font-semibold" onclick="closeListing('${l.id}')">Close</button>
+                ${soldPending ? `<button class="px-3 py-1.5 rounded-lg bg-sky-700 text-white text-xs font-semibold" onclick="completeOrder('${l.id}')">Complete Order</button>` : ""}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderBids(listing) {
+      const bids = listing?.bids || [];
+      if (!bids.length) {
+        el.bidRows.innerHTML = `<tr><td colspan="4" class="py-4 text-on-surface-variant">No bids yet.</td></tr>`;
+        return;
+      }
+      el.bidRows.innerHTML = bids.map(b => `
+        <tr>
+          <td class="py-3 pr-3">${b.buyer_id}</td>
+          <td class="py-3 pr-3">${money(b.bid_price_per_unit)}</td>
+          <td class="py-3 pr-3">${b.quantity}</td>
+          <td class="py-3">${tm(b.created_at)}</td>
+        </tr>
+      `).join("");
+    }
+
+    async function loadDashboard() {
+      if (!state.phone) return;
+
+      const [dashboard, listings] = await Promise.all([
+        api(`/api/seller/${encodeURIComponent(state.phone)}/dashboard`),
+        api(`/api/seller/${encodeURIComponent(state.phone)}/listings`),
+      ]);
+
+      renderKpis(dashboard.kpis);
+      state.listings = listings.listings || [];
+      renderListings();
+
+      if (state.selectedListing) {
+        const full = await api(`/api/listings/${state.selectedListing}`);
+        renderBids(full.listing);
+      }
+    }
+
+    async function createListing() {
+      try {
+        await api("/api/listings/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            farmer_phone: state.phone,
+            crop_name: el.crop.value,
+            quantity: Number(el.qty.value),
+            base_price_per_unit: Number(el.price.value),
+            expires_in_minutes: Number(el.exp.value || 30),
+          }),
+        });
+        setStatus("Listing created successfully.");
+        await loadDashboard();
+      } catch (err) {
+        setStatus(err.message || "Failed to create listing", true);
+      }
+    }
+
+    window.viewBids = async function(listingId) {
+      try {
+        state.selectedListing = listingId;
+        const data = await api(`/api/listings/${listingId}`);
+        renderBids(data.listing);
+      } catch (err) {
+        setStatus(err.message || "Unable to load bids", true);
+      }
+    }
+
+    window.acceptTopBid = async function(listingId) {
+      try {
+        const details = await api(`/api/listings/${listingId}`);
+        const top = details.listing.highest_bid;
+        if (!top) {
+          setStatus("No bid available for this listing.", true);
+          return;
+        }
+        await api(`/api/listings/${listingId}/accept-bid`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bid_id: top.id, farmer_phone: state.phone }),
+        });
+        setStatus("Bid accepted. Listing marked SOLD.");
+        await loadDashboard();
+        await window.viewBids(listingId);
+      } catch (err) {
+        setStatus(err.message || "Failed to accept bid", true);
+      }
+    }
+
+    window.closeListing = async function(listingId) {
+      try {
+        await api(`/api/listings/${listingId}/close`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ farmer_phone: state.phone }),
+        });
+        setStatus("Listing closed.");
+        await loadDashboard();
+      } catch (err) {
+        setStatus(err.message || "Failed to close listing", true);
+      }
+    }
+
+    window.completeOrder = async function(listingId) {
+      try {
+        await api(`/api/listings/${listingId}/complete-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ farmer_phone: state.phone }),
+        });
+        setStatus("Order marked as completed.");
+        await loadDashboard();
+      } catch (err) {
+        setStatus(err.message || "Failed to complete order", true);
+      }
+    }
+
+    function attachSse() {
+      if (streamRef) return;
+      streamRef = new EventSource("/api/activity-stream?limit=30");
+      streamRef.onmessage = async (event) => {
+        const payload = JSON.parse(event.data || "{}");
+        const events = payload.events || [];
+        const hasRelevant = events.some(e => ["listing_created", "new_bid", "bid_accepted", "listing_closed", "order_completed"].includes(e.event_type));
+        if (hasRelevant && state.phone) {
+          await loadDashboard();
+        }
+      };
+      streamRef.onerror = () => {
+        setStatus("Live stream disconnected, retrying...", true);
+        streamRef.close();
+        streamRef = null;
+        setTimeout(attachSse, 3000);
+      };
+    }
+
+    el.loadBtn.addEventListener("click", async () => {
+      state.phone = String(el.phone.value || "").trim();
+      if (!state.phone) {
+        setStatus("Please enter seller phone number", true);
+        return;
+      }
+      localStorage.setItem("seller_phone", state.phone);
+      localStorage.setItem("stitch_role", "seller");
+      setStatus("Loading seller dashboard...");
+      try {
+        await loadDashboard();
+        attachSse();
+        setStatus("Dashboard synced.");
+      } catch (err) {
+        setStatus(err.message || "Failed to load dashboard", true);
+      }
+    });
+
+    el.createBtn.addEventListener("click", createListing);
+
+    (function init() {
+      const fromQuery = new URLSearchParams(window.location.search).get("phone") || "";
+      const fromSession = (() => {
+        try {
+          return JSON.parse(localStorage.getItem("stitch_session") || "{}").phone || "";
+        } catch (_e) {
+          return "";
+        }
+      })();
+      const cached = fromQuery || localStorage.getItem("seller_phone") || fromSession || localStorage.getItem("farmer_phone") || "";
+      if (!cached) return;
+
+      el.phone.value = cached;
+      state.phone = cached;
+      loadDashboard().catch(err => setStatus(err.message || "Failed to load dashboard", true));
+      attachSse();
+    })();
+  </script>
+</body>
+</html>

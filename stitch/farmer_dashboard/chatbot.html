@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>KrishiSaarthi | Saarthi Gyan AI</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .starfield-grid {
+      background-image: radial-gradient(circle, #3c4a42 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .emerald-glow {
+      box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.2);
+    }
+
+    .glass-panel {
+      backdrop-filter: blur(20px);
+      background: rgba(17, 30, 22, 0.6);
+    }
+
+    .concave-input {
+      background: #051109;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #3c4a42;
+      border-radius: 10px;
+    }
+  </style>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary": "#1b3628",
+            "on-secondary-fixed": "#111c2d",
+            "on-secondary-fixed-variant": "#3c475a",
+            "background": "#09160e",
+            "primary-fixed": "#6ffbbe",
+            "primary": "#4edea3",
+            "surface": "#09160e",
+            "surface-container-low": "#111e16",
+            "surface-bright": "#2f3c33",
+            "primary-fixed-dim": "#4edea3",
+            "tertiary": "#afceba",
+            "secondary-fixed-dim": "#bcc7de",
+            "outline-variant": "#3c4a42",
+            "primary-container": "#10b981",
+            "on-background": "#d7e7d9",
+            "surface-variant": "#2a382e",
+            "outline": "#86948a",
+            "inverse-on-surface": "#26332a",
+            "tertiary-container": "#8caa97",
+            "surface-container-lowest": "#051109",
+            "on-secondary-container": "#aeb9d0",
+            "error-container": "#93000a",
+            "secondary-container": "#3e495d",
+            "on-primary": "#003824",
+            "on-tertiary-fixed": "#042014",
+            "on-surface-variant": "#bbcabf",
+            "inverse-primary": "#006c49",
+            "surface-container": "#15221a",
+            "tertiary-fixed": "#caead6",
+            "on-surface": "#d7e7d9",
+            "secondary-fixed": "#d8e3fb",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed": "#002113",
+            "surface-tint": "#4edea3",
+            "tertiary-fixed-dim": "#afceba",
+            "on-secondary": "#263143",
+            "on-primary-fixed-variant": "#005236",
+            "on-tertiary-fixed-variant": "#314d3e",
+            "on-primary-container": "#00422b",
+            "secondary": "#bcc7de",
+            "on-tertiary-container": "#243f30",
+            "surface-container-highest": "#2a382e",
+            "surface-dim": "#09160e",
+            "error": "#ffb4ab",
+            "surface-container-high": "#202d24",
+            "inverse-surface": "#d7e7d9"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 flex overflow-hidden h-screen">
+  <!-- Left Panel (Side Navigation Anchor) -->
+  <aside class="w-80 h-full flex flex-col glass-panel border-r border-outline-variant/15 z-20">
+    <!-- Header -->
+    <div class="p-6">
+      <div class="flex items-center gap-3 mb-1">
+        <span class="text-2xl">🤖</span>
+        <h1 class="font-headline font-extrabold text-xl tracking-tight text-on-surface">Saarthi Gyan</h1>
+      </div>
+      <p class="text-primary font-semibold text-xs uppercase tracking-widest px-1">Your AI Farming Advisor</p>
+    </div>
+    <!-- Search -->
+    <div class="px-6 mb-8">
+      <div class="concave-input flex items-center gap-3 px-4 py-3 rounded-xl border border-outline-variant/10">
+        <span class="material-symbols-outlined text-outline text-sm">search</span>
+        <input
+          class="bg-transparent border-none outline-none text-sm text-on-surface w-full placeholder:text-outline/50"
+          placeholder="Search conversations..." type="text" />
+      </div>
+    </div>
+    <!-- List Items -->
+    <nav class="flex-1 overflow-y-auto px-4 space-y-2">
+      <div
+        class="p-3 bg-surface-container-high rounded-xl border border-primary/10 flex items-center gap-3 cursor-pointer group">
+        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">psychology</span>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Tomato Crop Plan
+          </p>
+          <p class="text-[10px] text-outline uppercase tracking-wider">2h ago</p>
+        </div>
+      </div>
+      <div class="p-3 hover:bg-surface-container/50 rounded-xl flex items-center gap-3 cursor-pointer transition-all">
+        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-outline">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-on-surface/80">Best selling time?</p>
+          <p class="text-[10px] text-outline/60 uppercase tracking-wider">Yesterday</p>
+        </div>
+      </div>
+      <div class="p-3 hover:bg-surface-container/50 rounded-xl flex items-center gap-3 cursor-pointer transition-all">
+        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-outline">
+          <span class="material-symbols-outlined">eco</span>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-on-surface/80">Wheat disease spotted</p>
+          <p class="text-[10px] text-outline/60 uppercase tracking-wider">2d ago</p>
+        </div>
+      </div>
+      <div class="p-3 hover:bg-surface-container/50 rounded-xl flex items-center gap-3 cursor-pointer transition-all">
+        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-outline">
+          <span class="material-symbols-outlined">description</span>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-on-surface/80">PMKSY scheme eligibility</p>
+          <p class="text-[10px] text-outline/60 uppercase tracking-wider">3d ago</p>
+        </div>
+      </div>
+    </nav>
+    <!-- Bottom Call Saarthi -->
+    <div class="p-6 border-t border-outline-variant/10">
+      <button
+        class="w-full bg-gradient-to-br from-primary to-primary-container p-4 rounded-xl flex flex-col items-center text-on-primary shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-95">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="material-symbols-outlined font-bold">call</span>
+          <span class="font-headline font-extrabold text-lg uppercase tracking-tight">Call Saarthi</span>
+        </div>
+        <span class="text-[10px] font-medium opacity-80 uppercase tracking-widest">Talk to AI via phone call</span>
+      </button>
+    </div>
+  </aside>
+  <!-- Main Chat Area -->
+  <main class="flex-1 flex flex-col relative starfield-grid">
+    <!-- Top Navigation Bar -->
+    <header
+      class="h-20 flex justify-between items-center px-8 bg-surface/40 backdrop-blur-xl border-b border-outline-variant/10 sticky top-0 z-50">
+      <div class="flex items-center gap-4">
+        <img alt="Farmer Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+          data-alt="portrait of an elderly Indian farmer with a weathered face, wearing a white turban and traditional clothing, warm natural lighting"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAww13y0dddCEH3y179dbFonoSvAhNu2bBdUekdSbrMQ5oI9enJ2QudxfOFnNhemPcR97RH8Csw_6ouXfnSaHssHSRobJawKnpBb_QxSk1NSf9l79i8xpL7z9qIQXV4Gt7rh9jSFTrO1Fl42SLTrThRMHc_NEjEhp3ick4zCWKLl6R5dm71tkx82Ov4pIqXa8MSVL9QQz5fi4y4O8KHHc-jFi2nqOxXfFn_t7oI8Z8DKqDhgfOlbcWwZnxLuefh54JiAqyCbhnJvqk" />
+        <div>
+          <p class="font-headline font-bold text-on-surface leading-none">Ramesh Kumar</p>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <p class="text-[10px] font-semibold text-outline uppercase tracking-wider">Farmer • Karnataka</p>
+          </div>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-6">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full border border-outline-variant/10">
+          <span class="material-symbols-outlined text-primary text-sm">location_on</span>
+          <span class="text-xs font-bold text-on-surface">Hubli, 28°C</span>
+        </div>
+        <div class="flex items-center gap-4 px-4 py-1.5 border-x border-outline-variant/20">
+          <button class="flex items-center gap-2 text-xs font-bold text-primary group">
+            <span
+              class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform">settings_voice</span>
+            Voice Mode
+          </button>
+        </div>
+        <div class="flex gap-2 text-[10px] font-black uppercase tracking-widest">
+          <span class="text-primary cursor-pointer underline decoration-2 underline-offset-4">EN</span>
+          <span class="text-outline/50 hover:text-on-surface cursor-pointer">हिंदी</span>
+          <span class="text-outline/50 hover:text-on-surface cursor-pointer">ಕನ್ನಡ</span>
+        </div>
+      </div>
+    </header>
+    <!-- Chat Canvas -->
+    <section class="flex-1 overflow-y-auto p-8 space-y-8 scroll-smooth">
+      <!-- AI Bubble -->
+      <div class="flex gap-4 max-w-3xl">
+        <div
+          class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-on-primary">smart_toy</span>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-surface-container-high p-5 rounded-2xl rounded-tl-none border border-primary/5 emerald-glow">
+            <p class="text-on-surface leading-relaxed">
+              Namaste Ramesh 🌾 I'm Saarthi, your digital soil partner. I know your land in Hubli has been performing
+              well this year. Based on current market trends and weather patterns, I have some tailored advice. What
+              would you like to know today?
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- User Bubble -->
+      <div class="flex gap-4 max-w-3xl ml-auto flex-row-reverse">
+        <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-outline">person</span>
+        </div>
+        <div class="bg-primary/10 border border-primary/20 p-5 rounded-2xl rounded-tr-none">
+          <p class="text-primary font-medium">What should I grow next season?</p>
+        </div>
+      </div>
+      <!-- AI Data Collection -->
+      <div class="flex gap-4 max-w-3xl">
+        <div
+          class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-on-primary">smart_toy</span>
+        </div>
+        <div class="space-y-6 w-full">
+          <div class="bg-surface-container-high p-5 rounded-2xl rounded-tl-none border border-primary/5">
+            <p class="text-on-surface font-medium">What is your land size for this new cultivation?</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <button
+                class="px-4 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold bg-primary/5 hover:bg-primary hover:text-on-primary transition-all">1-2
+                acres</button>
+              <button
+                class="px-4 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold bg-primary/5 hover:bg-primary hover:text-on-primary transition-all">3-5
+                acres</button>
+              <button
+                class="px-4 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold bg-primary/5 hover:bg-primary hover:text-on-primary transition-all">5-10
+                acres</button>
+              <button
+                class="px-4 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold bg-primary/5 hover:bg-primary hover:text-on-primary transition-all">10+
+                acres</button>
+            </div>
+          </div>
+          <div class="bg-surface-container-high p-5 rounded-2xl rounded-tl-none border border-primary/5">
+            <p class="text-on-surface font-medium mb-4">And what type of soil do you have? You can upload your health
+              card or a photo of your field.</p>
+            <div
+              class="border-2 border-dashed border-outline-variant/30 rounded-xl p-8 flex flex-col items-center justify-center hover:border-primary/50 transition-colors cursor-pointer bg-surface-container-lowest/50 group">
+              <span
+                class="material-symbols-outlined text-4xl text-outline group-hover:text-primary transition-colors mb-2">add_a_photo</span>
+              <p class="text-xs font-bold text-outline uppercase tracking-wider">Drag &amp; drop or click to upload</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- AI Roadmap Expandable Card -->
+      <div class="flex gap-4 max-w-4xl">
+        <div
+          class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-on-primary">smart_toy</span>
+        </div>
+        <div
+          class="flex-1 bg-surface-container-low border border-primary/20 rounded-2xl p-6 emerald-glow overflow-hidden">
+          <div class="flex items-center gap-3 mb-8">
+            <span class="material-symbols-outlined text-primary">eco</span>
+            <h2 class="font-headline font-bold text-xl text-on-surface">Recommended Crops for Your Farm</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Crop Card 1 -->
+            <div
+              class="bg-surface-container-high p-5 rounded-xl border border-outline-variant/10 flex flex-col h-full group">
+              <div class="flex justify-between items-start mb-4">
+                <span class="text-3xl">🍅</span>
+                <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">94% MATCH</span>
+              </div>
+              <h3 class="font-bold text-lg mb-1">Tomato</h3>
+              <p class="text-primary font-black text-xl mb-4">₹3,200/q</p>
+              <div class="mt-auto space-y-2">
+                <div class="flex justify-between text-[10px] font-bold text-outline uppercase tracking-widest">
+                  <span>Profit potential</span>
+                  <span class="text-primary">68%</span>
+                </div>
+                <div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full" style="width: 68%"></div>
+                </div>
+                <button
+                  class="w-full mt-4 py-2 text-[10px] font-black uppercase tracking-widest border border-primary/20 rounded hover:bg-primary hover:text-on-primary transition-all">View
+                  Roadmap →</button>
+              </div>
+            </div>
+            <!-- Crop Card 2 -->
+            <div
+              class="bg-surface-container-high p-5 rounded-xl border border-outline-variant/10 flex flex-col h-full group">
+              <div class="flex justify-between items-start mb-4">
+                <span class="text-3xl">🧅</span>
+                <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">87% MATCH</span>
+              </div>
+              <h3 class="font-bold text-lg mb-1">Onion</h3>
+              <p class="text-primary font-black text-xl mb-4">₹2,100/q</p>
+              <div class="mt-auto space-y-2">
+                <div class="flex justify-between text-[10px] font-bold text-outline uppercase tracking-widest">
+                  <span>Profit potential</span>
+                  <span class="text-primary">55%</span>
+                </div>
+                <div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full" style="width: 55%"></div>
+                </div>
+                <button
+                  class="w-full mt-4 py-2 text-[10px] font-black uppercase tracking-widest border border-primary/20 rounded hover:bg-primary hover:text-on-primary transition-all">View
+                  Roadmap →</button>
+              </div>
+            </div>
+            <!-- Crop Card 3 -->
+            <div
+              class="bg-surface-container-high p-5 rounded-xl border border-outline-variant/10 flex flex-col h-full group">
+              <div class="flex justify-between items-start mb-4">
+                <span class="text-3xl">🥜</span>
+                <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">82% MATCH</span>
+              </div>
+              <h3 class="font-bold text-lg mb-1">Groundnut</h3>
+              <p class="text-primary font-black text-xl mb-4">₹5,200/q</p>
+              <div class="mt-auto space-y-2">
+                <div class="flex justify-between text-[10px] font-bold text-outline uppercase tracking-widest">
+                  <span>Profit potential</span>
+                  <span class="text-primary">71%</span>
+                </div>
+                <div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full" style="width: 71%"></div>
+                </div>
+                <button
+                  class="w-full mt-4 py-2 text-[10px] font-black uppercase tracking-widest border border-primary/20 rounded hover:bg-primary hover:text-on-primary transition-all">View
+                  Roadmap →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Bottom Chat Input -->
+    <footer class="p-8 pt-0">
+      <div class="max-w-4xl mx-auto space-y-4">
+        <div class="glass-panel border border-outline-variant/20 rounded-xl p-2 flex items-center gap-4 shadow-2xl">
+          <button class="p-3 text-outline hover:text-primary transition-colors">
+            <span class="material-symbols-outlined">attach_file</span>
+          </button>
+          <input
+            class="flex-1 bg-transparent border-none outline-none text-on-surface placeholder:text-outline/50 font-medium px-2"
+            placeholder="Ask Saarthi anything..." type="text" />
+          <button
+            class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary relative group">
+            <div class="absolute inset-0 rounded-full border border-primary/40 animate-ping opacity-20"></div>
+            <span
+              class="material-symbols-outlined font-variation-settings-'FILL'-1 group-hover:scale-110 transition-transform">mic</span>
+          </button>
+          <button
+            class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 font-bold hover:brightness-110 active:scale-95 transition-all">
+            <span class="hidden md:inline">Send</span>
+            <span class="material-symbols-outlined">send</span>
+          </button>
+        </div>
+        <p class="text-center text-[10px] text-outline font-bold uppercase tracking-widest opacity-60">
+          Powered by Real Gov APIs • Data accurate as of today
+        </p>
+      </div>
+    </footer>
+    <!-- Floating Call Card -->
+    <div class="fixed bottom-8 right-8 w-80 glass-panel border border-primary/20 rounded-2xl p-5 shadow-2xl z-50">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-sm">call</span>
+        </div>
+        <h4 class="font-headline font-bold text-sm">Call Saarthi AI</h4>
+      </div>
+      <div class="concave-input flex items-center px-4 py-3 rounded-xl mb-4 border border-outline-variant/10">
+        <input class="bg-transparent border-none outline-none text-sm font-bold text-on-surface w-full" type="text"
+          value="+91 9876543210" />
+      </div>
+      <button
+        class="w-full bg-primary text-on-primary py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all mb-3 shadow-lg shadow-primary/10">
+        Start Call
+      </button>
+      <p class="text-[10px] text-primary/80 font-bold text-center italic">AI will call you within 30 seconds</p>
+    </div>
+  </main>
+<script>
+const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8001' : '';
+let currentPhone = localStorage.getItem('ks_phone') || '';
+let currentName = localStorage.getItem('ks_name') || '';
+const _up = new URLSearchParams(window.location.search);
+if (_up.get('phone')) { currentPhone = _up.get('phone'); currentName = _up.get('name') || currentName; localStorage.setItem('ks_phone', currentPhone); localStorage.setItem('ks_name', currentName); }
+if (!currentPhone) {
+  try { const s = JSON.parse(localStorage.getItem('stitch_session') || '{}'); currentPhone = s.phone || ''; currentName = s.name || ''; if (currentPhone) { localStorage.setItem('ks_phone', currentPhone); localStorage.setItem('ks_name', currentName); } } catch(e) {}
+}
+
+// Auth
+if (!currentPhone) { window.location.href = '/dashboard'; }
+document.querySelector('.concave-input input')?.setAttribute('value', currentPhone ? '+91 ' + currentPhone : '');
+
+// Update user info
+const nameEl = document.querySelector('header .font-headline.font-bold');
+if (nameEl && currentName) nameEl.textContent = currentName;
+
+// Chat section ref
+const chatCanvas = document.querySelector('section.flex-1');
+const chatInput = document.querySelector('footer input[type="text"]');
+const sendBtn = document.querySelector('footer button:last-child');
+
+function addUserBubble(msg) {
+  const div = document.createElement('div');
+  div.className = 'flex gap-4 max-w-3xl ml-auto flex-row-reverse';
+  div.innerHTML = `
+    <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-outline">person</span></div>
+    <div class="bg-primary/10 border border-primary/20 p-5 rounded-2xl rounded-tr-none"><p class="text-primary font-medium">${msg}</p></div>`;
+  chatCanvas.appendChild(div);
+  chatCanvas.scrollTop = chatCanvas.scrollHeight;
+}
+
+function addAIBubble(msg) {
+  const div = document.createElement('div');
+  div.className = 'flex gap-4 max-w-3xl';
+  div.innerHTML = `
+    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20"><span class="material-symbols-outlined text-on-primary">smart_toy</span></div>
+    <div class="bg-surface-container-high p-5 rounded-2xl rounded-tl-none border border-primary/5 emerald-glow"><p class="text-on-surface leading-relaxed">${msg}</p></div>`;
+  chatCanvas.appendChild(div);
+  chatCanvas.scrollTop = chatCanvas.scrollHeight;
+}
+
+function addTyping() {
+  const div = document.createElement('div');
+  div.id = 'typing';
+  div.className = 'flex gap-4 max-w-3xl';
+  div.innerHTML = `
+    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20"><span class="material-symbols-outlined text-on-primary">smart_toy</span></div>
+    <div class="bg-surface-container-high p-5 rounded-2xl rounded-tl-none border border-primary/5"><span class="text-on-surface-variant animate-pulse">Thinking...</span></div>`;
+  chatCanvas.appendChild(div);
+  chatCanvas.scrollTop = chatCanvas.scrollHeight;
+}
+
+async function sendMessage() {
+  const msg = chatInput.value.trim();
+  if (!msg) return;
+  chatInput.value = '';
+  addUserBubble(msg);
+  addTyping();
+  try {
+    const res = await fetch(`${API_BASE}/api/chatbot/message`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ message: msg, phone: currentPhone, name: currentName })
+    });
+    const data = await res.json();
+    document.getElementById('typing')?.remove();
+    addAIBubble(data.reply || data.response || 'Sorry, I could not process that.');
+  } catch(e) {
+    document.getElementById('typing')?.remove();
+    addAIBubble('Connection error. Please try again.');
+  }
+}
+
+sendBtn?.addEventListener('click', sendMessage);
+chatInput?.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+// Call Agent
+document.querySelector('.fixed button, aside button')?.addEventListener('click', async function() {
+  const phone = currentPhone;
+  if (!phone) { alert('Please login first'); return; }
+  this.disabled = true;
+  this.textContent = 'Connecting...';
+  try {
+    const res = await fetch(`${API_BASE}/api/farmer/${encodeURIComponent(phone)}/call`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ name: currentName })
+    });
+    const data = await res.json();
+    if (data.success) { this.textContent = '✅ Call Started!'; }
+    else throw new Error(data.detail || 'Failed');
+  } catch(e) { alert('Call failed: ' + e.message); this.textContent = 'Start Call'; }
+  finally { setTimeout(() => { this.disabled = false; this.textContent = 'Start Call'; }, 3000); }
+});
+
+// Call Saarthi sidebar button
+document.querySelector('aside .p-6 button')?.addEventListener('click', () => {
+  document.querySelector('.fixed.bottom-8')?.scrollIntoView();
+});
+
+// File upload
+const uploadArea = document.querySelector('.border-dashed');
+if (uploadArea) {
+  uploadArea.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*,.pdf';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      addUserBubble(`📎 Uploaded: ${file.name}`);
+      addTyping();
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('phone', currentPhone);
+      try {
+        const res = await fetch(`${API_BASE}/api/chatbot/upload-file`, { method: 'POST', body: fd });
+        const data = await res.json();
+        document.getElementById('typing')?.remove();
+        addAIBubble(data.reply || data.response || 'File received.');
+      } catch(e) { document.getElementById('typing')?.remove(); addAIBubble('Upload failed.'); }
+    };
+    input.click();
+  });
+}
+</script>
+</body>
+
+</html>
