@@ -97,9 +97,14 @@ def initialize_gemini() -> None:
 
     try:
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        # Using gemini-2.5-flash with function calling support
+        # gemini-2.5-flash's free tier caps out at 20 requests/day, which a
+        # live phone line burns through in minutes and then serves a "busy"
+        # fallback for every farmer until the cooldown expires. The voice
+        # pipeline already moved to flash-lite for its much higher free-tier
+        # ceiling (see VOICE_NLU_MODEL / VOICE_REPLY_MODEL); match it here so
+        # calls don't get cut short by quota either.
         _gemini_model = genai.GenerativeModel(
-            model_name="gemini-2.5-flash",
+            model_name="gemini-3.5-flash-lite",
             system_instruction=SYSTEM_PROMPT,
             tools=AGRICULTURE_TOOLS,
         )
