@@ -391,7 +391,7 @@ def test_first_call_asks_for_a_language_in_all_three(twilio_client):
         assert f"sys_{code}_menu.mp3" in xml
 
 
-def test_choosing_hindi_greets_and_listens_in_hindi_and_is_remembered(twilio_client):
+def test_choosing_hindi_greets_and_listens_in_hindi_and_is_saved(twilio_client):
     from app.voice import call_log
 
     client, _ = twilio_client
@@ -401,9 +401,11 @@ def test_choosing_hindi_greets_and_listens_in_hindi_and_is_remembered(twilio_cli
     assert "sys_hi_greeting.mp3" in xml
     assert call_log.get_language_preference(FARMER) == "hi"
 
+    # Every call asks explicitly, even a repeat caller with a saved
+    # preference - the saved value is kept for reference, not to skip asking.
     again = client.post("/twilio/voice", data={**CALL, "CallSid": "CA" + "2" * 32}).text
-    assert 'input="dtmf speech"' not in again
-    assert 'language="hi-IN"' in again
+    assert 'input="dtmf speech"' in again
+    assert "/twilio/language" in again
 
 
 def test_unanswered_menu_repeats_once_then_uses_kannada(twilio_client):

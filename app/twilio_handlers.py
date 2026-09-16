@@ -229,8 +229,12 @@ async def handle_incoming_call(
     state = dialogue.get_state(CallSid, phone)
     name = request.query_params.get("name", "").strip()
 
+    # A caller's saved language used to skip the menu on repeat calls. Every
+    # call now asks explicitly, English/Kannada/Hindi, so the caller always
+    # confirms rather than being defaulted silently. An explicit `lang` query
+    # param (operator-dialled outbound calls) still bypasses the menu.
     requested = normalise_language(request.query_params.get("lang"), default=None)
-    language = requested or await asyncio.to_thread(call_log.get_language_preference, phone)
+    language = requested
     logger.info("Call connected: %s (farmer %s, language %s)", CallSid, phone, language or "not chosen")
 
     # Preflight and launcher checks use made-up call SIDs; they are not calls.
@@ -351,8 +355,9 @@ async def handle_answer(request: Request):
         logger.warning("No answer for %s (%s after %.0fs)", call_sid, status or "missing", waited)
         return _twiml(_listen(response, language, _prompt_url(key, language)))
 
-    # Short waits keep the reply prompt; one reassurance part-way through a long one.
-    more = _prompt_url("hold_more", language) if attempt == 4 else None
+    # Silence for several seconds reads as a dropped call, so a short
+    # reassurance plays every other attempt instead of bare dead air.
+    more = _prompt_url("hold_more", language) if attempt % 2 == 0 else None
     if more:
         response.play(more)
     else:

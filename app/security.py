@@ -234,8 +234,10 @@ class SlidingWindowRateLimiter:
             self._hits.pop(key, None)
 
 
-# Outbound calls cost money on every request, so they are limited hardest.
-call_limiter = SlidingWindowRateLimiter(max_requests=10, window_seconds=60.0)
+# Outbound calls cost money on every request, so they are still bounded, but
+# 10/min was tight enough to trip during normal manual testing from the web
+# console; 30/min keeps the cost guard without getting in the way of that.
+call_limiter = SlidingWindowRateLimiter(max_requests=30, window_seconds=60.0)
 # LLM-backed endpoints burn quota.
 ai_limiter = SlidingWindowRateLimiter(max_requests=60, window_seconds=60.0)
 # Read-only market queries are cheap but still worth bounding.

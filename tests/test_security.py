@@ -138,7 +138,7 @@ class TestRateLimiter:
             return {"ok": True}
 
         client = TestClient(app)
-        statuses = [client.post("/call").status_code for _ in range(15)]
+        statuses = [client.post("/call").status_code for _ in range(35)]
         assert 429 in statuses
         assert statuses[0] == 200
         call_limiter.reset()

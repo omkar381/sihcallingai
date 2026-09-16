@@ -467,17 +467,22 @@ def understand(
 # Open questions
 # ---------------------------------------------------------------------------
 
-_OPEN_REPLY_INSTRUCTION = """You are a phone assistant for Indian farmers, focused on selling produce: market prices,
-choosing a market, when to sell, finding verified buyers, offers, payments and complaints.
+_OPEN_REPLY_INSTRUCTION = """You are a knowledgeable phone assistant for Indian farmers. Answer whatever the farmer
+asks - market selling questions, weather-based sowing or harvest timing, pest and disease control,
+fertiliser and irrigation practice, crop choice, government loan and insurance schemes, or general
+farming know-how. Give real, practical, specific guidance the way an experienced agricultural
+extension officer would. Do not brush the farmer off or redirect them elsewhere unless you
+genuinely cannot help at all.
 
-Reply to the farmer in simple, warm, spoken {language}, the way a helpful person at a farmers'
-helpline talks. Rules:
-- At most three short sentences. No lists and no symbols. {script_rule}
-- Never state a price, a buyer, a scheme amount or any figure. You have no data in this step.
-- If the question is about farming practice, weather, pests, loans or schemes, give one line of
-  general guidance and tell them the free Kisan Call Centre number 1800 180 1551 can help.
-- End by offering what you can do: today's price, the best market, sell-or-wait advice,
-  or verified buyers.
+Reply to the farmer in simple, warm, spoken {language}. Rules:
+- At most four short sentences. No lists and no symbols. {script_rule}
+- Do not invent a mandi price, a buyer name, a scheme payout amount, or any rupee figure - you have
+  no live market data in this step. Practical numbers such as a dosage, a number of days, or a
+  quantity are fine and encouraged when they make the advice useful.
+- If the question truly needs a live inspection, a lab test, or is outside farming entirely, say so
+  plainly and give the free Kisan Call Centre number 1800 180 1551.
+- Only steer toward today's price, the best market, or verified buyers when it is naturally
+  relevant to what was asked - do not force it onto every answer.
 Return JSON with "reply" (in {language}) and "english" (its English translation)."""
 
 _SCRIPT_RULES = {
@@ -491,6 +496,14 @@ _OPEN_REPLY_SCHEMA = {
     "properties": {"reply": {"type": "STRING"}, "english": {"type": "STRING"}},
     "required": ["reply", "english"],
 }
+
+# Only a rupee-shaped figure is a fabrication risk here (no market data was
+# looked up); a dosage, a day count or a quantity is genuinely useful advice
+# and must not be thrown away just because it contains a digit.
+_PRICE_LIKE = re.compile(
+    r"₹\s*\d|\brs\.?\s*\d|\d\s*(rupees?|rupaye|rs\.?)\b|\bquintal\b[^.]{0,20}\d",
+    re.IGNORECASE,
+)
 
 
 def compose_open_reply(
@@ -522,10 +535,11 @@ def compose_open_reply(
 
     reply = str(data.get("reply") or "").strip()
     en = str(data.get("english") or "").strip()
-    # A reply that slipped a number in is discarded: this step has no data, so
-    # any figure in it is invented. The helpline number is the one exception.
+    # A reply that slips in a rupee figure is discarded: this step has no
+    # market data, so any price in it is invented. Other numbers (a dosage, a
+    # day count, a quantity) are real, useful advice and are kept.
     for text in (reply, en):
-        if re.search(r"\d", text.replace("1800 180 1551", "")):
+        if _PRICE_LIKE.search(text.replace("1800 180 1551", "")):
             return None
     if not reply:
         return None
