@@ -42,6 +42,7 @@ from app.routes.market_routes import router as market_router
 from app.routes.trade_routes import router as trade_router
 from app.routes.voice_routes import router as voice_router
 from app.routes.advisor_routes import router as advisor_router
+from app.routes.portal_routes import install as install_portal
 from app.services.db import init_extension_tables
 from app.services.auction_service import close_expired_listings
 from app.marketplace import (
@@ -270,6 +271,7 @@ app.include_router(market_router)
 app.include_router(trade_router)
 app.include_router(voice_router)
 app.include_router(advisor_router)
+install_portal(app)
 
 
 # ============================================

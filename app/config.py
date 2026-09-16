@@ -54,6 +54,11 @@ class Settings(BaseSettings):
     ENABLE_RATE_LIMIT: bool = Field(default=True)
     # Comma-separated. Never use "*" together with credentials.
     ALLOWED_ORIGINS: str = Field(default="")
+    # Signs the verification link in the farmer ID card QR code. Derived from
+    # API_KEY when blank; set it explicitly so cards survive an API key rotation.
+    PORTAL_SECRET: str = Field(default="")
+    # The farmer portal's "Call now" button always dials this number.
+    PORTAL_CALL_NUMBER: str = Field(default="+918618075133")
 
     # --- Market intelligence ---
     # Allows MOCK-tagged demo data to reach the recommendation engine. Off by

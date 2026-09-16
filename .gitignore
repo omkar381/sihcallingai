@@ -8,3 +8,4 @@ __pycache__/
 htmlcov/
 output/*.err
 output/*.log
+data/portal_uploads/
