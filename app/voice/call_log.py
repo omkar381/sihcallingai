@@ -26,7 +26,7 @@ from app.voice.language import normalise_language
 
 logger = logging.getLogger(__name__)
 
-_initialised = False
+_initialised_paths: set = set()
 _init_lock = threading.Lock()
 
 # In-memory feed for the live view. Sequence numbers let a client ask for
@@ -41,9 +41,10 @@ def _columns(conn, table: str) -> set:
 
 
 def init_call_tables() -> None:
-    global _initialised
+    from app.services.db import DB_PATH
+
     with _init_lock:
-        if _initialised:
+        if DB_PATH in _initialised_paths:
             return
         with DB_LOCK:
             conn = get_connection()
@@ -107,7 +108,7 @@ def init_call_tables() -> None:
                 conn.commit()
             finally:
                 conn.close()
-        _initialised = True
+        _initialised_paths.add(DB_PATH)
 
 
 def _publish(event: Dict[str, Any]) -> None:

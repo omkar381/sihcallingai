@@ -296,7 +296,7 @@ async function viewHome(root) {
     <div class="hero">
       <div>
         <span class="eyebrow"><span class="live-dot"></span>Kannada voice line · SIH PS 26132</span>
-        <h1>Know the price. Pick the market. Sell to a buyer you can trust.</h1>
+        <h1>Know the <em>price</em>. Pick the <em>market</em>. Sell to a buyer you can trust.</h1>
         <p class="lede">A farmer calls and asks in Kannada. The agent answers from mandi prices, transport costs and verified buyer demand, then helps list the produce, weigh offers and track the payment.</p>
         <div class="hero-actions">
           <a class="btn large" href="/calls" data-link>Talk to the agent</a>
