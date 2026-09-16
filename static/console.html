@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Krishi — Market Console</title>
+<style>
+/* ==========================================================================
+   Design tokens
+
+   Restrained on purpose. This is an operational console for market data and
+   money: the interface should recede and let the numbers carry the page.
+   One accent colour, one warning, one danger. No gradients, no glass, no
+   decorative colour. Borders do the structural work that shadows would
+   otherwise do badly.
+   ========================================================================== */
+:root {
+  --bg:            #fbfbfa;
+  --surface:       #ffffff;
+  --surface-sunk:  #f6f5f3;
+  --border:        #e7e5e1;
+  --border-strong: #d6d3cd;
+
+  --text:          #191917;
+  --text-mid:      #55534d;
+  --text-dim:      #86837c;
+
+  --accent:        #15653f;
+  --accent-soft:   #edf4f0;
+  --accent-line:   #bcd9c9;
+
+  --warn:          #92600b;
+  --warn-soft:     #fdf5e6;
+  --warn-line:     #ecd9ab;
+
+  --danger:        #9c2f26;
+  --danger-soft:   #fcf1f0;
+  --danger-line:   #eec6c2;
+
+  --info:          #2b4f7a;
+  --info-soft:     #eff3f8;
+  --info-line:     #c5d4e6;
+
+  --radius:   6px;
+  --radius-sm:4px;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #141413;
+    --surface:       #1c1c1a;
+    --surface-sunk:  #232320;
+    --border:        #302f2c;
+    --border-strong: #3d3c38;
+
+    --text:          #edece8;
+    --text-mid:      #a8a59d;
+    --text-dim:      #78756e;
+
+    --accent:        #5cbd8e;
+    --accent-soft:   #17261f;
+    --accent-line:   #2c4a3a;
+
+    --warn:          #d9a548;
+    --warn-soft:     #26200f;
+    --warn-line:     #453718;
+
+    --danger:        #e0837a;
+    --danger-soft:   #291715;
+    --danger-line:   #4a2723;
+
+    --info:          #7ea6d8;
+    --info-soft:     #161d26;
+    --info-line:     #2a3746;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures everywhere numbers appear, so columns align down the page. */
+.num, td.num, .metric-value, table.data td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.shell {
+  display: grid;
+  grid-template-columns: 216px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.brand h1 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.brand p {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+}
+
+.nav-group { padding: 0 10px; margin-bottom: 18px; }
+.nav-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-dim);
+  padding: 0 10px 7px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-mid);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.nav-item:hover { background: var(--surface-sunk); color: var(--text); }
+.nav-item[aria-current="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 550;
+}
+.nav-count {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+}
+
+.main { min-width: 0; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.topbar h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.topbar .sub {
+  margin: 1px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.content { padding: 24px 28px 64px; max-width: 1180px; }
+
+/* ------------------------------------------------------------ components */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+}
+.card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.card-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.card-head .hint { font-size: 12px; color: var(--text-dim); }
+.card-body { padding: 16px; }
+.card-body.flush { padding: 0; }
+
+/* Individually bordered tiles rather than a 1px-gap grid over a coloured
+   background: a partial final row then simply has fewer tiles, instead of
+   leaving a phantom empty cell that reads as a rendering fault. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 15px;
+}
+.metric-label {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+  margin-bottom: 5px;
+}
+.metric-value {
+  font-size: 21px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.metric-note { font-size: 11.5px; color: var(--text-dim); margin-top: 3px; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: var(--text-dim);
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--surface-sunk);
+}
+table.data td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.data tr:last-child td { border-bottom: 0; }
+
+/* Names and identifiers should not wrap to four lines in a narrow column.
+   The wrapper scrolls horizontally instead, which keeps rows readable. */
+table.data { min-width: 620px; }
+table.data td.cell-name { white-space: nowrap; }
+table.data td.cell-name .sub {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+table.data td.cell-stack .sub {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+table.data tr.highlight td { background: var(--accent-soft); }
+table.data td.right, table.data th.right { text-align: right; }
+.table-wrap { overflow-x: auto; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-sunk);
+  color: var(--text-mid);
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.015em;
+  white-space: nowrap;
+}
+.tag.good   { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.tag.warn   { background: var(--warn-soft);   border-color: var(--warn-line);   color: var(--warn); }
+.tag.bad    { background: var(--danger-soft); border-color: var(--danger-line); color: var(--danger); }
+.tag.info   { background: var(--info-soft);   border-color: var(--info-line);   color: var(--info); }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+.notice {
+  display: flex;
+  gap: 11px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 13px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.notice strong { font-weight: 600; }
+.notice.warn { border-left-color: var(--warn);   background: var(--warn-soft); }
+.notice.bad  { border-left-color: var(--danger); background: var(--danger-soft); }
+.notice.good { border-left-color: var(--accent); background: var(--accent-soft); }
+.notice.info { border-left-color: var(--info);   background: var(--info-soft); }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 11.5px;
+  font-weight: 550;
+  color: var(--text-mid);
+  letter-spacing: 0.01em;
+}
+input, select {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  min-width: 0;
+}
+input:focus, select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+button.btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 550;
+  padding: 6.5px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button.btn:hover { filter: brightness(1.08); }
+button.btn:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+button.btn.secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+button.btn.secondary:hover { background: var(--surface-sunk); filter: none; }
+
+.reasons { margin: 0; padding: 0; list-style: none; }
+.reasons li {
+  position: relative;
+  padding: 4px 0 4px 16px;
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.reasons li::before {
+  content: "";
+  position: absolute;
+  left: 3px; top: 11px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+.reasons.risk li::before { background: var(--warn); }
+
+.bar {
+  height: 5px;
+  background: var(--surface-sunk);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 56px;
+}
+.bar > span { display: block; height: 100%; background: var(--accent); }
+
+.empty {
+  padding: 34px 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; }
+.kv dt { color: var(--text-dim); white-space: nowrap; }
+.kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+.timeline { margin: 0; padding: 0; list-style: none; }
+.timeline li {
+  position: relative;
+  padding: 0 0 14px 20px;
+  border-left: 1px solid var(--border);
+  margin-left: 4px;
+}
+.timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -4.5px; top: 4px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+}
+.timeline li.done::before { background: var(--accent); border-color: var(--accent); }
+.timeline .t-action { font-size: 13px; font-weight: 550; }
+.timeline .t-meta { font-size: 11.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+.mono { font-family: var(--mono); font-size: 12px; }
+.muted { color: var(--text-dim); }
+.view { display: none; }
+.view.active { display: block; }
+
+.spinner {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 820px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static; height: auto;
+    border-right: 0; border-bottom: 1px solid var(--border);
+  }
+  .content, .topbar { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>AI Krishi</h1>
+      <p>Market Console</p>
+    </div>
+
+    <nav class="nav-group">
+      <div class="nav-label">Intelligence</div>
+      <button class="nav-item" data-view="overview" aria-current="true">Overview</button>
+      <button class="nav-item" data-view="discovery">Price discovery</button>
+      <button class="nav-item" data-view="advice">Sale window</button>
+    </nav>
+
+    <nav class="nav-group">
+      <div class="nav-label">Marketplace</div>
+      <button class="nav-item" data-view="lots">Lots<span class="nav-count" id="c-lots"></span></button>
+      <button class="nav-item" data-view="buyers">Buyers<span class="nav-count" id="c-buyers"></span></button>
+      <button class="nav-item" data-view="fpo">FPO aggregation</button>
+    </nav>
+
+    <nav class="nav-group">
+      <div class="nav-label">Settlement</div>
+      <button class="nav-item" data-view="payments">Payments<span class="nav-count" id="c-pay"></span></button>
+      <button class="nav-item" data-view="disputes">Disputes<span class="nav-count" id="c-disp"></span></button>
+      <button class="nav-item" data-view="audit">Audit trail</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h2 id="view-title">Overview</h2>
+        <p class="sub" id="view-sub">System state and data provenance</p>
+      </div>
+      <button class="btn secondary" id="refresh">Refresh</button>
+    </header>
+
+    <div class="content">
+      <div id="data-banner"></div>
+
+      <section class="view active" id="view-overview"></section>
+      <section class="view" id="view-discovery"></section>
+      <section class="view" id="view-advice"></section>
+      <section class="view" id="view-lots"></section>
+      <section class="view" id="view-buyers"></section>
+      <section class="view" id="view-fpo"></section>
+      <section class="view" id="view-payments"></section>
+      <section class="view" id="view-disputes"></section>
+      <section class="view" id="view-audit"></section>
+    </div>
+  </main>
+</div>
+
+<script src="/static/console.js"></script>
+</body>
+</html>

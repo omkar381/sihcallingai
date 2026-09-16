@@ -458,6 +458,49 @@ def estimate_aggregation_benefit(
     }
 
 
+# Farm-to-market haul assumed when the best market is the farmers' own. Without
+# a floor, a zero-distance market makes pooling look worthless, when in reality
+# every load still travels from the village to the yard.
+MIN_POOL_HAUL_KM = 30.0
+
+
+def estimate_pool_benefit_at_market(group: AggregationGroup, origin: str) -> Optional[Dict[str, Any]]:
+    """
+    The rupee benefit of pooling, priced at the market the pool would sell in.
+
+    The pooled consignment is ranked across nearby markets with the same
+    net-realisation model a farmer hears on a call, and the best market's price
+    and distance feed `estimate_aggregation_benefit`. The FPO screen and the
+    voice agent both call this, so they never quote different figures for the
+    same pool. Returns None when no price is available.
+    """
+    from app.market import service
+    from app.market.normalization import COMMODITY_BY_CANONICAL
+
+    if not group.lots:
+        return None
+    comparison = service.compare(group.commodity, origin, quantity=f"{group.total_kg} kg")
+    options = comparison.get("options") or []
+    if options:
+        top = next((o for o in options if o["market"] == comparison.get("best_market")), options[0])
+        price = top["gross_price_per_quintal"]
+        distance = max(float(top["distance_km"] or 0.0), MIN_POOL_HAUL_KM)
+        market, quality = top["market"], top["data_quality"]
+    else:
+        latest = service.get_price(group.commodity, origin)
+        if not latest.get("available"):
+            return None
+        price, distance = latest["modal_price"], 100.0
+        market, quality = latest["market"], latest["data_quality"]
+
+    commodity = COMMODITY_BY_CANONICAL.get(group.commodity)
+    benefit = estimate_aggregation_benefit(
+        group, price, distance, perishable=bool(commodity and commodity.perishable)
+    )
+    benefit.update({"priced_at_market": market, "data_quality": quality})
+    return benefit
+
+
 def create_aggregate_lot(
     fpo_id: str,
     lot_ids: Sequence[str],
@@ -484,15 +527,17 @@ def create_aggregate_lot(
     if missing:
         raise FpoError(f"Unknown lot(s): {', '.join(missing)}")
 
+    # Checked before the status guard so re-aggregating an already-pooled lot
+    # reports the specific reason rather than the generic status complaint.
+    already = [l["id"] for l in lots if l["parent_lot_id"] or l["is_aggregate"]]
+    if already:
+        raise FpoError(f"These lots are already part of an aggregate: {', '.join(already)}")
+
     wrong_status = [l["id"] for l in lots if l["status"] != LotStatus.PUBLISHED]
     if wrong_status:
         raise FpoError(
             f"Only PUBLISHED lots can be aggregated; these are not: {', '.join(wrong_status)}"
         )
-
-    already = [l["id"] for l in lots if l["parent_lot_id"] or l["is_aggregate"]]
-    if already:
-        raise FpoError(f"These lots are already part of an aggregate: {', '.join(already)}")
 
     # Compatibility: one commodity, one grade, one variety.
     commodities = {l["commodity"] for l in lots}

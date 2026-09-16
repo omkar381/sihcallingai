@@ -63,8 +63,8 @@ def cleanup_old_audio_files(max_age_minutes: int = 60) -> int:
 
     try:
         for filename in os.listdir(audio_dir):
-            if filename in system_files:
-                continue  # Never delete system audio
+            if filename in system_files or filename.startswith(("sys_", "greet_")):
+                continue  # Never delete system prompts; they are fixed text
 
             filepath = os.path.join(audio_dir, filename)
             if not os.path.isfile(filepath):

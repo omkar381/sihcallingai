@@ -3,16 +3,18 @@
 Place a test call with the AI Krishi voice agent.
 
 Usage:
-    python call.py                      # call the default number
-    python call.py +918618075133        # call a specific number
-    python call.py +918618075133 Rajesh # personalised Kannada greeting
-    python call.py --status             # show recent calls
-    python call.py --check              # preflight only, place no call
+    python call.py                              # call the default number
+    python call.py +918618075133                # uses the saved language, or plays the menu
+    python call.py +918618075133 --lang=hi      # call in Hindi (kn, hi or en)
+    python call.py +918618075133 Rajesh --lang=en
+    python call.py --status                     # show recent calls
+    python call.py --check                      # preflight only, place no call
 
 Requires the server and an ngrok tunnel to be running; use start_calling.py
 to bring both up and sync BASE_URL automatically.
 """
 
+import asyncio
 import sys
 import time
 import urllib.parse
@@ -23,7 +25,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from app.config import get_settings, get_twilio_client, twilio_configured  # noqa: E402
-from app.twilio_handlers import build_personalized_greeting  # noqa: E402
+from app.voice import call_log, speech  # noqa: E402
+from app.voice.language import PROFILES, greeting_text, normalise_language  # noqa: E402
 
 DEFAULT_TO = "+918618075133"
 
@@ -79,22 +82,34 @@ def show_status(limit: int = 10) -> None:
         )
 
 
-def place_call(to: str, name: str = "") -> int:
+def place_call(to: str, name: str = "", language: str = "") -> int:
     settings = get_settings()
     base = settings.BASE_URL.rstrip("/")
 
     if not to.startswith("+"):
         to = "+91" + to.lstrip("0")
 
-    print(f"\nCalling {to} from {settings.TWILIO_PHONE_NUMBER} ...")
+    if language:
+        call_log.set_language_preference(to, language)
+    saved = language or call_log.get_language_preference(to)
+    spoken = PROFILES[saved].english_name if saved else "language menu"
+    print(f"\nCalling {to} from {settings.TWILIO_PHONE_NUMBER} ({spoken}) ...")
 
-    voice_url = f"{base}/twilio/voice"
+    params = {}
     if name:
-        voice_url += f"?name={urllib.parse.quote(name)}"
+        params["name"] = name
+    if language:
+        params["lang"] = language
+    voice_url = f"{base}/twilio/voice"
+    if params:
+        voice_url += "?" + urllib.parse.urlencode(params)
+
+    if name and saved:
         # Generate the greeting BEFORE dialing. The file is content-addressed,
         # so the server reuses it instantly and the caller hears no dead air.
         print("  pre-generating greeting ...", end=" ", flush=True)
-        print("done" if build_personalized_greeting(name) else "failed")
+        made = asyncio.run(speech.synthesize(greeting_text(saved, name), saved, prefix="greet_"))
+        print("done" if made else "failed")
 
     client = get_twilio_client()
     try:
@@ -134,13 +149,20 @@ def place_call(to: str, name: str = "") -> int:
 
 
 def main() -> int:
-    args = [a for a in sys.argv[1:]]
+    args = list(sys.argv[1:])
 
     if "--status" in args:
         show_status()
         return 0
 
     check_only = "--check" in args
+    language = ""
+    for arg in args:
+        if arg.startswith("--lang="):
+            language = normalise_language(arg.split("=", 1)[1], default=None) or ""
+            if not language:
+                print("--lang must be kn, hi or en")
+                return 2
     args = [a for a in args if not a.startswith("--")]
 
     print("Preflight:")
@@ -154,7 +176,7 @@ def main() -> int:
 
     to = args[0] if args else DEFAULT_TO
     name = args[1] if len(args) > 1 else ""
-    return place_call(to, name)
+    return place_call(to, name, language)
 
 
 if __name__ == "__main__":

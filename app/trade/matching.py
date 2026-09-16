@@ -165,7 +165,11 @@ def _score_quality(lot: Dict[str, Any], demand: Dict[str, Any]) -> MatchFactor:
         note = "inspected" if lot.get("grade_is_evidence") else "self-declared"
         return MatchFactor("quality", bonus, WEIGHTS["quality"],
                            f"Grade {have} meets the buyer's minimum of {want} ({note})")
-    return MatchFactor("quality", 0.2, WEIGHTS["quality"],
+
+    # Zero, not a low score. The buyer stated a minimum grade, so this is a
+    # sale that cannot happen - showing it to the farmer would send them to a
+    # buyer who will reject the consignment on arrival.
+    return MatchFactor("quality", 0.0, WEIGHTS["quality"],
                        f"Grade {have} is below the buyer's minimum of {want}")
 
 

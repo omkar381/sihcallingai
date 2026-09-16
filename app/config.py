@@ -61,6 +61,19 @@ class Settings(BaseSettings):
     MARKET_DEMO_MODE: bool = Field(default=False)
     MARKET_DEFAULT_RADIUS_KM: float = Field(default=150.0)
 
+    # --- Voice agent ---
+    # Intent parsing runs on every turn, so it uses the fastest model that
+    # reads Kannada reliably (~1.7s measured, against ~2.7s for 2.5 Flash).
+    VOICE_NLU_MODEL: str = Field(default="gemini-3.5-flash-lite")
+    VOICE_NLU_TIMEOUT_SECONDS: float = Field(default=6.0)
+    VOICE_REPLY_MODEL: str = Field(default="gemini-3.5-flash-lite")
+    VOICE_REPLY_TIMEOUT_SECONDS: float = Field(default=6.0)
+    VOICE_TTS_VOICE: str = Field(default="kn-IN-GaganNeural")
+    VOICE_TTS_VOICE_HI: str = Field(default="hi-IN-MadhurNeural")
+    VOICE_TTS_VOICE_EN: str = Field(default="en-IN-PrabhatNeural")
+    VOICE_TTS_RATE: str = Field(default="-4%")
+    VOICE_DEFAULT_LOCATION: str = Field(default="Kalaburagi")
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

@@ -6,20 +6,25 @@ Mounts static audio serving and includes all route handlers.
 """
 
 import os
+
+# faiss/numpy's bundled OpenBLAS fails to allocate per-thread buffers on this
+# machine with its default thread count; must be set before numpy is imported.
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+
 import asyncio
 import logging
 import json
 import urllib.parse
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, Request, HTTPException, UploadFile, File, Form, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse, StreamingResponse
 from twilio.rest import Client as TwilioClient
 
 from app.config import get_settings, get_twilio_client, twilio_configured
-from app.security import resolve_cors_origins, cors_allows_credentials
+from app.security import resolve_cors_origins, cors_allows_credentials, require_api_key, rate_limit_calls
 from app.gemini_ai import initialize_gemini
 from app.tts import pre_generate_system_audio
 from app.audio_manager import periodic_audio_cleanup
@@ -34,6 +39,9 @@ from app.routes.seller_routes import router as seller_router
 from app.routes.buyer_routes import router as buyer_router
 from app.routes.twin_routes import router as twin_router
 from app.routes.market_routes import router as market_router
+from app.routes.trade_routes import router as trade_router
+from app.routes.voice_routes import router as voice_router
+from app.routes.advisor_routes import router as advisor_router
 from app.services.db import init_extension_tables
 from app.services.auction_service import close_expired_listings
 from app.marketplace import (
@@ -64,6 +72,8 @@ async def _background_session_cleanup():
         await asyncio.sleep(300)  # Every 5 minutes
         try:
             cleanup_expired_sessions(timeout_seconds=1800)
+            from app.voice.dialogue import cleanup_states
+            cleanup_states(max_idle_seconds=1800)
         except Exception as e:
             logger.error(f"Session cleanup error: {e}")
 
@@ -125,6 +135,26 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"System audio pre-generation failed: {e}")
 
+    # 3b. Voice agent: call transcript tables and the fixed Kannada prompts
+    # (greeting, hold, re-prompt, goodbye). Prompts are content-addressed, so
+    # after the first start this is a no-op that just finds them on disk.
+    try:
+        from app.voice.call_log import init_call_tables
+        from app.voice.speech import prepare_system_prompts
+        await asyncio.to_thread(init_call_tables)
+        await prepare_system_prompts()
+    except Exception as e:
+        logger.error(f"Voice prompt preparation failed: {e}")
+
+    # 3c. Build/load the RAG knowledge index (farming schemes, pest/disease,
+    # selling mechanics) so the first chatbot question isn't slowed by it.
+    try:
+        from app.rag import ensure_ready as rag_ensure_ready
+        rag_ok = await asyncio.to_thread(rag_ensure_ready)
+        logger.info("RAG knowledge index ready" if rag_ok else "RAG knowledge index unavailable")
+    except Exception as e:
+        logger.error(f"RAG index preparation failed: {e}")
+
     # 4. Warm market cache at startup to reduce first-request latency
     try:
         await asyncio.to_thread(warm_market_price_cache)
@@ -135,7 +165,9 @@ async def lifespan(app: FastAPI):
     # 4b2. Ensure market intelligence tables and the market registry exist.
     try:
         from app.market.schema import init_market_tables
+        from app.trade.schema import init_trade_tables
         await asyncio.to_thread(init_market_tables)
+        await asyncio.to_thread(init_trade_tables)
         from app.market import repository as _market_repo
         _coverage = await asyncio.to_thread(_market_repo.get_data_coverage)
         _total = sum(c["records"] for c in _coverage)
@@ -225,6 +257,8 @@ app.add_middleware(
 settings = get_settings()
 os.makedirs(settings.AUDIO_DIR, exist_ok=True)
 app.mount("/audio", StaticFiles(directory=settings.AUDIO_DIR), name="audio")
+os.makedirs("static", exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include routers
 app.include_router(twilio_router)
@@ -233,6 +267,9 @@ app.include_router(seller_router)
 app.include_router(buyer_router)
 app.include_router(twin_router)
 app.include_router(market_router)
+app.include_router(trade_router)
+app.include_router(voice_router)
+app.include_router(advisor_router)
 
 
 # ============================================
@@ -249,15 +286,15 @@ async def health_check():
     }
 
 
-@app.get("/")
-async def root():
-    """Root endpoint with API information."""
+@app.get("/api")
+async def api_index():
+    """API information."""
     return {
         "name": "AI Krishi Voice Assistant (Kannada-first)",
         "version": "1.0.0",
         "endpoints": {
-            "frontend": "/app",
-            "dashboard": "/dashboard",
+            "frontend": "/",
+            "console": "/console",
             "health": "/health",
             "twilio_voice": "/twilio/voice",
             "twilio_gather": "/twilio/gather",
@@ -266,9 +303,10 @@ async def root():
             "process_speech": "/api/process-speech",
             "market_prices": "/api/market-prices",
             "activity_feed": "/api/activity-feed",
-            "farmer_dashboard": "/farmer",
-            "seller_dashboard": "/stitch/seller",
-            "buyer_dashboard": "/stitch/buyer",
+            "farmer_portal": "/farmer",
+            "buyer_portal": "/buyer",
+            "fpo_portal": "/fpo",
+            "live_calls": "/calls",
         },
     }
 
@@ -369,7 +407,10 @@ async def api_farmer_update(phone: str, request: Request):
     return {"success": True, "farmer": updated}
 
 
-@app.post("/api/farmer/{phone}/call")
+@app.post(
+    "/api/farmer/{phone}/call",
+    dependencies=[Depends(require_api_key), Depends(rate_limit_calls)],
+)
 async def api_farmer_call(phone: str, request: Request):
     """Initiate call to farmer number from farmer dashboard."""
     settings = get_settings()
@@ -591,6 +632,14 @@ async def api_chatbot_history(session_id: str):
     """Get chat history for a session."""
     result = chatbot_history(session_id)
     return {"success": True, **result}
+
+
+@app.get("/api/chatbot/rag/search")
+async def api_rag_search(q: str, k: int = 3):
+    """Debug/inspection endpoint: raw top-k knowledge base matches for a query."""
+    from app.rag import retrieve
+    hits = await asyncio.to_thread(retrieve, q, k)
+    return {"success": True, "query": q, "results": [h.to_dict() for h in hits]}
 
 
 @app.post("/api/chatbot/upload-file")
@@ -815,207 +864,61 @@ async def api_gov_pmfby(district: str = "", limit: int = 20):
     records = await fetch_pmfby_data(district=district, limit=limit)
     return {"source": "data.gov.in", "records": records, "count": len(records)}
 
-@app.get("/app")
-async def serve_frontend():
-    """Serve unified Stitch landing page."""
+# ============================================
+# Frontend
+# ============================================
+# One product frontend for the current feature set. The earlier Stitch pages
+# (wallet, input orders, auctions, crop prediction) describe a different
+# product and are no longer served; their URLs redirect here.
+
+_APP_SHELL = os.path.join("static", "app", "index.html")
+
+
+def _app_shell():
     from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "landing_page", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    if os.path.exists("code.html"):
-        return FileResponse("code.html")
-    return {"error": "landing page not found"}
-
-@app.get("/dashboard")
-async def serve_dashboard():
-    """Serve unified Stitch sign-in entry for admin/farmer."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "sign_in", "signin.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    if os.path.exists("dashboard.html"):
-        return FileResponse("dashboard.html")
-    return {"error": "dashboard page not found"}
+    return FileResponse(_APP_SHELL, headers={"Cache-Control": "no-cache"})
 
 
-@app.get("/farmer")
-async def serve_farmer_dashboard():
-    """Serve Stitch farmer self-service dashboard."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    if os.path.exists("farmer_dashboard.html"):
-        return FileResponse("farmer_dashboard.html")
-    return {"error": "farmer dashboard not found"}
-
-@app.get("/farmer/profile/{ugfid}")
-async def serve_farmer_digital_profile(ugfid: str):
-    """Serve the public official digital profile card for the farmer."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "digital_profile.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "digital profile page not found"}
+@app.get("/", include_in_schema=False)
+async def app_home():
+    return _app_shell()
 
 
-@app.get("/stitch")
-@app.get("/stitch/landing")
-async def serve_stitch_landing():
-    """Serve Stitch landing page variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "landing_page", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch landing page not found"}
+@app.get("/prices", include_in_schema=False)
+@app.get("/advisor", include_in_schema=False)
+@app.get("/farmer", include_in_schema=False)
+@app.get("/buyer", include_in_schema=False)
+@app.get("/fpo", include_in_schema=False)
+@app.get("/calls", include_in_schema=False)
+async def app_section():
+    return _app_shell()
 
 
-@app.get("/stitch/farmer")
-async def serve_stitch_farmer():
-    """Serve Stitch farmer dashboard variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch farmer dashboard not found"}
+_LEGACY_PAGES = {
+    "/app": "/", "/dashboard": "/console", "/stitch": "/", "/stitch/landing": "/",
+    "/stitch/farmer": "/farmer", "/stitch/farmer/profile": "/farmer", "/stitch/admin": "/console",
+    "/stitch/seller": "/farmer", "/stitch/buyer": "/buyer", "/stitch/marketplace": "/buyer",
+    "/stitch/crop-prediction": "/", "/stitch/yield-prediction": "/", "/stitch/chatbot": "/calls",
+    "/stitch/insurance": "/", "/stitch/gov-schemes": "/", "/stitch/signin": "/", "/stitch/404": "/",
+}
 
 
-@app.get("/stitch/farmer/profile")
-async def serve_stitch_farmer_profile():
-    """Serve Stitch farmer profile variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "farmer_profile.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch farmer profile not found"}
+def _legacy_redirect(target: str):
+    from fastapi.responses import RedirectResponse
+
+    async def handler():
+        return RedirectResponse(target, status_code=308)
+    return handler
 
 
-@app.get("/stitch/admin")
-async def serve_stitch_admin():
-    """Serve Stitch admin dashboard variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "admin_dashboard", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch admin dashboard not found"}
+for _path, _target in _LEGACY_PAGES.items():
+    app.add_api_route(_path, _legacy_redirect(_target), methods=["GET"], include_in_schema=False)
 
 
-@app.get("/stitch/seller")
-async def serve_stitch_seller():
-    """Serve Stitch seller dashboard variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "seller_dashboard", "seller.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch seller dashboard not found"}
-
-
-@app.get("/stitch/buyer")
-async def serve_stitch_buyer():
-    """Serve Stitch buyer dashboard variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "buyer_dashboard", "buyer.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch buyer dashboard not found"}
-
-
-@app.get("/stitch/marketplace")
-async def serve_stitch_marketplace():
-    """Serve Stitch standalone marketplace page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "marketplace.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch marketplace page not found"}
-
-
-@app.get("/stitch/crop-prediction")
-async def serve_stitch_crop_prediction():
-    """Serve Stitch standalone crop prediction page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "crop_prediction.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch crop prediction page not found"}
-
-
-@app.get("/stitch/yield-prediction")
-async def serve_stitch_yield_prediction():
-    """Serve Stitch standalone yield prediction page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "yield_prediction.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch yield prediction page not found"}
-
-
-@app.get("/stitch/chatbot")
-async def serve_stitch_chatbot():
-    """Serve Stitch standalone chatbot page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "chatbot.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch chatbot page not found"}
-
-
-@app.get("/stitch/insurance")
-async def serve_stitch_insurance():
-    """Serve Stitch standalone crop insurance page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "insurance.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch insurance page not found"}
-
-
-@app.get("/stitch/gov-schemes")
-async def serve_stitch_gov_schemes():
-    """Serve Stitch standalone govt policies/schemes page."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "farmer_dashboard", "gov_schemes.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch gov schemes page not found"}
-
-
-@app.get("/stitch/signin")
-async def serve_stitch_signin():
-    """Serve Stitch sign-in page variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "sign_in", "signin.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch sign in page not found"}
-
-
-@app.get("/stitch/404")
-async def serve_stitch_404():
-    """Serve Stitch 404 page variant."""
-    from fastapi.responses import FileResponse
-    import os
-    file_path = os.path.join("stitch", "404_error_page", "code.html")
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    return {"error": "stitch 404 page not found"}
+@app.get("/farmer/profile/{ugfid}", include_in_schema=False)
+async def legacy_farmer_profile(ugfid: str):
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse("/farmer", status_code=308)
 
 
 @app.get("/api/ugfid/{ugfid}")
@@ -1064,3 +967,14 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={"error": "Internal server error", "detail": str(exc)},
     )
+
+
+@app.get("/console", include_in_schema=False)
+async def market_console():
+    """
+    Market console: the operational UI for price discovery, the marketplace,
+    settlement and the audit trail. Reads the same APIs the voice agent calls.
+    """
+    from fastapi.responses import FileResponse
+
+    return FileResponse("static/console.html")

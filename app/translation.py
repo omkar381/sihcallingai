@@ -41,9 +41,9 @@ def _translate_with_gcloud(text: str, src: str, dest: str) -> Optional[str]:
 
 # ---------- Public API ----------
 
-def translate_to_english(kannada_text: str) -> str:
+def translate_to_english(kannada_text: str, source: str = "kn") -> str:
     """
-    Translate Kannada text to English.
+    Translate Kannada (or `source`) text to English.
     Tries googletrans first, falls back to Google Cloud Translation.
     """
     if not kannada_text or not kannada_text.strip():
@@ -52,13 +52,13 @@ def translate_to_english(kannada_text: str) -> str:
     text = kannada_text.strip()
 
     # Try free API first
-    result = _translate_with_googletrans(text, src="kn", dest="en")
+    result = _translate_with_googletrans(text, src=source, dest="en")
     if result:
         logger.info(f"Translated KN→EN (googletrans): '{result[:80]}...'")
         return result
 
     # Fallback to Google Cloud
-    result = _translate_with_gcloud(text, src="kn", dest="en")
+    result = _translate_with_gcloud(text, src=source, dest="en")
     if result:
         logger.info(f"Translated KN→EN (gcloud): '{result[:80]}...'")
         return result

@@ -127,6 +127,12 @@ async def chat(message: str, session_id: str = "", farmer_context: str = "") -> 
 
     # Build prompt with context
     doc_context = _build_context(session)
+    try:
+        from app.rag import context_block
+        kb_context = context_block(message)
+    except Exception as exc:
+        logger.warning(f"RAG retrieval skipped: {exc}")
+        kb_context = ""
     history_text = ""
     for msg in session["messages"][-6:]:  # last 6 messages for context
         role_label = "Farmer" if msg["role"] == "user" else "Krishi AI"
@@ -135,6 +141,7 @@ async def chat(message: str, session_id: str = "", farmer_context: str = "") -> 
     full_prompt = f"""{_SYSTEM_PROMPT}
 
 {f'Farmer Context: {farmer_context}' if farmer_context else ''}
+{kb_context}
 {doc_context}
 
 Conversation:

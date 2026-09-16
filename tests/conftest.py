@@ -79,3 +79,52 @@ def make_series(
 @pytest.fixture
 def now() -> datetime:
     return NOW
+
+
+# ---------------------------------------------------------------------------
+# Isolated database
+# ---------------------------------------------------------------------------
+
+@pytest.fixture
+def trade_db(tmp_path, monkeypatch):
+    """
+    Point the whole data layer at a throwaway SQLite file.
+
+    Trade tests create buyers, accept offers and release payments. Running
+    those against the real development database would pollute it with test
+    fixtures that later look like genuine records - exactly the kind of
+    contamination the provenance rules exist to prevent.
+    """
+    import app.services.db as db
+
+    db_file = tmp_path / "test_krishi.sqlite3"
+    monkeypatch.setattr(db, "DB_PATH", str(db_file))
+
+    from app.market.schema import init_market_tables
+    from app.trade.schema import init_trade_tables
+
+    init_market_tables(seed=True)
+    init_trade_tables()
+
+    # farmers table is created by farmer_store; lots reference it loosely.
+    try:
+        from app.farmer_store import _init_db
+        _init_db()
+    except Exception:
+        pass
+
+    return str(db_file)
+
+
+@pytest.fixture
+def verified_buyer(trade_db):
+    """A buyer that has cleared verification, ready to trade."""
+    from app.trade import buyers
+
+    buyer = buyers.create_buyer(
+        "Test Agro Traders", buyers.BuyerType.APMC_TRADER,
+        phone="+919000000001", district="Solapur", state="Maharashtra",
+    )
+    for doc in ("APMC_LICENCE", "PAN", "PHONE"):
+        buyers.submit_document(buyer["id"], doc, doc_number=f"DOC-{doc}")
+    return buyers.verify_buyer(buyer["id"], verified_by="test-admin")

@@ -38,6 +38,10 @@ pydub==0.25.1
 # --- Caching ---
 cachetools==5.5.1
 
+# --- RAG knowledge engine ---
+faiss-cpu>=1.8,<2.0
+numpy>=1.26
+
 # --- TTS fallback (used by app/tts.py) ---
 edge-tts
 

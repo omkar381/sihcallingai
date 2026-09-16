@@ -19,6 +19,19 @@ from app.market.provenance import (
 NOW = datetime(2026, 9, 11, 12, 0, tzinfo=timezone.utc)
 
 
+
+@pytest.fixture(autouse=True)
+def _pin_clock(monkeypatch):
+    """
+    Freshness is relative to "now". These tests build observations relative to
+    the fixed NOW, so the classifier must use the same clock - otherwise they
+    pass on the day they were written and fail a few days later.
+    """
+    import app.market.provenance as provenance_module
+
+    monkeypatch.setattr(provenance_module, "_utc_now", lambda: NOW.timestamp())
+
+
 class TestParseDataDate:
     @pytest.mark.parametrize(
         "raw,expected",

@@ -3,7 +3,9 @@
 **Against:** SIH PS 26132 · *Strengthening market linkages and price discovery for farmers*
 **Last updated:** 2026-09-11
 
-**This build so far:** 4,868 lines of new production code · 211 tests, all passing.
+**This build so far:** ~11,800 lines of new production code · 285 tests, all passing.
+Market intelligence, the marketplace (buyers, FPO, lots, offers, payments, disputes,
+audit) and the operator console are all in place.
 
 ---
 
@@ -131,24 +133,19 @@ The recommendation engine **refuses** to advise on MOCK data unless
 
 ---
 
-## Not yet built
+## Marketplace scope — status after the second pass
 
-Scoped but not started. Roughly in dependency order:
+| Section | Component | Status |
+|---|---|---|
+| §16–19 | Buyer registry, verification, structured demand, match scoring | Built |
+| §20–21 | FPO entities, membership, lot aggregation | Built |
+| §22–23 | Lot lifecycle, structured quality grading | Built |
+| §26–27 | Payment escrow lifecycle, dispute engine | Built |
+| §28 | Append-only audit trail with integrity checking | Built |
+| §24–25 | Transport and storage **provider registries** | Tables exist; booking flow not wired |
+| §39–40 | Admin analytics charts | Console tables only |
 
-| Section | Component |
-|---|---|
-| §16–19 | Buyer registry, verification state machine, structured demand, farmer↔buyer match scoring |
-| §20–21 | FPO entities, membership, lot aggregation into buyer-ready volumes |
-| §22–23 | Full lot lifecycle (DRAFT→COMPLETED), structured quality grading |
-| §24–25 | Transport provider registry, storage provider registry |
-| §26–27 | Payment lifecycle with escrow states; dispute/grievance engine |
-| §28 | Immutable audit event trail |
-| §39–40 | Admin control centre and analytics dashboard |
-
-The FPO aggregation work (§20–21) has a ready-made economic justification from
-the engine already built: freight per quintal falls sharply with load size, so
-pooling smallholder lots measurably raises every member's net realisation. That
-is tested today in `test_logistics.py::test_freight_per_quintal_falls_as_load_grows`.
+Details of the second pass are at the end of this document.
 
 ---
 
@@ -177,3 +174,187 @@ Write endpoints require `X-API-Key` (set in `.env`).
 
 **Two things still need you:** register a personal data.gov.in key, and rotate
 the Twilio auth token that is sitting in plaintext in `.env`.
+
+---
+
+## Transaction infrastructure (second build pass)
+
+| Module | Lines | What it does |
+|---|--:|---|
+| `app/trade/schema.py` | 388 | 14 tables: buyers, demand, FPOs, lots, offers, logistics, payments, disputes, audit |
+| `app/trade/audit.py` | 258 | Append-only event trail with monotonic sequence and tamper detection |
+| `app/trade/buyers.py` | 864 | Verification state machine, document gating, behaviour-based trust scoring |
+| `app/trade/fpo.py` | 633 | FPO registry, membership, compatible-lot pooling, weight-proportional settlement |
+| `app/trade/lots.py` | 521 | 14-state lot lifecycle, layered quality grading (claim vs evidence) |
+| `app/trade/matching.py` | 385 | 7-factor weighted farmer↔buyer matching with per-factor explanation |
+| `app/trade/offers.py` | 389 | Offer lifecycle; acceptance is one transaction with a race guard |
+| `app/trade/payments.py` | 440 | Escrow state machine in integer paise; settlement reconciliation |
+| `app/trade/disputes.py` | 428 | Grievance workflow that freezes funds while open |
+| `app/routes/trade_routes.py` | 483 | 37 REST endpoints |
+| `static/console.*` | 1,490 | Operator console |
+
+### What it proved
+
+**FPO aggregation, five smallholders pooling 4,200 kg of Grade A onion:**
+
+```
+Sold separately   ₹1,14,836
+Pooled            ₹1,23,938      one 7-ton truck instead of five small loads
+Gain              ₹9,102         ₹1,820 per farmer · ₹217 per quintal
+```
+
+Not an assumption — computed with the same net-realisation model used for
+market comparison, and covered by
+`test_pooling_beats_shipping_separately`.
+
+**Buyer trust is computed, never hardcoded.** The same buyer's farmer-facing
+badge moved from *"Verified buyer, no trading history yet"* (60) to
+*"Verified buyer, strong payment record"* (95) purely from settlement
+outcomes. A second buyer with one default sits at 55 with a
+`1 default(s)` flag.
+
+**Settlement reconciles to the paisa.** A ₹1,11,520 aggregate sale splits
+across four farmers by weight with the rounding remainder assigned to the
+largest contributor: `11152000 == 11152000 paise`.
+
+**Full lifecycle runs end to end:**
+`lot → offer → accept → escrow → delivery → release → settlement split`,
+with the lot and payment state machines kept in step and every step audited.
+
+### Defects found and fixed in this pass
+
+| # | Defect | Impact |
+|---|---|---|
+| 12 | Below-minimum grade scored 0.2, not 0.0 | A buyer requiring Grade A was shown Grade C produce — the lot would be rejected on arrival |
+| 13 | `release()` attempted `DELIVERED → PAID` directly | Illegal transition failed silently; lot stayed `DELIVERED` while its payment read `RELEASED` |
+| 14 | Offer expiry used `<` not `<=` | An offer expiring exactly now was still acceptable |
+| 15 | Re-aggregation reported a status error, not the real cause | Misleading message for an already-pooled lot |
+| 16 | Console showed "Pooling earns ₹0 more" for single-lot groups | Meaningless — one lot cannot be pooled |
+| 17 | Speech pipeline ran on the webhook's own event loop (first via `BackgroundTasks`, then via `create_task`) | The gather webhook logged `returned in 0.065s` while Twilio actually waited 8–14s for the same response. The caller heard **silence instead of the hold clip**, and any turn crossing Twilio's 15s webhook deadline ended in **"an application error has occurred."** Fixed by running the pipeline in its own thread — webhook now answers in <0.1s and the redirect poll works as designed |
+
+Defects 12–14 were found **by the tests**, not by inspection.
+
+---
+
+## Operator console
+
+`GET /console` — nine views over the same APIs the voice agent calls.
+
+Design constraint: **no number renders without its data quality.** The console
+states at the top of every screen that all stored price data is demonstration
+data, and every price row carries a `Demo data` tag. An evaluator cannot
+mistake fixture data for live mandi prices, because the UI is built so that
+mistake is impossible to make.
+
+Restrained on purpose — one accent colour, borders rather than shadows,
+tabular figures, no gradients. It reads as an operations console, not a
+landing page. Light and dark both supported.
+
+Views: Overview · Price discovery · Sale window · Lots · Buyers ·
+FPO aggregation · Payments · Disputes · Audit trail.
+
+---
+
+## Still not built
+
+| Section | Component |
+|---|---|
+| §24–25 | Transport and storage **provider registries** (tables exist; the cost model and booking flow do not yet read from them) |
+| §39–40 | Admin analytics charts beyond the console's current tables |
+| §26 | Binding payment RELEASE to a real payment provider webhook |
+
+Everything else from the original scope is implemented and tested.
+
+
+---
+
+## Third pass: voice agent realigned to PS 26132, new frontend (2026-09-14)
+
+### Why
+
+The phone path still carried the pre-PS product. Substring routing sent
+"should I **sell** now or wait?" to an auction listing with an inferred price,
+and "who will **buy** my onion?" to a fertiliser order that debited a wallet.
+Replies were written in English and machine-translated, so figures were read
+aloud as symbols ("2480-3040 INR/ಕ್ವಿಂಟಲ್ (ಸರಾಸರಿ 2760)"). And the gather webhook
+held its TwiML until the whole pipeline finished, which is what produced
+"an application error has occurred" on calls.
+
+### What the caller can do now
+
+| PS 26132 need | Say (Kannada) | The agent |
+|---|---|---|
+| Price discovery | ಕಲಬುರಗಿಯಲ್ಲಿ ಈರುಳ್ಳಿ ಬೆಲೆ ಎಷ್ಟು? | Modal, range, per-kg; offers a market comparison |
+| Localised trends, arrivals | ಬೆಲೆ ಏರುತ್ತಿದೆಯಾ? | Week change, month average, arrival change |
+| Best market after transport | ಯಾವ ಮಾರುಕಟ್ಟೆ ಉತ್ತಮ? | Asks quantity, ranks by net realisation |
+| Sale-window recommendation | ಈಗ ಮಾರಬೇಕಾ ಕಾಯಬೇಕಾ? | Asks storage days and cash need, then decides with reasons |
+| Verified buyer demand | ಯಾರು ಖರೀದಿ ಮಾಡ್ತಾರೆ? | Verified buyers only, with trust record |
+| Lot creation, quality | ಇಪ್ಪತ್ತು ಕ್ವಿಂಟಲ್ ಈರುಳ್ಳಿ ಮಾರಬೇಕು | Asks grade, reads back, lists on yes |
+| Digital offers | ಆಫರ್ ಬಂದಿದೆಯಾ? | Best offer vs market price; accepts on yes |
+| Payment tracking | ಹಣ ಬಂತಾ? | Escrow state in plain words, overdue warning |
+| Grievance | ತೂಕದಲ್ಲಿ ಮೋಸ, ದೂರು ಕೊಡಬೇಕು | Picks the deal, confirms, files, freezes held money |
+| FPO aggregation | ಎಫ್‌ಪಿಒ ಜೊತೆ ಒಟ್ಟಾಗಿ ಮಾರಿದರೆ? | The farmer's own pool and the rupee gain |
+
+### Architecture
+
+```
+speech -> Gemini 3.5 Flash-Lite (intent + slots + English gloss, ~1.8s)
+       -> dialogue manager (engines only, no invented figures)
+       -> Kannada composed directly from the numbers
+       -> edge-tts in-process, content-addressed cache
+       -> call transcript (voice_calls / voice_turns) + live stream
+```
+
+| Module | What it does |
+|---|---|
+| `app/voice/nlu.py` | Structured intent/slot parsing from Kannada; keyword fallback when Gemini is unavailable |
+| `app/voice/dialogue.py` | PS-scoped conversation: slot filling, suggestions, yes/no confirmation for anything that commits the farmer |
+| `app/voice/kannada.py` | Kannada names for all 24 crops and 57 markets; TTS-safe numbers |
+| `app/voice/speech.py` | In-process synthesis, cached by hash of the text |
+| `app/voice/pipeline.py` | One turn end to end, recorded |
+| `app/voice/call_log.py` | Persistent transcripts and a sequenced live feed |
+| `app/twilio_handlers.py` | Rewritten: hold prompt, poll loop, interruptible replies, silence handling, hangup |
+| `app/routes/voice_routes.py` | Overview, farmer workspace, calls + SSE stream, browser simulator, demo seeding |
+| `app/trade/demo_seed.py` | Demo marketplace around one phone number, every entity registered as a fixture |
+
+### Defects found and fixed in this pass
+
+| # | Defect | Impact |
+|---|---|---|
+| 17 | Speech pipeline ran inside the webhook's response cycle | Caller heard silence; slow turns ended in "application error" |
+| 18 | Substring intent routing | Sell-or-wait became an auction listing; "who will buy" became a fertiliser order |
+| 19 | English replies machine-translated to Kannada | Symbols and ranges read aloud; stiff phrasing |
+| 20 | Unsupported crop reused the previous crop | "Dragon fruit price" answered with the tur price |
+| 21 | Payment status ignored the crop named | "My tur money" reported an onion payment |
+| 22 | Complaint reply always claimed money was in escrow | False reassurance on an unpaid deal |
+| 23 | Demo caveat appended after the closing question | Turn ended on a statement; farmer did not know to answer |
+| 24 | `/api/farmer/{phone}/call` unauthenticated | Anyone could dial any number on the account |
+| 25 | Provenance tests read the real clock | Passed on the day written, failed three days later |
+
+Defects 20 to 23 were found by running a full scripted Kannada conversation,
+not by inspection.
+
+### Measured
+
+- Intent parsing: 13 of 13 Kannada test phrases correct, 1.7 to 2.4 s.
+- Webhook response: under 0.1 s (it was 8 to 14 s).
+- Full turn: 4 to 7 s. Speech synthesis is most of it (about 1 s per 110
+  characters). Splitting sentences and synthesising them in parallel was
+  measured slower (5.9 s against 3.9 s) and was not kept. Cached sentences
+  are instant.
+
+### Frontend
+
+`/` now serves one product for the current feature set; the old Stitch pages
+(wallet, input orders, auctions, crop prediction) redirect to it.
+
+| Page | For | Shows |
+|---|---|---|
+| `/` | Everyone | What it does mapped to PS 26132, live platform numbers, net-of-transport comparison |
+| `/prices` | Farmers, extension staff | Price, trend with arrivals, sell-or-wait with reasons and risks, market ranking with costs |
+| `/farmer` | Farmer | Offers to decide, produce, payment progress, complaints, FPO pool, call history |
+| `/buyer` | Trader, processor | Verification and documents, demand, produce open for offers, payments to make |
+| `/fpo` | FPO manager | Pools with separate-vs-pooled rupee benefit, one-click pooling, settlement split |
+| `/calls` | Evaluators, operators | Live transcripts (Kannada + English, intent, data quality, timings), and talk to the agent in the browser |
+
+Tests: 314 passing (29 new for the voice agent).
